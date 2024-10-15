@@ -100,9 +100,26 @@ class PilisPreprocessor:
 
         self.data = self.adjust_months(self.data)
 
-        # TODO: Itt elveszik a 'Gyűjtési hely' és az 'Egyéb megjegyzések'
-        self.data = self.data.groupby('Date').sum(numeric_only=True).reset_index()
-        self.data = self.data.set_index('Date')
+        avg_cols = {
+            'Min - T (°C)': 'mean',
+            'Max - T (°C)': 'mean',
+            'Min - RH(%)': 'mean',
+            'Max - RH(%)': 'mean',
+        }
+
+        string_cols = ['Gyűjtés helye', 'Gyűjtési dátum', 'Egyéb megjegyzés']
+
+        df_grouped = self.data.groupby('year_month').agg(avg_cols).reset_index()
+
+        for col in self.data.columns:
+            if col not in avg_cols.keys() and col != 'year_month' and col not in string_cols:
+                df_grouped[col] = self.data.groupby('year_month')[col].sum().values
+            if col in string_cols:
+                df_grouped[col] = self.data[col]
+
+        df_grouped = df_grouped.set_index('year_month')
+        df_grouped = df_grouped.drop(columns='Gyűjtési dátum')
+        self.data = df_grouped
 
         full_index = pd.date_range(start='2011-03', end='2024-08', freq='M').to_period('M')
         self.data = self.data.reindex(full_index, fill_value=np.nan)
