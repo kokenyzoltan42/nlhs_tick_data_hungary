@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-class InermisPreprcessor:
+class InermisPreprocessor:
     def __init__(self, data):
         self.data = data
 
