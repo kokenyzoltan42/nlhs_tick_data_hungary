@@ -15,15 +15,18 @@ class PilisPreprocessor:
         self.adjust_indices()
         self.normalize_tick_gathering()
 
+        self.
+
     @staticmethod
     def split_min_max(temp):
-        temp = str(temp).replace(',', '.')
-        if re.match(pattern=r"^\d+(\.\d+)?(-\d+(\.\d+)?)?$", string=temp):
-            if '-' in temp:
-                min_val, max_val = map(float, temp.split('-'))
-            else:
-                min_val = float(temp)
-                max_val = float(temp)
+        temp = str(temp).replace(',', '.').strip()
+        if re.match(pattern=r"^\s*\d+([.,]\d+)?\s*$", string=temp):
+            # Ha csak egy szám van
+            min_val = max_val = float(temp)
+            return pd.Series([min_val, max_val])
+        elif re.match(pattern=r"^\s*\d+([.,]\d+)?\s*-\s*\d+([.,]\d+)?\s*$", string=temp):
+            # Ha intervallum van
+            min_val, max_val = map(float, temp.split('-'))
             return pd.Series([min_val, max_val])
         else:
             return pd.Series([None, None])
@@ -106,3 +109,6 @@ class PilisPreprocessor:
 
     def normalize_tick_gathering(self):
         self.data['Normált gyűjtött kullancsok'] = self.data['Összes kullancs (db)'] / self.data['Gyűjtők száma']
+
+    def handling_missing_data(self):
+        pass
