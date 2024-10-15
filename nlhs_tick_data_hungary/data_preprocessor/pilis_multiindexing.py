@@ -8,6 +8,7 @@ class PilisMultiindexing:
         self.tick_summary = None
 
         self.transform_to_multiindex()
+        self.create_tick_summary()
 
 
     def transform_to_multiindex(self):
