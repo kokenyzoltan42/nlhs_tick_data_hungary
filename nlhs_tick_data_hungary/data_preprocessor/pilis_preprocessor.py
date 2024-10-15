@@ -107,16 +107,16 @@ class PilisPreprocessor:
 
         string_cols = ['Gyűjtés helye', 'Gyűjtési dátum', 'Egyéb megjegyzés']
 
-        df_grouped = self.data.groupby('year_month').agg(avg_cols).reset_index()
+        df_grouped = self.data.groupby('Date').agg(avg_cols).reset_index()
 
         for col in self.data.columns:
-            if col not in avg_cols.keys() and col != 'year_month' and col not in string_cols:
-                df_grouped[col] = self.data.groupby('year_month')[col].sum().values
+            if col not in avg_cols.keys() and col != 'Date' and col not in string_cols:
+                df_grouped[col] = self.data.groupby('Date')[col].sum().values
                 df_grouped[col] = df_grouped[col].replace(0, np.nan)
             if col in string_cols:
                 df_grouped[col] = self.data[col]
 
-        df_grouped = df_grouped.set_index('year_month')
+        df_grouped = df_grouped.set_index('Date')
         df_grouped = df_grouped.drop(columns='Gyűjtési dátum')
         self.data = df_grouped
 
