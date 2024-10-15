@@ -15,8 +15,6 @@ class PilisPreprocessor:
         self.adjust_indices()
         self.normalize_tick_gathering()
 
-        self.
-
     @staticmethod
     def split_min_max(temp):
         temp = str(temp).replace(',', '.').strip()
@@ -114,6 +112,7 @@ class PilisPreprocessor:
         for col in self.data.columns:
             if col not in avg_cols.keys() and col != 'year_month' and col not in string_cols:
                 df_grouped[col] = self.data.groupby('year_month')[col].sum().values
+                df_grouped[col] = df_grouped[col].replace(0, np.nan)
             if col in string_cols:
                 df_grouped[col] = self.data[col]
 
