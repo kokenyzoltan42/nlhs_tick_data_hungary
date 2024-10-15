@@ -33,7 +33,6 @@ class InermisPreprcessor:
         df = df.apply(pd.to_numeric, errors='coerce', downcast='integer')
         return df
 
-    # @title Adattípus kiválasztása
     def get_winter_tick_data(self, data: pd.DataFrame, gender: str, year: str, month: str):
         # Se év, se hónap -> teljes adattábla
         if year == '' and month == '':
