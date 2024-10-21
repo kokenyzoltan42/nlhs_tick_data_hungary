@@ -8,6 +8,11 @@ class PilisPreprocessor:
         self.data = data
         self.remove_reds = remove_reds
 
+        self.run()
+
+    def run(self):
+        # TODO: rendezés +
+        #  + új osztály az adjust-oknak, még egy osztály a segédfüggvényeknek, többi marad
         self.adjust_columns()
         self.split_temps_and_rhs()
         self.remove_reds_from_table()
@@ -16,8 +21,15 @@ class PilisPreprocessor:
         self.normalize_tick_gathering()
 
     @staticmethod
-    def split_min_max(temp):
-        temp = str(temp).replace(',', '.').strip()
+    def split_min_max(temp: pd.Series) -> pd.Series:
+        """
+        In specific columns there can be more than one number. This method is responsible for splitting those columns
+        into two: minimum and maximum. The first value in the cell will go to the minimum section and econd to the
+        maximum section.
+        :param temp:
+        :return:
+        """
+        temp = str(temp).replace(__old=',', __new='.').strip()
         if re.match(pattern=r"^\s*\d+([.,]\d+)?\s*$", string=temp):
             # Ha csak egy szám van
             min_val = max_val = float(temp)
@@ -30,7 +42,7 @@ class PilisPreprocessor:
             return pd.Series([None, None])
 
     @staticmethod
-    def adjust_months(df):
+    def adjust_months(df) -> pd.DataFrame:
         prev_month = None
         for idx, row in df.iterrows():
             if prev_month == row['Date']:
@@ -125,6 +137,3 @@ class PilisPreprocessor:
 
     def normalize_tick_gathering(self):
         self.data['Normált gyűjtött kullancsok'] = self.data['Összes kullancs (db)'] / self.data['Gyűjtők száma']
-
-    def handling_missing_data(self):
-        pass
