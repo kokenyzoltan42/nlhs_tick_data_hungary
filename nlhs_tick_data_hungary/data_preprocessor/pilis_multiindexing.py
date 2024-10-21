@@ -58,12 +58,13 @@ class PilisMultiindexing:
             df_multiindex[('I.', 'ricinus', stage)] = self.data[f'I. ricinus {stage}']
         df_multiindex[('I.', 'ricinus', 'lárva')] = self.data[f'I. lárva']
 
-        # H. inermis és H. concinna kitöltése
+        # H. inermis és H. concinna kitöltése (csak H. concinna esetében kell lárva oszlop)
         for species in ['inermis', 'concinna']:
             for stage in tick_stages:
-                col_key = ('H.', species, stage)
-                data_key = f'H. {species} {stage}' if stage != 'lárva' else f'H. lárva'
-                df_multiindex[col_key] = self.data[data_key]
+                if not (species == 'inermis' and stage == 'lárva'):
+                    col_key = ('H.', species, stage)
+                    data_key = f'H. {species} {stage}' if stage != 'lárva' else f'H. lárva'
+                    df_multiindex[col_key] = self.data[data_key]
 
         # D. marginatus és D. reticulatus kitöltése
         for species in ['marginatus', 'reticulatus']:
