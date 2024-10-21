@@ -84,10 +84,13 @@ class LoadWinterTickData:
         # elif gender == 'Female':
         #    df = df.filter(like='Male')
 
-        if gender == 'All':
-            gender = None
+        if gender == 'Male' or gender == 'Female':
+            df = df.filter(like=gender)
 
-        df = df.filter(like=gender)
+        elif gender == 'All':
+            # TODO: teszt
+            df = df.filter(like=None)
+
 
         df = df.apply(pd.to_numeric, errors='coerce', downcast='integer')
         return df
