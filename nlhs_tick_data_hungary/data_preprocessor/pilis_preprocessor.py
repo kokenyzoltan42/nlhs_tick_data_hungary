@@ -29,7 +29,7 @@ class PilisPreprocessor:
         :param temp:
         :return:
         """
-        temp = str(temp).replace(__old=',', __new='.').strip()
+        temp = str(temp).replace(',', '.').strip()
         if re.match(pattern=r"^\s*\d+([.,]\d+)?\s*$", string=temp):
             # Ha csak egy szám van
             min_val = max_val = float(temp)
