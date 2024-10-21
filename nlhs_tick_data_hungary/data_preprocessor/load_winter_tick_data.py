@@ -73,24 +73,24 @@ class LoadWinterTickData:
     @staticmethod
     def select_gender(df: pd.DataFrame, gender: str):
         """
+        Select rows based on gender. If 'All' is provided, no filtering is applied.
+        If neither 'Male', 'Female', nor 'All' is provided, an error is raised.
 
-        :param df:
-        :param gender:
-        :return:
+        :param df: DataFrame to filter
+        :param gender: 'Male', 'Female', or 'All'
+        :return: Filtered or unfiltered DataFrame
         """
-        # TODO: szépíteni, így nem látszik, hogy ha gender='All', akkor nem filterezik
-        # if gender == 'Male':
-        #    df = df.filter(like='Female')
-        # elif gender == 'Female':
-        #    df = df.filter(like='Male')
 
         if gender == 'Male' or gender == 'Female':
             df = df.filter(like=gender)
 
         elif gender == 'All':
-            # TODO: teszt
-            df = df.filter(like=None)
+            # Ha 'All', akkor nem történik filterelés, az eredeti DataFrame-et adja vissza
+            pass
 
+        else:
+            # Ha nem érvényes érték van megadva, hibát dobunk
+            raise ValueError("Invalid gender. Gender must be 'Male', 'Female', or 'All'.")
 
         df = df.apply(pd.to_numeric, errors='coerce', downcast='integer')
         return df
