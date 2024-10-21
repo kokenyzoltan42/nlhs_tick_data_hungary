@@ -2,12 +2,18 @@ import pandas as pd
 
 
 class InermisPreprocessor:
+    """
+    Class for preparing the winter tick data for further analysis.
+    """
     def __init__(self, data: pd.DataFrame):
         self.data = data
 
         self.fixing_columns()
 
-    def fixing_columns(self):
+    def fixing_columns(self) -> None:
+        """
+        Method for fixing the columns of the winter tick data for easier manipulation.
+        """
         self.data['Bacteria'] = self.data['18×173']
         self.data = self.data.drop(columns=['18×173'])
         self.data = self.data.set_index('Bacteria')
