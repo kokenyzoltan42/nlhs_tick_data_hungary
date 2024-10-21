@@ -3,6 +3,9 @@ import gdown
 
 
 class GoogleDataDownloader:
+    """
+    Class for loading data with gdown from GDrive.
+    """
     def __init__(self, file_url, file_name):
         self.data_folder = "data"
         self.file_path = os.path.join(self.data_folder, file_name)
