@@ -8,10 +8,8 @@ class PilisMultiindexing:
 
     Attributes:
     ----------
-    data : pd.DataFrame
-        The original tick data.
-    tick_summary : pd.DataFrame or None
-        A summary DataFrame for different tick species and their life stages. Initialized as None.
+    data : The original tick data.
+    tick_summary : A summary DataFrame for different tick species and their life stages. Initialized as None.
     """
 
     def __init__(self, data: pd.DataFrame):
@@ -77,8 +75,8 @@ class PilisMultiindexing:
         This function also handles the additional metadata such as temperature, RH, and collection information.
         """
         # Create the MultiIndex structure for the DataFrame
-        multi_index: pd.MultiIndex = self._create_multiindex_structure()
-        df_multiindex: pd.DataFrame = pd.DataFrame(columns=multi_index)
+        multi_index = self._create_multiindex_structure()
+        df_multiindex = pd.DataFrame(columns=multi_index)
 
         # Base data mapping (common columns)
         base_data_mapping = {
@@ -92,7 +90,7 @@ class PilisMultiindexing:
         self._populate_dataframe(df_multiindex=df_multiindex, data_mapping=base_data_mapping)
 
         # Tick stages to be filled for species
-        tick_stages: list = ['nőstény', 'hím', 'nimfa', 'lárva']
+        tick_stages = ['nőstény', 'hím', 'nimfa', 'lárva']
 
         # Fill data for I. ricinus species
         for stage in tick_stages[:-1]:  # All stages except 'lárva'
@@ -113,7 +111,7 @@ class PilisMultiindexing:
                 df_multiindex[('D.', species, stage)] = self.data[f'D. {species} {stage}']
 
         # Additional weather and environment data
-        weather_data_mapping: dict = {
+        weather_data_mapping = {
             ('Min - T (°C)', '', ''): 'Min - T (°C)',
             ('Max - T (°C)', '', ''): 'Max - T (°C)',
             ('Min - RH(%)', '', ''): 'Min - RH(%)',
@@ -135,9 +133,9 @@ class PilisMultiindexing:
         :return: A pandas Series containing the summed data for the species across all stages.
         """
         # Create column names based on the species and stages
-        columns: list = [(species[0], species[1], stage) for stage in stages]
+        columns = [(species[0], species[1], stage) for stage in stages]
         # Only sum columns that actually exist in the DataFrame
-        valid_columns: list = [col for col in columns if col in self.data.columns]
+        valid_columns = [col for col in columns if col in self.data.columns]
         if valid_columns:
             return self.data[valid_columns].sum(axis=1)
         # Return a Series of zeros if no valid columns are found
@@ -149,15 +147,15 @@ class PilisMultiindexing:
         This summary aggregates data for I. ricinus, H. inermis, H. concinna, D. marginatus, and D. reticulatus.
         """
         # Define the species to be summarized
-        tick_species: list = [('I.', 'ricinus'), ('H.', 'inermis'), ('H.', 'concinna'), ('D.', 'marginatus'),
+        tick_species = [('I.', 'ricinus'), ('H.', 'inermis'), ('H.', 'concinna'), ('D.', 'marginatus'),
                               ('D.', 'reticulatus')]
         # Define the life stages
-        tick_stages: list = ['nőstény', 'hím', 'nimfa', 'lárva']
-        df_summary: pd.DataFrame = pd.DataFrame()
+        tick_stages = ['nőstény', 'hím', 'nimfa', 'lárva']
+        df_summary = pd.DataFrame()
 
         # Loop through each species and calculate the total for their stages
         for species in tick_species:
-            species_label: str = f'{species[0]} {species[1]}'
+            species_label = f'{species[0]} {species[1]}'
             df_summary[species_label] = self._sum_species_data(species, tick_stages)
 
         # Assign the summary DataFrame to the class attribute `tick_summary`

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from nlhs_tick_data_hungary.data_preprocessor.inermis_preprocessor import InermisPreprocessor
+from nlhs_tick_data_hungary.data_preprocessor.winter_tick.inermis_preprocessor import InermisPreprocessor
 
 
 class LoadWinterTickData:
