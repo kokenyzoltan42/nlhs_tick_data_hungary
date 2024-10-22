@@ -24,7 +24,7 @@ class WinterTickPreprocessor:
 
     def rename_and_set_index(self) -> None:
         """
-        Rename the '18×173' column to 'Bacteria' and set it as the index.
+        Method for renaming the '18×173' column to 'Bacteria' and set it as the index.
         """
         self.data.rename(columns={'18×173': 'Bacteria'}, inplace=True)
         self.data.set_index('Bacteria', inplace=True)
@@ -49,4 +49,4 @@ class WinterTickPreprocessor:
 
         :return: Preprocessed DataFrame.
         """
-        return self.data.T  # Transpose back to original orientation if necessary
+        return self.data.T
