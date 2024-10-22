@@ -120,7 +120,7 @@ class PilisPreprocessor:
         # Drop the first row and reset the index
         self.data = self.data.drop(index=0).reset_index().drop(columns="index")
 
-        # Define columns that need to be converted to float
+        # Defining columns that need to be converted to float
         columns_to_float = [
             'I. ricinus hím', 'I. ricinus nőstény', 'I. ricinus nimfa', 'I. lárva',
             'H. inermis nőstény', 'H. inermis hím', 'H. inermis nimfa',
@@ -130,7 +130,7 @@ class PilisPreprocessor:
             'Gyűjtők száma', 'Összes kullancs (db)'
         ]
 
-        # Convert specified columns to float
+        # Convert specific columns to float
         self.data[columns_to_float] = self.data[columns_to_float].astype(float)
         self.data["Gyűjtés időtartama (h)"] = self.data["Gyűjtés időtartama (h)"].str.replace(',', '.').astype(float)
 
@@ -193,7 +193,7 @@ class PilisPreprocessor:
             'Max - RH(%)': 'mean',
         }
 
-        # String columns that need to be retained as-is
+        # String columns that don't need to be changed
         string_cols = ['Gyűjtés helye', 'Gyűjtési dátum', 'Egyéb megjegyzés']
 
         # Group by date and calculate mean for numeric columns
@@ -203,7 +203,7 @@ class PilisPreprocessor:
         for col in self.data.columns:
             if col not in avg_cols.keys() and col != 'Date' and col not in string_cols:
                 df_grouped[col] = self.data.groupby('Date')[col].sum().values
-                df_grouped[col] = df_grouped[col].replace(0, np.nan)  # Replace zeroes with NaN for clarity
+                df_grouped[col] = df_grouped[col].replace(0, np.nan)  # Replace zeroes with NaN
             if col in string_cols:
                 df_grouped[col] = self.data[col]
 

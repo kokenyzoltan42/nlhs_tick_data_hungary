@@ -77,7 +77,7 @@ class PilisMultiindexing:
         multi_index = self._create_multiindex_structure()
         df_multiindex = pd.DataFrame(columns=multi_index)
 
-        # Base data mapping (common columns)
+        # Base data mapping (not tick species related columns)
         base_data_mapping = {
             ('Eredeti csövek száma', '', ''): 'Eredeti csövek száma',
             ('Válogatott csövek száma', '', ''): 'Válogatott csövek száma',
@@ -85,26 +85,26 @@ class PilisMultiindexing:
             ('Gyűjtők száma', '', ''): 'Gyűjtők száma',
             ('Összes kullancs (db)', '', ''): 'Összes kullancs (db)'
         }
-        # Populate the base columns
+        # Fill the base columns
         self._populate_dataframe(df_multiindex=df_multiindex, data_mapping=base_data_mapping)
 
         # Tick stages to be filled for species
         tick_stages = ['nőstény', 'hím', 'nimfa', 'lárva']
 
         # Fill data for I. ricinus species
-        for stage in tick_stages[:-1]:  # All stages except 'lárva'
+        for stage in tick_stages[:-1]:  # Lárva kivételével
             df_multiindex[('I.', 'ricinus', stage)] = self.data[f'I. ricinus {stage}']
         df_multiindex[('I.', 'ricinus', 'lárva')] = self.data[f'I. lárva']
 
         # Fill data for H. inermis and H. concinna species
         for species in ['inermis', 'concinna']:
             for stage in tick_stages:
-                if not (species == 'inermis' and stage == 'lárva'):  # H. inermis has no 'lárva'
+                if not (species == 'inermis' and stage == 'lárva'):  # H. inermisben nincs 'lárva'
                     col_key = ('H.', species, stage)
                     data_key = f'H. {species} {stage}' if stage != 'lárva' else f'H. lárva'
                     df_multiindex[col_key] = self.data[data_key]
 
-        # Fill data for D. marginatus and D. reticulatus species
+        # Fill data for D. marginatus and D. reticulatus
         for species in ['marginatus', 'reticulatus']:
             for stage in tick_stages:
                 df_multiindex[('D.', species, stage)] = self.data[f'D. {species} {stage}']
@@ -152,10 +152,10 @@ class PilisMultiindexing:
         tick_stages = ['nőstény', 'hím', 'nimfa', 'lárva']
         df_summary = pd.DataFrame()
 
-        # Loop through each species and calculate the total for their stages
+        # Loop through each species and calculate the sum for their stages
         for species in tick_species:
             species_label = f'{species[0]} {species[1]}'
             df_summary[species_label] = self._sum_species_data(species, tick_stages)
 
-        # Assign the summary DataFrame to the class attribute `tick_summary`
+        # Assign the summary DataFrame to the class attribute tick_summary
         self.tick_summary = df_summary

@@ -116,6 +116,6 @@ class LoadWinterTickData:
             # Raise an error if an invalid gender is provided
             raise ValueError("Invalid gender. Gender must be 'Male', 'Female', or 'All'.")
 
-        # Convert the DataFrame values to numeric, coercing errors and downcasting to integer where possible
+        # Convert the DataFrame values to numeric integer where possible
         df = df.apply(pd.to_numeric, errors='coerce', downcast='integer')
         return df
