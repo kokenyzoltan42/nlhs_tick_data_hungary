@@ -147,7 +147,7 @@ class PilisPreprocessor:
         self.data[['Min - T (°C)', 'Max - T (°C)']] = self.data['T (°C)'].apply(self.split_min_max)
         self.data[['Min - RH(%)', 'Max - RH(%)']] = self.data['RH(%)'].apply(self.split_min_max)
 
-        # Drop the original temperature and RH columns
+        # Drop the original columns
         self.data.drop(columns=['T (°C)', 'RH(%)'], inplace=True)
 
     def remove_reds_from_table(self) -> None:
@@ -216,7 +216,7 @@ class PilisPreprocessor:
         self.data = df_grouped
 
         # Reindex to include a full range of dates
-        full_index = pd.date_range(start='2011-03', end='2024-08', freq='M').to_period('M')
+        full_index = pd.date_range(start='2011-03', end='2024-08', freq='ME').to_period('M')
         self.data = self.data.reindex(full_index, fill_value=np.nan)
 
     def normalize_tick_gathering(self) -> None:

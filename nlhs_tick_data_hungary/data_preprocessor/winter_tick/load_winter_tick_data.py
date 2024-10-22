@@ -71,6 +71,9 @@ class LoadWinterTickData:
             names=['Year', 'Month', 'Gender']
         )
 
+        # If we sort the data then it doesn't give PerformanceWarning
+        data = data.sort_index(axis=1)
+
         # Only month is provided: Concatenate data across all available years for the specified month
         if year == '' and month != '':
             available_years = [y for y in ['2022', '2023'] if (y, month) in data.columns]
