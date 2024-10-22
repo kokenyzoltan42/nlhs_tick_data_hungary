@@ -4,12 +4,11 @@ import pandas as pd
 class PilisMultiindexing:
     """
     This class is responsible for transforming the raw tick data from Pilisszentkereszt into a MultiIndex DataFrame
-    and creating summary data for different tick species and their life stages.
+    and creating summary data for different tick species and their life stages (stages = stádiumok).
 
     Attributes:
-    ----------
-    data : The original tick data.
-    tick_summary : A summary DataFrame for different tick species and their life stages. Initialized as None.
+    data: The original tick data.
+    tick_summary: A summary DataFrame for different tick species and their life stages. Initialized as None.
     """
 
     def __init__(self, data: pd.DataFrame):
@@ -148,7 +147,7 @@ class PilisMultiindexing:
         """
         # Define the species to be summarized
         tick_species = [('I.', 'ricinus'), ('H.', 'inermis'), ('H.', 'concinna'), ('D.', 'marginatus'),
-                              ('D.', 'reticulatus')]
+                        ('D.', 'reticulatus')]
         # Define the life stages
         tick_stages = ['nőstény', 'hím', 'nimfa', 'lárva']
         df_summary = pd.DataFrame()

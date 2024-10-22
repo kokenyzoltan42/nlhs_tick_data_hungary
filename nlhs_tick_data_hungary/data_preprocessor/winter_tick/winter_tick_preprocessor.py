@@ -4,6 +4,9 @@ import pandas as pd
 class WinterTickPreprocessor:
     """
     Class for preparing the winter tick data for further analysis.
+
+    Attribute(s):
+    data: raw winter tick data passed by LoadWinterTickData class
     """
 
     def __init__(self, data: pd.DataFrame):

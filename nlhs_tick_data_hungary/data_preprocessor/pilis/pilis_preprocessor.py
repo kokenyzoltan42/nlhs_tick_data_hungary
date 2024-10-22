@@ -13,11 +13,8 @@ class PilisPreprocessor:
     gathering records, transforming raw input data into a usable format for analysis.
 
     Attributes:
-    ----------
-    data : pd.DataFrame
-        The raw tick data as a pandas DataFrame.
-    remove_reds : bool
-        A flag to indicate whether to remove specific rows of data (for erroneous entries).
+    data: The raw tick data as a pandas DataFrame.
+    remove_reds: A flag to indicate whether to remove specific rows of data (for erroneous entries).
     """
 
     def __init__(self, data: pd.DataFrame, remove_reds: bool = True):

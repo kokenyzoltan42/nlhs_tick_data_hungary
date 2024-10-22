@@ -6,13 +6,12 @@ from nlhs_tick_data_hungary.data_preprocessor.winter_tick.winter_tick_preprocess
 class LoadWinterTickData:
     """
     Class for loading and filtering winter tick data (H. inermis).
-    This class utilizes the InermisPreprocessor to handle the data preprocessing and provides
+    This class utilizes the WinterTickPreprocessor to handle the data preprocessing and provides
     filtering functionality based on gender, year, and month.
 
     Attributes:
-    ----------
-    data : The original DataFrame containing winter tick data.
-    preprocessor : An instance of the InermisPreprocessor class for preprocessing the data.
+    data: The original DataFrame containing winter tick data.
+    preprocessor: An instance of the WinterTickPreprocessor class for preprocessing the data.
     """
 
     def __init__(self, data: pd.DataFrame):
