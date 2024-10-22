@@ -7,46 +7,25 @@ class WinterTickPreprocessor:
     """
 
     def __init__(self, data: pd.DataFrame):
-        """
-        Initialize the preprocessor with the provided DataFrame.
-
-        :param data: DataFrame containing winter tick data.
-        """
         self.data = data
-        self.preprocess_data()
 
-    def preprocess_data(self) -> None:
-        """
-        Main method to preprocess the data by fixing columns and setting the index.
-        """
-        self.rename_and_set_index()
-        self.restructure_data()
+        self.fixing_columns()
 
-    def rename_and_set_index(self) -> None:
+    def fixing_columns(self) -> None:
         """
-        Method for renaming the '18×173' column to 'Bacteria' and set it as the index.
+        Method for fixing the columns of the winter tick data for easier manipulation.
         """
-        self.data.rename(columns={'18×173': 'Bacteria'}, inplace=True)
-        self.data.set_index('Bacteria', inplace=True)
+        self.data['Bacteria'] = self.data['18×173']
+        self.data = self.data.drop(columns=['18×173'])
+        self.data = self.data.set_index('Bacteria')
 
-    def restructure_data(self) -> None:
-        """
-        Restructure the DataFrame by transposing it and setting meaningful multi-index.
-        """
-        # Get current columns and assign meaningful names
-        new_columns = ['Year', 'Month', 'Gender'] + list(self.data.index[3:])
+        colos = list(self.data.T.columns)
+        colos[0] = 'Year'
+        colos[1] = 'Month'
+        colos[2] = 'Gender'
+        new_df = self.data.T
 
-        # Transpose the DataFrame and set new column names
-        self.data = self.data.T
-        self.data.columns = new_columns
+        new_df.columns = colos
 
-        # Set a multi-index with Year, Month, and Gender
-        self.data.set_index(keys=['Year', 'Month', 'Gender'], inplace=True)
-
-    def get_preprocessed_data(self) -> pd.DataFrame:
-        """
-        Get the preprocessed DataFrame.
-
-        :return: Preprocessed DataFrame.
-        """
-        return self.data.T
+        new_df.set_index(keys=['Year', 'Month', 'Gender'], inplace=True)
+        self.data = new_df.T
