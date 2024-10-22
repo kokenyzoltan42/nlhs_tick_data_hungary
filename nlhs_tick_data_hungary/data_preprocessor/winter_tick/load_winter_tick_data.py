@@ -1,6 +1,6 @@
 import pandas as pd
 
-from nlhs_tick_data_hungary.data_preprocessor.winter_tick.inermis_preprocessor import InermisPreprocessor
+from nlhs_tick_data_hungary.data_preprocessor.winter_tick.winter_tick_preprocessor import WinterTickPreprocessor
 
 
 class LoadWinterTickData:
@@ -22,7 +22,7 @@ class LoadWinterTickData:
         :param data: The DataFrame containing raw winter tick data.
         """
         self.data = data
-        self.preprocessor = InermisPreprocessor(data=self.data)
+        self.preprocessor = WinterTickPreprocessor(data=self.data)
 
     def run(self, gender: str, year: str, month: str) -> pd.DataFrame:
         """
