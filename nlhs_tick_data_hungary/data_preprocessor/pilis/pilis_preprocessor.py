@@ -3,6 +3,8 @@ import pandas as pd
 import re
 
 
+# TODO: több osztályra szedni?
+
 class PilisPreprocessor:
     """
     A data preprocessing class for tick collection data from Pilis region.
@@ -81,10 +83,9 @@ class PilisPreprocessor:
         :return: The DataFrame with adjusted month values.
         """
         prev_month = None
-        for idx in range(len(df)):
-            row = df.iloc[idx]
+        for idx, row in df.iterrows():
             if prev_month == row['Date']:
-                df.at[idx - 1, 'Date'] = row['Date'] - pd.DateOffset(months=1)
+                df.at[idx - 1, 'Date'] -= 1
             prev_month = row['Date']
         return df
 
