@@ -1,4 +1,6 @@
 import json
+from typing import Tuple
+
 import pandas as pd
 import re
 
@@ -29,15 +31,9 @@ class GoogleDriveDataloader:
         Yearly Lyme disease cases.
     """
 
-    def __init__(self  # ,
-                 # gsheet_url_pilis: str,
-                 # gsheet_url_inermis: str
-                 ):
+    def __init__(self):
         """
         Initializes the GoogleDriveDataloader with URLs and loads the data from the given Google Sheets.
-
-        :param gsheet_url_pilis: URL of the Google Sheet for Pilis tick data.
-        :param gsheet_url_inermis: URL of the Google Sheet for Inermis tick data.
         """
 
         # Load data from Google Sheets as CSV
@@ -49,9 +45,9 @@ class GoogleDriveDataloader:
         self.inermis_data = pd.read_csv(self.convert_google_sheet_url(result["winter_tick"]))
 
         # Load Lyme disease data (monthly and yearly)
-        self.lyme_m, self.lyme_y = self.lyme_loader()
+        self.lyme_m, self.lyme_y = self.lyme_loader(links=result)
 
-    def lyme_loader(self):
+    def lyme_loader(self, links: dict) -> Tuple[pd.Series, pd.Series]:
         """
         Loads the Lyme disease data from Google Drive, both monthly and yearly data.
 
@@ -59,10 +55,10 @@ class GoogleDriveDataloader:
         """
         # Google Drive downloader for monthly and yearly Lyme disease data
         g_dl_month = GoogleDataDownloader(
-            file_url="https://drive.google.com/file/d/12Z8fxqLuTHwhSKpNUidTQYPXb5BG_O_s/view?usp=sharing",
+            file_url=links["lyme_month"],
             file_name="lyme_disease_monthly.csv")
         g_dl_year = GoogleDataDownloader(
-            file_url="https://drive.google.com/file/d/1V4ShcC6lOfAatkru243visXWXSU3tgER/view?usp=sharing",
+            file_url=links["lyme_year"],
             file_name="lyme_disease_yearly.csv")
 
         # Load the data into pd.Series objects for monthly and yearly cases
