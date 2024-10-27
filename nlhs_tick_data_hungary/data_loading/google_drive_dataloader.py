@@ -1,8 +1,8 @@
-# import json
+import json
 import pandas as pd
 import re
 
-# from nlhs_tick_data_hungary import url_path
+from nlhs_tick_data_hungary import url_path
 from nlhs_tick_data_hungary.data_loading.GoogleDataDownLoader import GoogleDataDownloader
 
 
@@ -29,7 +29,10 @@ class GoogleDriveDataloader:
         Yearly Lyme disease cases.
     """
 
-    def __init__(self, gsheet_url_pilis: str, gsheet_url_inermis: str):
+    def __init__(self  # ,
+                 # gsheet_url_pilis: str,
+                 # gsheet_url_inermis: str
+                 ):
         """
         Initializes the GoogleDriveDataloader with URLs and loads the data from the given Google Sheets.
 
@@ -38,8 +41,12 @@ class GoogleDriveDataloader:
         """
 
         # Load data from Google Sheets as CSV
-        self.pilis_data = pd.read_csv(self.convert_google_sheet_url(gsheet_url_pilis))
-        self.inermis_data = pd.read_csv(self.convert_google_sheet_url(gsheet_url_inermis))
+        with open(url_path + f'/links.json', 'r+') as file:
+            result = json.load(file)
+        # self.pilis_data = pd.read_csv(self.convert_google_sheet_url(gsheet_url_pilis))
+        # self.inermis_data = pd.read_csv(self.convert_google_sheet_url(gsheet_url_inermis))
+        self.pilis_data = pd.read_csv(self.convert_google_sheet_url(result["pilis_tick"]))
+        self.inermis_data = pd.read_csv(self.convert_google_sheet_url(result["winter_tick"]))
 
         # Load Lyme disease data (monthly and yearly)
         self.lyme_m, self.lyme_y = self.lyme_loader()
