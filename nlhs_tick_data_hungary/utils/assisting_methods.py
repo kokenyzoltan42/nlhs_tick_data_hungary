@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-class AssisstingMethods:
+class AssistingMethods:
     @staticmethod
     def create_crosstable(df):
         # out = pd.get_dummies(data=df.iloc[:, 1:].stack()).sum().ne(0).astype(int)

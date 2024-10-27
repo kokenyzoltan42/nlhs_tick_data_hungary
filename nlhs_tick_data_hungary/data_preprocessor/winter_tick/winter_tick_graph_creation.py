@@ -2,7 +2,7 @@ import networkx as nx
 import numpy as np
 
 from nlhs_tick_data_hungary.data_preprocessor.winter_tick.load_winter_tick_data import LoadWinterTickData
-from nlhs_tick_data_hungary.utils.assissting_methods import AssisstingMethods
+from nlhs_tick_data_hungary.utils.assisting_methods import AssisstingMethods
 
 
 class GraphPreProcessor:
