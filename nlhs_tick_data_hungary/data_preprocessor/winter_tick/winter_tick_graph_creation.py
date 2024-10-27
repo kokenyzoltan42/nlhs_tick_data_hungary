@@ -2,7 +2,7 @@ import networkx as nx
 import numpy as np
 
 from nlhs_tick_data_hungary.data_preprocessor.winter_tick.load_winter_tick_data import LoadWinterTickData
-from nlhs_tick_data_hungary.utils.assisting_methods import AssisstingMethods
+from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
 
 
 class GraphPreProcessor:
@@ -79,19 +79,19 @@ class GraphPreProcessor:
             # Load data for females
             temp_df = self.winter_tick.run(gender='Female', year=self.year, month=self.month).astype(int)
             self.instances = len(temp_df.columns)
-            self.my_df_s = AssisstingMethods.create_crosstable(df=temp_df)
+            self.my_df_s = AssistingMethods.create_crosstable(df=temp_df)
 
         elif self.tipus == 'Hímek':
             # Load data for males
             temp_df = self.winter_tick.run(gender='Male', year=self.year, month=self.month).astype(int)
             self.instances = len(temp_df.columns)
-            self.my_df_s = AssisstingMethods.create_crosstable(df=temp_df)
+            self.my_df_s = AssistingMethods.create_crosstable(df=temp_df)
 
         elif self.tipus == 'Összes':
             # Load data for all
             temp_df = self.winter_tick.run(gender='All', year=self.year, month=self.month).astype(int)
             self.instances = len(temp_df.columns)
-            self.my_df_s = AssisstingMethods.create_crosstable(df=temp_df)
+            self.my_df_s = AssistingMethods.create_crosstable(df=temp_df)
 
         elif self.tipus in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
             # Load data for both genders to calculate differences
@@ -99,8 +99,8 @@ class GraphPreProcessor:
             male_df = self.winter_tick.run(gender='Male', year=self.year, month=self.month).astype(int)
 
             # Create crosstables for each gender
-            fem_crosstable = AssisstingMethods.create_crosstable(fem_df).fillna(0)
-            male_crosstable = AssisstingMethods.create_crosstable(male_df).fillna(0)
+            fem_crosstable = AssistingMethods.create_crosstable(fem_df).fillna(0)
+            male_crosstable = AssistingMethods.create_crosstable(male_df).fillna(0)
 
             # Calculate differences based on the specified type
             if self.tipus == 'Nőstény - Hím':
