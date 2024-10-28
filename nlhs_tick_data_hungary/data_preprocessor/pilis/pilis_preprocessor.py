@@ -190,6 +190,8 @@ class PilisPreprocessor:
         # Adjust month values for continuity
         self.data = self.adjust_months(self.data)
 
+        self.data.set_index('Date', inplace=True)
+
         # Group by date using resample for monthly aggregation and calculate mean for numeric columns
         self.data = self.data.resample('M').agg({
             'Min - T (°C)': 'mean',
