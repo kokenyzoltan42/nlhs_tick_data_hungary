@@ -82,8 +82,7 @@ class PilisPreprocessor:
         prev_month = None
         for idx, row in df.iterrows():
             if prev_month == row['Date']:
-                # Egy hónapot hozzáadunk a Date oszlophoz, ha ismétlődés van
-                df.at[idx - 1, 'Date'] = row['Date'] - pd.DateOffset(months=1)
+                df.at[idx + 1, 'Date'] += 1
             prev_month = row['Date']
         return df
 
@@ -182,25 +181,24 @@ class PilisPreprocessor:
         """
         # Convert collection dates to periods
         self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
-
-        # A 'Date' oszlopot először 'DatetimeIndex'-re konvertáljuk
         self.data['Date'] = self.data['Date'].dt.to_timestamp()
+
+        self.data.set_index('Date', inplace=True)
+        self.data = self.data.drop(columns=['Gyűjtési dátum'])
 
         # Adjust month values for continuity
         self.data = self.adjust_months(self.data)
 
-        # Ezután beállítjuk 'Date'-et indexnek, hogy használható legyen a resample-lal
-        self.data.set_index('Date', inplace=True)
-        self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
-
-        # Most a resample működni fog
+        # Group by date using resample for monthly aggregation and calculate mean for numeric columns
         self.data = self.data.resample('M').agg({
             'Min - T (°C)': 'mean',
             'Max - T (°C)': 'mean',
             'Min - RH(%)': 'mean',
             'Max - RH(%)': 'mean',
-            **{col: 'sum' for col in self.data.columns if
-               col not in ['Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)', 'Max - RH(%)', 'Gyűjtés helye']}
+            'Gyűjtés helye': 'first',  # Keep the first non-numeric column as it is
+            **{col: 'sum' for col in self.data.columns if col not in ['Date',
+                                                                      'Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)',
+                                                                      'Max - RH(%)', 'Gyűjtés helye']}
         }).reset_index()
 
         # Set 'Date' as index and drop unnecessary columns
