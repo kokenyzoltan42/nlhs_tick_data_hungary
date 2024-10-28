@@ -82,7 +82,8 @@ class PilisPreprocessor:
         prev_month = None
         for idx, row in df.iterrows():
             if prev_month == row['Date']:
-                df.at[idx + 1, 'Date'] += 1
+                # Egy hónapot hozzáadunk a Date oszlophoz, ha ismétlődés van
+                df.at[idx - 1, 'Date'] = row['Date'] - pd.DateOffset(months=1)
             prev_month = row['Date']
         return df
 
