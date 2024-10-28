@@ -185,17 +185,21 @@ class PilisPreprocessor:
         # Adjust month values for continuity
         self.data = self.adjust_months(self.data)
 
-        # Group by date using resample for monthly aggregation and calculate mean for numeric columns
-        self.data = self.data.resample('M', on='Date').agg({
+        # A 'Date' oszlopot először 'DatetimeIndex'-re konvertáljuk
+        self.data['Date'] = self.data['Date'].dt.to_timestamp()
+
+        # Ezután beállítjuk 'Date'-et indexnek, hogy használható legyen a resample-lal
+        self.data.set_index('Date', inplace=True)
+
+        # Most a resample működni fog
+        self.data = self.data.resample('M').agg({
             'Min - T (°C)': 'mean',
             'Max - T (°C)': 'mean',
             'Min - RH(%)': 'mean',
             'Max - RH(%)': 'mean',
-            'Gyűjtés helye': 'first',  # Keep the first non-numeric column as it is
-            **{col: 'sum' for col in self.data.columns if col not in ['Date',
-                                                                      'Min - T (°C)', 'Max - T (°C)',
-                                                                      'Min - RH(%)', 'Max - RH(%)',
-                                                                      'Gyűjtés helye']}
+            'Gyűjtés helye': 'first',  # Egy nem numerikus oszlop első értéke
+            **{col: 'sum' for col in self.data.columns if
+               col not in ['Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)', 'Max - RH(%)', 'Gyűjtés helye']}
         }).reset_index()
 
         # Set 'Date' as index and drop unnecessary columns
