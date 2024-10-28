@@ -202,12 +202,12 @@ class PilisPreprocessor:
         }).reset_index()
 
         # Set 'Date' as index and drop unnecessary columns
-        # self.data.set_index('Date', inplace=True)
+        self.data.set_index('Date', inplace=True)
         # self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
 
         # Reindex to include a full range of dates
-        # full_index = pd.date_range(start='2011-04', end='2024-08', freq='M').to_period('M')
-        # self.data = self.data.reindex(full_index, fill_value=np.nan)
+        full_index = pd.date_range(start='2011-04', end='2024-08', freq='M').to_period('M')
+        self.data = self.data.reindex(full_index, fill_value=np.nan)
 
     def normalize_tick_gathering(self) -> None:
         """
