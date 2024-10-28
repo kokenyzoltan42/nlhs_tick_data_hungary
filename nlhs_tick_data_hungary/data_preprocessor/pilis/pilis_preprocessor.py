@@ -185,21 +185,19 @@ class PilisPreprocessor:
         self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
         self.data['Date'] = self.data['Date'].dt.to_timestamp()
 
-        # self.data.set_index('Date', inplace=True)
         self.data = self.data.drop(columns=['Gyűjtési dátum'])
 
-        # Adjust month values for continuity
+        # Adjust months
         self.data = self.adjust_months(self.data)
 
         self.data.set_index('Date', inplace=True)
 
-        # Group by date using resample for monthly aggregation and calculate mean for numeric columns
         self.data = self.data.resample('M').agg({
             'Min - T (°C)': 'mean',
             'Max - T (°C)': 'mean',
             'Min - RH(%)': 'mean',
             'Max - RH(%)': 'mean',
-            'Gyűjtés helye': 'first',  # Keep the first non-numeric column as it is
+            'Gyűjtés helye': 'first',  # erre szükség van?
             **{col: 'sum' for col in self.data.columns if col not in ['Date',
                                                                       'Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)',
                                                                       'Max - RH(%)', 'Gyűjtés helye']}
