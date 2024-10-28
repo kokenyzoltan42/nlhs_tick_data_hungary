@@ -192,7 +192,7 @@ class PilisPreprocessor:
 
         self.data.set_index('Date', inplace=True)
 
-        self.data = self.data.resample('M').agg({
+        self.data = self.data.resample('ME').agg({
             'Min - T (°C)': 'mean',
             'Max - T (°C)': 'mean',
             'Min - RH(%)': 'mean',
