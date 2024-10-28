@@ -180,13 +180,13 @@ class PilisPreprocessor:
         Additionally, it reindexes the DataFrame to cover the full date range.
         """
         # Convert collection dates to periods
-        self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
-
-        # Adjust month values for continuity
-        self.data = self.adjust_months(self.data)
+        # self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
 
         # A 'Date' oszlopot először 'DatetimeIndex'-re konvertáljuk
         self.data['Date'] = self.data['Date'].dt.to_timestamp()
+
+        # Adjust month values for continuity
+        self.data = self.adjust_months(self.data)
 
         # Ezután beállítjuk 'Date'-et indexnek, hogy használható legyen a resample-lal
         self.data.set_index('Date', inplace=True)
@@ -197,7 +197,6 @@ class PilisPreprocessor:
             'Max - T (°C)': 'mean',
             'Min - RH(%)': 'mean',
             'Max - RH(%)': 'mean',
-            'Gyűjtés helye': 'first',  # Egy nem numerikus oszlop első értéke
             **{col: 'sum' for col in self.data.columns if
                col not in ['Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)', 'Max - RH(%)', 'Gyűjtés helye']}
         }).reset_index()
