@@ -185,35 +185,25 @@ class PilisPreprocessor:
         # Adjust month values for continuity
         self.data = self.adjust_months(self.data)
 
-        # Define aggregation functions for numeric columns
-        avg_cols = {
+        # Group by date using resample for monthly aggregation and calculate mean for numeric columns
+        self.data = self.data.resample('M', on='Date').agg({
             'Min - T (°C)': 'mean',
             'Max - T (°C)': 'mean',
             'Min - RH(%)': 'mean',
             'Max - RH(%)': 'mean',
-        }
-
-        # String columns that don't need to be changed
-        string_cols = ['Gyűjtés helye', 'Gyűjtési dátum', 'Egyéb megjegyzés']
-
-        # Group by date and calculate mean for numeric columns
-        df_grouped = self.data.groupby('Date').agg(avg_cols).reset_index()
-
-        # Retain additional columns
-        for col in self.data.columns:
-            if col not in avg_cols.keys() and col != 'Date' and col not in string_cols:
-                df_grouped[col] = self.data.groupby('Date')[col].sum().values
-                df_grouped[col] = df_grouped[col].replace(0, np.nan)  # Replace zeroes with NaN
-            if col in string_cols:
-                df_grouped[col] = self.data[col]
+            'Gyűjtés helye': 'first',  # Keep the first non-numeric column as it is
+            **{col: 'sum' for col in self.data.columns if col not in ['Date',
+                                                                      'Min - T (°C)', 'Max - T (°C)',
+                                                                      'Min - RH(%)', 'Max - RH(%)',
+                                                                      'Gyűjtés helye']}
+        }).reset_index()
 
         # Set 'Date' as index and drop unnecessary columns
-        df_grouped = df_grouped.set_index('Date')
-        df_grouped = df_grouped.drop(columns='Gyűjtési dátum')
-        self.data = df_grouped
+        self.data.set_index('Date', inplace=True)
+        self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
 
         # Reindex to include a full range of dates
-        full_index = pd.date_range(start='2011-04', end='2024-08', freq='ME').to_period('M')
+        full_index = pd.date_range(start='2011-04', end='2024-08', freq='M').to_period('M')
         self.data = self.data.reindex(full_index, fill_value=np.nan)
 
     def normalize_tick_gathering(self) -> None:
