@@ -180,7 +180,7 @@ class PilisPreprocessor:
         Additionally, it reindexes the DataFrame to cover the full date range.
         """
         # Convert collection dates to periods
-        # self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
+        self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
 
         # A 'Date' oszlopot először 'DatetimeIndex'-re konvertáljuk
         self.data['Date'] = self.data['Date'].dt.to_timestamp()
@@ -190,6 +190,7 @@ class PilisPreprocessor:
 
         # Ezután beállítjuk 'Date'-et indexnek, hogy használható legyen a resample-lal
         self.data.set_index('Date', inplace=True)
+        self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
 
         # Most a resample működni fog
         self.data = self.data.resample('M').agg({
@@ -202,8 +203,8 @@ class PilisPreprocessor:
         }).reset_index()
 
         # Set 'Date' as index and drop unnecessary columns
-        self.data.set_index('Date', inplace=True)
-        self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
+        # self.data.set_index('Date', inplace=True)
+        # self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
 
         # Reindex to include a full range of dates
         full_index = pd.date_range(start='2011-04', end='2024-08', freq='M').to_period('M')
