@@ -83,7 +83,7 @@ class PilisPreprocessor:
         for idx, row in df.iterrows():
             print('idx:',idx, '\n row:',row, '\n')
             if prev_month == row['Date']:
-                df.at[idx - 1, 'Date'] -= 1
+                df.at[idx - 1, 'Date'] = row['Date'] - pd.DateOffset(months=1)
             prev_month = row['Date']
         return df
 
