@@ -81,6 +81,7 @@ class PilisPreprocessor:
         """
         prev_month = None
         for idx, row in df.iterrows():
+            print(idx, row)
             if prev_month == row['Date']:
                 df.at[idx - 1, 'Date'] -= 1
             prev_month = row['Date']
@@ -187,7 +188,7 @@ class PilisPreprocessor:
         self.data = self.data.drop(columns=['Gyűjtési dátum'])
 
         # Adjust month values for continuity
-        # self.data = self.adjust_months(self.data)
+        self.data = self.adjust_months(self.data)
 
         # Group by date using resample for monthly aggregation and calculate mean for numeric columns
         self.data = self.data.resample('M').agg({
@@ -201,13 +202,9 @@ class PilisPreprocessor:
                                                                       'Max - RH(%)', 'Gyűjtés helye']}
         }).reset_index()
 
-        # Set 'Date' as index and drop unnecessary columns
-        # self.data.set_index('Date', inplace=True)
-        # self.data = self.data.drop(columns='Gyűjtési dátum', errors='ignore')
+        self.data.set_index('Date', inplace=True)
 
-        # Reindex to include a full range of dates
-        # full_index = pd.date_range(start='2011-04', end='2024-08', freq='M').to_period('M')
-        # self.data = self.data.reindex(full_index, fill_value=np.nan)
+        self.data.index = self.data.index.to_period('M')
 
     def normalize_tick_gathering(self) -> None:
         """
