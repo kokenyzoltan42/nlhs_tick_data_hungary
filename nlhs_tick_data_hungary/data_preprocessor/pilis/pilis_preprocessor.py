@@ -187,7 +187,7 @@ class PilisPreprocessor:
         self.data = self.data.drop(columns=['Gyűjtési dátum'])
 
         # Adjust month values for continuity
-        self.data = self.adjust_months(self.data)
+        # self.data = self.adjust_months(self.data)
 
         # Group by date using resample for monthly aggregation and calculate mean for numeric columns
         self.data = self.data.resample('M').agg({
