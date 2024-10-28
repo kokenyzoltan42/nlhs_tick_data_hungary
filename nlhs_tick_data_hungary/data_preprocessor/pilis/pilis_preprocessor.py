@@ -213,7 +213,7 @@ class PilisPreprocessor:
         self.data = df_grouped
 
         # Reindex to include a full range of dates
-        full_index = pd.date_range(start='2011-04', end='2024-08', freq='ME').to_period('M')
+        full_index = pd.date_range(start='2011-03', end='2024-08', freq='ME').to_period('M')
         self.data = self.data.reindex(full_index, fill_value=np.nan)
 
     def normalize_tick_gathering(self) -> None:
