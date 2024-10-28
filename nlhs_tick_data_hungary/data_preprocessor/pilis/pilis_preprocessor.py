@@ -81,7 +81,7 @@ class PilisPreprocessor:
         """
         prev_month = None
         for idx, row in df.iterrows():
-            print(idx, row)
+            print('idx:',idx, '\n row:',row, '\n')
             if prev_month == row['Date']:
                 df.at[idx - 1, 'Date'] -= 1
             prev_month = row['Date']
@@ -184,7 +184,7 @@ class PilisPreprocessor:
         self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
         self.data['Date'] = self.data['Date'].dt.to_timestamp()
 
-        self.data.set_index('Date', inplace=True)
+        # self.data.set_index('Date', inplace=True)
         self.data = self.data.drop(columns=['Gyűjtési dátum'])
 
         # Adjust month values for continuity
