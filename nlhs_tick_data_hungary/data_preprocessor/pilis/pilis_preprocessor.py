@@ -81,10 +81,11 @@ class PilisPreprocessor:
         """
         prev_month = None
         for idx, row in df.iterrows():
-            print('idx:',idx, '\n row:',row, '\n')
-            if prev_month == row['Date']:
-                df.at[idx - 1, 'Date'] = row['Date'] - pd.DateOffset(months=1)
-            prev_month = row['Date']
+            if idx > 7:
+                # print('idx:',idx, '\n row:',row, '\n')
+                if prev_month == row['Date']:
+                    df.at[idx - 1, 'Date'] = row['Date'] - pd.DateOffset(months=1)
+                prev_month = row['Date']
         return df
 
     def adjust_columns(self) -> None:
