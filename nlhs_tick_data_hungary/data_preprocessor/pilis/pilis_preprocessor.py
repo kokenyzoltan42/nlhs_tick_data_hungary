@@ -182,7 +182,7 @@ class PilisPreprocessor:
         Additionally, it reindexes the DataFrame to cover the full date range.
         """
         # Convert collection dates to periods
-        self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum']).dt.to_period('M')
+        self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum'], format='mixed').dt.to_period('M')
         self.data['Date'] = self.data['Date'].dt.to_timestamp()
 
         self.data = self.data.drop(columns=['Gyűjtési dátum'])
