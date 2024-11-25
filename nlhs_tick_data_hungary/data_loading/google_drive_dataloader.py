@@ -1,6 +1,7 @@
 import json
 from typing import Tuple
 
+import numpy as np
 import pandas as pd
 import re
 
@@ -30,7 +31,7 @@ class GoogleDriveDataloader:
     lyme_y : pd.Series
         Yearly Lyme disease cases.
     """
-
+# TODO: docstring-ek kiegészítése a csapadékos adatokkal
     def __init__(self):
         """
         Initializes the GoogleDriveDataloader with URLs and loads the data from the given Google Sheets.
@@ -67,6 +68,33 @@ class GoogleDriveDataloader:
 
         return lyme_m, lyme_y
 
+    def rainfall_loader(self, links: dict) -> Tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
+        g_dl_piliscsaba_2002_2023 = GoogleDataDownloader(
+            file_url=links["piliscsaba_csapadek_2002-2023"],
+            file_name="piliscsaba_2002-2023.csv"
+        )
+        g_dl_piliscsaba_2024 = GoogleDataDownloader(
+            file_url=links["piliscsaba_csapadek_2024"],
+            file_name="piliscsaba_csapadek_2024.csv"
+        )
+
+        g_dl_pilisszentkereszt_2020_2023 = GoogleDataDownloader(
+            file_url=links["pilisszentkereszt_csapadek_2020-2023"],
+            file_name="pilisszentkereszt_csapadek_2020-2023"
+        )
+        g_dl_pilisszentkereszt_2024 = GoogleDataDownloader(
+            file_url=links["pilisszentkereszt_csapadek_2024"],
+            file_name="pilisszentkereszt_csapadek_2024.csv"
+        )
+
+        piliscsaba_2002_2023 = self.load_rainfall_data(path=g_dl_piliscsaba_2002_2023.file_path)
+        pilissaba_2024 = self.load_rainfall_data(path=g_dl_piliscsaba_2024.file_path)
+
+        pilisszentkereszt_2020_2023 = self.load_rainfall_data(path=g_dl_pilisszentkereszt_2020_2023.file_path)
+        pilisszentkereszt_2024 = self.load_rainfall_data(path=g_dl_pilisszentkereszt_2024.file_path)
+
+        return piliscsaba_2002_2023, pilissaba_2024, pilisszentkereszt_2020_2023, pilisszentkereszt_2024
+
     @staticmethod
     def load_lyme_data(path, period: str) -> pd.Series:
         """
@@ -97,6 +125,25 @@ class GoogleDriveDataloader:
         lyme_series = pd.Series(index=lyme_data.index, data=lyme_data['Values'])
 
         return lyme_series
+
+    @staticmethod
+    def load_rainfall_data(path) -> pd.Series:
+        rainfall_data = pd.read_csv(path, sep=';', header=4)
+
+        # Removing unnecessary whitespaces from the columns
+        rainfall_data.columns = rainfall_data.columns.str.strip()
+
+        # Creating time index
+        rainfall_data['Time'] = pd.to_datetime(rainfall_data["Time"], format='%Y%m%d')
+        rainfall_data.set_index('Time', inplace=True)
+
+        # Replacing missing values with NaN
+        rainfall_data.replace(-999, np.nan, inplace=True)
+
+        # Creating series to return
+        rainfall_series = rainfall_data['r'].astype(float)
+
+        return rainfall_series
 
     @staticmethod
     def convert_google_sheet_url(url: str) -> str:
