@@ -170,8 +170,15 @@ class PilisPreprocessor:
         This function ensures that the 'Gyűjtők száma' column is filled with data from
         the 'Eredeti csövek száma' column where applicable.
         """
+
+        remain_nans = ['Eredeti csövek száma', 'Válogatott csövek száma', 'Gyűjtés időtartama (h)',
+                       'Egyéb megjegyzés']
+
         self.data = self.data.fillna(np.nan)  # Fill with NaN for clarity
         self.data['Gyűjtők száma'] = self.data['Gyűjtők száma'].fillna(self.data['Eredeti csövek száma'])
+        for col in self.data.columns:
+            if col not in remain_nans:
+                self.data[col] = self.data.fillna(0)
 
     def adjust_indices(self) -> None:
         """
