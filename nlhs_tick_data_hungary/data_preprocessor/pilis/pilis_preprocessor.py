@@ -224,7 +224,6 @@ class PilisPreprocessor:
 
     def adjust_indices_basic(self) -> None:
         self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum'], format='mixed')
-        self.data['Date'] = self.data['Date'].dt.to_timestamp()  # Erre szükség van?
 
         self.data = self.data.drop(columns=['Gyűjtési dátum'])
         self.data.set_index('Date', inplace=True)
