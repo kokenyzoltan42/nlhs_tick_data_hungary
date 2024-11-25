@@ -17,7 +17,7 @@ class PilisPreprocessor:
     remove_reds: A flag to indicate whether to remove specific rows of data (for erroneous entries).
     """
 
-    def __init__(self, data: pd.DataFrame, remove_reds: bool = True):
+    def __init__(self, data: pd.DataFrame, remove_reds: bool = True, monthly_period: bool = True):
         """
         Initializes the PilisPreprocessor class with the provided data.
 
@@ -26,8 +26,9 @@ class PilisPreprocessor:
         """
         self.data = data
         self.remove_reds = remove_reds
+        self.monthly_period = monthly_period
 
-        # Start the preprocessing pipeline
+        # Start the preprocessing
         self.run()
 
     def run(self) -> None:
@@ -42,7 +43,8 @@ class PilisPreprocessor:
         self.split_temps_and_rhs()
         self.remove_reds_from_table()
         self.fill_missing_data()
-        self.adjust_indices()
+        if self.monthly_period:
+            self.adjust_indices()
         self.normalize_tick_gathering()
 
     @staticmethod
@@ -118,6 +120,8 @@ class PilisPreprocessor:
             "Unnamed: 27": "D. reticulatus nimfa",
             "Unnamed: 28": "D. reticulatus lárva",
         })
+
+# TODO: az ilyesmi hosszú listákkal kezdeni valamit
 
         # Drop the first row and reset the index
         self.data = self.data.drop(index=0).reset_index().drop(columns="index")
