@@ -8,9 +8,11 @@ class WinterTickPreprocessor:
     Attribute(s):
     data: raw winter tick data passed by LoadWinterTickData class
     """
-
-    def __init__(self, data: pd.DataFrame):
+# TODO: Update docstrings
+    def __init__(self, data: pd.DataFrame, remove_catch_all: bool = False):
         self.data = data
+
+        self.remove_catch_all = remove_catch_all
 
         self.fixing_columns()
 
@@ -25,6 +27,10 @@ class WinterTickPreprocessor:
         self.data['Bacteria'] = self.data['18×173']
         self.data = self.data.drop(columns=['18×173'])
         self.data = self.data.set_index('Bacteria')
+
+        if self.remove_catch_all:
+            # There is an instance where 'catch-all' is written with a capital C
+            self.data = self.data[~self.data.index.astype(str).str.contains('atch-all')]
 
         # Renaming the columns for easier manageability
         colos = list(self.data.T.columns)
