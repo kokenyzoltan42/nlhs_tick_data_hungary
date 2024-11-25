@@ -47,6 +47,8 @@ class GoogleDriveDataloader:
 
         # Load Lyme disease data (monthly and yearly)
         self.lyme_m, self.lyme_y = self.lyme_loader(links=result)
+        (self.piliscs_2002_2023, self.piliscs_2024,
+         self.pilissz_2020_2023, self.pilissz_2024) = self.rainfall_loader(links=result)
 
     def lyme_loader(self, links: dict) -> Tuple[pd.Series, pd.Series]:
         """
