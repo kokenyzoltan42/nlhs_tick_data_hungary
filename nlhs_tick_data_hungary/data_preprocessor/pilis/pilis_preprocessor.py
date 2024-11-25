@@ -4,6 +4,8 @@ import re
 
 
 # TODO: több osztályra szedni?
+# TODO: docstring-ek
+# TODO: függvények sorrendjét helyre rakni és a kommenteket átnézni
 
 class PilisPreprocessor:
     """
@@ -44,7 +46,9 @@ class PilisPreprocessor:
         self.remove_reds_from_table()
         self.fill_missing_data()
         if self.monthly_period:
-            self.adjust_indices()
+            self.adjust_indices_to_monthly_period()
+        else:
+            self.adjust_indices_basic()
         self.normalize_tick_gathering()
 
     @staticmethod
@@ -121,7 +125,7 @@ class PilisPreprocessor:
             "Unnamed: 28": "D. reticulatus lárva",
         })
 
-# TODO: az ilyesmi hosszú listákkal kezdeni valamit
+        # TODO: az ilyesmi hosszú listákkal kezdeni valamit
 
         # Drop the first row and reset the index
         self.data = self.data.drop(index=0).reset_index().drop(columns="index")
@@ -184,7 +188,7 @@ class PilisPreprocessor:
             if col not in remain_nans:
                 self.data[col] = self.data[col].fillna(0)
 
-    def adjust_indices(self) -> None:
+    def adjust_indices_to_monthly_period(self) -> None:
         """
         Adjusts the DataFrame indices based on the collection dates.
 
@@ -217,6 +221,13 @@ class PilisPreprocessor:
         self.data.set_index('Date', inplace=True)
 
         self.data.index = self.data.index.to_period('M')
+
+    def adjust_indices_basic(self) -> None:
+        self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum'], format='mixed')
+        self.data['Date'] = self.data['Date'].dt.to_timestamp()  # Erre szükség van?
+
+        self.data = self.data.drop(columns=['Gyűjtési dátum'])
+        self.data.set_index('Date', inplace=True)
 
     def normalize_tick_gathering(self) -> None:
         """
