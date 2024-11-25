@@ -31,7 +31,8 @@ class GoogleDriveDataloader:
     lyme_y : pd.Series
         Yearly Lyme disease cases.
     """
-# TODO: docstring-ek kiegészítése a csapadékos adatokkal
+
+    # TODO: docstring-ek kiegészítése a csapadékos adatokkal
     def __init__(self):
         """
         Initializes the GoogleDriveDataloader with URLs and loads the data from the given Google Sheets.
@@ -47,8 +48,7 @@ class GoogleDriveDataloader:
 
         # Load Lyme disease data (monthly and yearly)
         self.lyme_m, self.lyme_y = self.lyme_loader(links=result)
-        (self.pilis_cs_2002_2023, self.pilis_cs_2024,
-         self.pilis_sz_2020_2023, self.pilis_sz_2024) = self.rainfall_loader(links=result)
+        self.piliscsaba_r, self.pilisszentkereszt_r = self.rainfall_loader(links=result)
 
     def lyme_loader(self, links: dict) -> Tuple[pd.Series, pd.Series]:
         """
@@ -70,7 +70,7 @@ class GoogleDriveDataloader:
 
         return lyme_m, lyme_y
 
-    def rainfall_loader(self, links: dict) -> Tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
+    def rainfall_loader(self, links: dict) -> Tuple[pd.Series, pd.Series]:
         g_dl_piliscsaba_2002_2023 = GoogleDataDownloader(
             file_url=links["piliscsaba_csapadek_2002-2023"],
             file_name="piliscsaba_2002-2023.csv"
@@ -90,12 +90,15 @@ class GoogleDriveDataloader:
         )
 
         piliscsaba_2002_2023 = self.load_rainfall_data(path=g_dl_piliscsaba_2002_2023.file_path)
-        pilissaba_2024 = self.load_rainfall_data(path=g_dl_piliscsaba_2024.file_path)
+        piliscsaba_2024 = self.load_rainfall_data(path=g_dl_piliscsaba_2024.file_path)
+        piliscsaba = self.concatonate_timeseries(first_ts=piliscsaba_2002_2023, second_ts=piliscsaba_2024)
 
         pilisszentkereszt_2020_2023 = self.load_rainfall_data(path=g_dl_pilisszentkereszt_2020_2023.file_path)
         pilisszentkereszt_2024 = self.load_rainfall_data(path=g_dl_pilisszentkereszt_2024.file_path)
+        pilisszentkereszt = self.concatonate_timeseries(first_ts=pilisszentkereszt_2020_2023,
+                                                        second_ts=pilisszentkereszt_2024)
 
-        return piliscsaba_2002_2023, pilissaba_2024, pilisszentkereszt_2020_2023, pilisszentkereszt_2024
+        return piliscsaba, pilisszentkereszt
 
     @staticmethod
     def load_lyme_data(path, period: str) -> pd.Series:
@@ -168,3 +171,7 @@ class GoogleDriveDataloader:
         new_url = re.sub(pattern, replacement, url)
 
         return new_url
+
+    @staticmethod
+    def concatonate_timeseries(first_ts: pd.Series, second_ts: pd.Series) -> pd.Series:
+        return pd.concat([first_ts, second_ts]).sort_index()
