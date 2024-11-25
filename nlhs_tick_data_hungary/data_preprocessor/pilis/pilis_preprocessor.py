@@ -4,6 +4,8 @@ import re
 
 
 # TODO: több osztályra szedni?
+# TODO: docstring-ek
+# TODO: függvények sorrendjét helyre rakni és a kommenteket átnézni
 
 class PilisPreprocessor:
     """
@@ -17,7 +19,7 @@ class PilisPreprocessor:
     remove_reds: A flag to indicate whether to remove specific rows of data (for erroneous entries).
     """
 
-    def __init__(self, data: pd.DataFrame, remove_reds: bool = True):
+    def __init__(self, data: pd.DataFrame, remove_reds: bool = True, monthly_period: bool = True):
         """
         Initializes the PilisPreprocessor class with the provided data.
 
@@ -26,8 +28,9 @@ class PilisPreprocessor:
         """
         self.data = data
         self.remove_reds = remove_reds
+        self.monthly_period = monthly_period
 
-        # Start the preprocessing pipeline
+        # Start the preprocessing
         self.run()
 
     def run(self) -> None:
@@ -42,7 +45,10 @@ class PilisPreprocessor:
         self.split_temps_and_rhs()
         self.remove_reds_from_table()
         self.fill_missing_data()
-        self.adjust_indices()
+        if self.monthly_period:
+            self.adjust_indices_to_monthly_period()
+        else:
+            self.adjust_indices_basic()
         self.normalize_tick_gathering()
 
     @staticmethod
@@ -119,6 +125,8 @@ class PilisPreprocessor:
             "Unnamed: 28": "D. reticulatus lárva",
         })
 
+        # TODO: az ilyesmi hosszú listákkal kezdeni valamit
+
         # Drop the first row and reset the index
         self.data = self.data.drop(index=0).reset_index().drop(columns="index")
 
@@ -170,10 +178,17 @@ class PilisPreprocessor:
         This function ensures that the 'Gyűjtők száma' column is filled with data from
         the 'Eredeti csövek száma' column where applicable.
         """
+
+        remain_nans = ['Eredeti csövek száma', 'Válogatott csövek száma', 'Gyűjtés időtartama (h)',
+                       'Egyéb megjegyzés']
+
         self.data = self.data.fillna(np.nan)  # Fill with NaN for clarity
         self.data['Gyűjtők száma'] = self.data['Gyűjtők száma'].fillna(self.data['Eredeti csövek száma'])
+        for col in self.data.columns:
+            if col not in remain_nans:
+                self.data[col] = self.data[col].fillna(0)
 
-    def adjust_indices(self) -> None:
+    def adjust_indices_to_monthly_period(self) -> None:
         """
         Adjusts the DataFrame indices based on the collection dates.
 
@@ -206,6 +221,12 @@ class PilisPreprocessor:
         self.data.set_index('Date', inplace=True)
 
         self.data.index = self.data.index.to_period('M')
+
+    def adjust_indices_basic(self) -> None:
+        self.data['Date'] = pd.to_datetime(self.data['Gyűjtési dátum'], format='mixed')
+
+        self.data = self.data.drop(columns=['Gyűjtési dátum'])
+        self.data.set_index('Date', inplace=True)
 
     def normalize_tick_gathering(self) -> None:
         """
