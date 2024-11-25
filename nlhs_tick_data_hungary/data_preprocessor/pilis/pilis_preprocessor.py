@@ -182,7 +182,7 @@ class PilisPreprocessor:
         self.data['Gyűjtők száma'] = self.data['Gyűjtők száma'].fillna(self.data['Eredeti csövek száma'])
         for col in self.data.columns:
             if col not in remain_nans:
-                self.data[col] = self.data.fillna(0)
+                self.data[col] = self.data[col].fillna(0)
 
     def adjust_indices(self) -> None:
         """
