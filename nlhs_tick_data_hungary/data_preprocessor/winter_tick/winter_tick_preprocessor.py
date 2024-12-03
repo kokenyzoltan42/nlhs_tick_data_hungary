@@ -8,7 +8,8 @@ class WinterTickPreprocessor:
     Attribute(s):
     data: raw winter tick data passed by LoadWinterTickData class
     """
-# TODO: Update docstrings
+
+    # TODO: Update docstrings
     def __init__(self, data: pd.DataFrame, selected_group: str = None):
         self.data = data
 
@@ -21,16 +22,6 @@ class WinterTickPreprocessor:
         Method for fixing the columns of the winter tick data for easier manageability.
         """
         # TODO: Ezeket json-ből kellene beolvasni
-        group_1 = ['Neoehrlichia mikurensis',
-                   'B.burgdorferi s.s.',
-                   'B.afzelii',
-                   'Babesia microti',
-                   'Rickettsia Catch-all (23-5s rRNA)',
-                   'Anaplasma phagocytophilum 1',
-                   'Rickettsia helvetica (16s rRNA)',
-                   'Rickettsia massiliae (16s rRNA)',
-                   'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
-                   ]
 
         group_2 = ['Lyme Borrelia catch-all (Rijpkema)',
                    'Lyme Borrelia catch-all (Anna)',
@@ -66,7 +57,16 @@ class WinterTickPreprocessor:
         # TODO: dictionary-be helyezni és onnan meghívni, így csúnya
         # TODO: a csoport kiválasztása kerüljön külön függvénybe
         if self.selected_group == '1. csoport':
-            self.data = self.data.loc[self.data.index.isin(group_1)]
+            self.data = self.data.loc['Neoehrlichia mikurensis',
+            'B.burgdorferi s.s.',
+            'B.afzelii',
+            'Babesia microti',
+            'Rickettsia Catch-all (23-5s rRNA)',
+            'Anaplasma phagocytophilum 1',
+            'Rickettsia helvetica (16s rRNA)',
+            'Rickettsia massiliae (16s rRNA)',
+            'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
+            ]
         if self.selected_group == '2. csoport':
             self.data = self.data.loc[self.data.index.isin(group_2)]
         if self.selected_group == '3. csoport':
