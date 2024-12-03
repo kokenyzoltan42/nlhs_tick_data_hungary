@@ -23,6 +23,17 @@ class WinterTickPreprocessor:
         """
         # TODO: Ezeket json-ből kellene beolvasni
 
+        group_1 = ['Neoehrlichia mikurensis',
+                   'B.burgdorferi s.s.',
+                   'B.afzelii',
+                   'Babesia microti',
+                   'Rickettsia Catch-all (23-5s rRNA)',
+                   'Anaplasma phagocytophilum 1',
+                   'Rickettsia helvetica (16s rRNA)',
+                   'Rickettsia massiliae (16s rRNA)',
+                   'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
+                   ]
+
         group_2 = ['Lyme Borrelia catch-all (Rijpkema)',
                    'Lyme Borrelia catch-all (Anna)',
                    'Spotted Fever Group catch-all (23-5s rRNA)',
@@ -68,26 +79,9 @@ class WinterTickPreprocessor:
             self.data = self.data[~self.data.index.astype(str).str.contains('atch-all')]
         # TODO: dictionary-be helyezni és onnan meghívni, így csúnya
         # TODO: a csoport kiválasztása kerüljön külön függvénybe
+        # TODO: rájönni, hogy ez miért csak akkor működik, ha a kód végén van
         if self.selected_group == '1. csoport':
-            self.data = self.data.loc[self.data.index.isin(['Neoehrlichia mikurensis',
-                                                            'B.burgdorferi s.s.',
-                                                            'B.afzelii',
-                                                            'Babesia microti',
-                                                            'Rickettsia Catch-all (23-5s rRNA)',
-                                                            'Anaplasma phagocytophilum 1',
-                                                            'Rickettsia helvetica (16s rRNA)',
-                                                            'Rickettsia massiliae (16s rRNA)',
-                                                            'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
-                                                            ])]
-            print(self.data.index.isin(['Neoehrlichia mikurensis',
-                                        'B.burgdorferi s.s.',
-                                        'B.afzelii',
-                                        'Babesia microti',
-                                        'Rickettsia Catch-all (23-5s rRNA)',
-                                        'Anaplasma phagocytophilum 1',
-                                        'Rickettsia helvetica (16s rRNA)',
-                                        'Rickettsia massiliae (16s rRNA)',
-                                        'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)']))
+            self.data = self.data.loc[self.data.index.isin(group_1)]
         if self.selected_group == '2. csoport':
             self.data = self.data.loc[self.data.index.isin(group_2)]
         if self.selected_group == '3. csoport':
