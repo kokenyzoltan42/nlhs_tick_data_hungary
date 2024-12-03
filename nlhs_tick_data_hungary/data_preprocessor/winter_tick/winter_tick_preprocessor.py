@@ -57,16 +57,16 @@ class WinterTickPreprocessor:
         # TODO: dictionary-be helyezni és onnan meghívni, így csúnya
         # TODO: a csoport kiválasztása kerüljön külön függvénybe
         if self.selected_group == '1. csoport':
-            self.data = self.data.loc['Neoehrlichia mikurensis',
-            'B.burgdorferi s.s.',
-            'B.afzelii',
-            'Babesia microti',
-            'Rickettsia Catch-all (23-5s rRNA)',
-            'Anaplasma phagocytophilum 1',
-            'Rickettsia helvetica (16s rRNA)',
-            'Rickettsia massiliae (16s rRNA)',
-            'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
-            ]
+            self.data = self.data[['Neoehrlichia mikurensis',
+                                   'B.burgdorferi s.s.',
+                                   'B.afzelii',
+                                   'Babesia microti',
+                                   'Rickettsia Catch-all (23-5s rRNA)',
+                                   'Anaplasma phagocytophilum 1',
+                                   'Rickettsia helvetica (16s rRNA)',
+                                   'Rickettsia massiliae (16s rRNA)',
+                                   'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
+                                   ]]
         if self.selected_group == '2. csoport':
             self.data = self.data.loc[self.data.index.isin(group_2)]
         if self.selected_group == '3. csoport':
