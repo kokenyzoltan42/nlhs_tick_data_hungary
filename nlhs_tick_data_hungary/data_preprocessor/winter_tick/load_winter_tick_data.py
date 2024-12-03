@@ -14,7 +14,7 @@ class LoadWinterTickData:
     preprocessor: An instance of the WinterTickPreprocessor class for preprocessing the data.
     """
 
-    def __init__(self, data: pd.DataFrame, remove_catch_all: bool = False):
+    def __init__(self, data: pd.DataFrame, selected_group: str = None):
         """
         Initialize the LoadWinterTickData class with the raw data and preprocessor.
 
@@ -23,7 +23,7 @@ class LoadWinterTickData:
         # TODO: Update docstrings
         self.data = data
         self.preprocessor = WinterTickPreprocessor(data=self.data,
-                                                   remove_catch_all=remove_catch_all)
+                                                   selected_group=selected_group)
 
     def run(self, gender: str, year: str, month: str) -> pd.DataFrame:
         """
