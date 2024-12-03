@@ -51,6 +51,18 @@ class WinterTickPreprocessor:
         self.data = self.data.drop(columns=['18×173'])
         self.data = self.data.set_index('Bacteria')
 
+        # Renaming the columns for easier manageability
+        colos = list(self.data.T.columns)
+        colos[0] = 'Year'
+        colos[1] = 'Month'
+        colos[2] = 'Gender'
+        new_df = self.data.T
+
+        new_df.columns = colos
+
+        new_df.set_index(keys=['Year', 'Month', 'Gender'], inplace=True)
+        self.data = new_df.T
+
         if self.selected_group == 'Remove catch-all':
             # There is an instance where 'catch-all' is written with a capital C
             self.data = self.data[~self.data.index.astype(str).str.contains('atch-all')]
@@ -67,19 +79,16 @@ class WinterTickPreprocessor:
                                                             'Rickettsia massiliae (16s rRNA)',
                                                             'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)'
                                                             ])]
+            print(self.data.index.isin(['Neoehrlichia mikurensis',
+                                        'B.burgdorferi s.s.',
+                                        'B.afzelii',
+                                        'Babesia microti',
+                                        'Rickettsia Catch-all (23-5s rRNA)',
+                                        'Anaplasma phagocytophilum 1',
+                                        'Rickettsia helvetica (16s rRNA)',
+                                        'Rickettsia massiliae (16s rRNA)',
+                                        'Rickettsia sp. (DnS14)/ raoultii (16s rRNA)']))
         if self.selected_group == '2. csoport':
             self.data = self.data.loc[self.data.index.isin(group_2)]
         if self.selected_group == '3. csoport':
             self.data = self.data.loc[self.data.index.isin(group_3)]
-
-        # Renaming the columns for easier manageability
-        colos = list(self.data.T.columns)
-        colos[0] = 'Year'
-        colos[1] = 'Month'
-        colos[2] = 'Gender'
-        new_df = self.data.T
-
-        new_df.columns = colos
-
-        new_df.set_index(keys=['Year', 'Month', 'Gender'], inplace=True)
-        self.data = new_df.T
