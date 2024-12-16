@@ -68,7 +68,7 @@ class GraphPreProcessor:
         if self.winter_tick.preprocessor.selected_group == None:
             selected_group = 'nincs_csoport_'
         else:
-            selected_group = self.winter_tick.preprocessor.selected_group + '_'
+            selected_group = self.winter_tick.preprocessor.selected_group.replace('.', ',') + '_'
 
         # Create the PNG filename
         self.png_name = 'Halozat_' + selected_group + self.tipus + szazalek + selected_year + selected_month
