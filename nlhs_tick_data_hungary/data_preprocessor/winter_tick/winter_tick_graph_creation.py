@@ -65,8 +65,13 @@ class GraphPreProcessor:
         else:
             selected_month = '_' + self.month
 
-        # Create the PNG filename using the type, percentage flag, year, and month
-        self.png_name = 'Halozat_' + self.tipus + szazalek + selected_year + selected_month
+        if self.winter_tick.selected_group == '':
+            selected_group = 'nincs_csoport_'
+        else:
+            selected_group = self.winter_tick.selected_group + '_'
+
+        # Create the PNG filename
+        self.png_name = 'Halozat_' + selected_group + self.tipus + szazalek + selected_year + selected_month
 
     def _get_data(self):
         """
