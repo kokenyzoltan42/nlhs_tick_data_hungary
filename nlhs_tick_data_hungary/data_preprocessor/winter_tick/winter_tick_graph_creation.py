@@ -65,7 +65,7 @@ class GraphPreProcessor:
         else:
             selected_month = '_' + self.month
 
-        if self.winter_tick.preprocessor.selected_group == '':
+        if self.winter_tick.preprocessor.selected_group == None:
             selected_group = 'nincs_csoport_'
         else:
             selected_group = self.winter_tick.preprocessor.selected_group + '_'
