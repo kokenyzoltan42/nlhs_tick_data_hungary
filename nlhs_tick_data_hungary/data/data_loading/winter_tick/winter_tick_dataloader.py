@@ -5,11 +5,11 @@ class WinterTickDataloader:
     def __init__(self):
         pass
 
-    def run(self):
+    def run(self) -> None:
         pass
 
-    def load_raw_data(self):
+    def load_raw_data(self) -> pd.DataFrame:
         pass
 
-    def preprocess_data(self, df: pd.DataFrame) -> pd.DataFrame:
+    def preprocess_data(self, df: pd.DataFrame) -> dict:
         pass

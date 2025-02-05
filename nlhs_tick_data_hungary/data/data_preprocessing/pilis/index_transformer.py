@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import pandas as pd
 
 
@@ -5,7 +7,7 @@ class IndexTransformer:
     def __init__(self):
         pass
 
-    def run(self):
+    def run(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
         pass
 
     def remove_reds(self, df: pd.DataFrame) -> pd.DataFrame:
