@@ -1,7 +1,6 @@
 import json
 
 import pandas as pd
-from pandas import DataFrame
 
 from nlhs_tick_data_hungary import config_path
 from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
@@ -56,7 +55,7 @@ class PilisTickDataLoader:
         return dataloader.load_data()
 
     @staticmethod
-    def preprocess_data(raw_pilis_tick_data: pd.DataFrame) -> dict[DataFrame, DataFrame]:
+    def preprocess_data(raw_pilis_tick_data: pd.DataFrame) -> dict[pd.DataFrame, pd.DataFrame]:
         """
         Preprocesses the raw Pilis tick data by running it through the PilisTickDataPreprocessor.
 
