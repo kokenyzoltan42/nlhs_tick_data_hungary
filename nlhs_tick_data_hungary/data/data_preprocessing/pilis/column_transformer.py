@@ -51,7 +51,7 @@ class ColumnTransformer:
         rename_dict = {self.data.columns[i]: self.long_lists["tick_species_and_stages"][i - kullancs_index] for i in
                        range(kullancs_index, len(self.data.columns))}
 
-        self.data.rename(columns=rename_dict)
+        self.data = self.data.rename(columns=rename_dict)
         # Drop the first row and reset the index
         self.data = self.data.drop(index=0).reset_index().drop(columns="index")
 
