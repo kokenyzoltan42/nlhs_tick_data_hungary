@@ -12,7 +12,7 @@ class PilisTickDataPreprocessor:
     The class handles the following steps:
     - Column transformations, such as renaming and filling missing values.
     - Index transformations, which adjust the indices based on date.
-    - Aggregation of tick species data, including summing counts for each species and life stage.
+    - Aggregation of tick species data, including summing counts for each species and stages.
 
     raw_data (pd.DataFrame): The raw tick data provided for preprocessing.
     result (dict): A dictionary containing the transformed data, including both regular and monthly summaries.
