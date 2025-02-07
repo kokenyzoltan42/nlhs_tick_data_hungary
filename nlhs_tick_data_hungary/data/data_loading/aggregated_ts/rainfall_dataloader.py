@@ -55,22 +55,22 @@ class RainfallDataLoader:
         }
 
     @staticmethod
-    def process_rainfall_data(rainfall_data: dict) -> pd.Series:
+    def process_rainfall_data(rainfall_datas: list) -> pd.Series:
         rainfall_series = {}
 
-        for item in rainfall_data:
+        for idx, data in enumerate(rainfall_datas):
             # Remove unnecessary whitespaces from the columns
-            rainfall_data[item].columns = rainfall_data[item].columns.str.strip()
+            data.columns = data.columns.str.strip()
 
             # Create time index
-            rainfall_data[item]['Time'] = pd.to_datetime(rainfall_data[item]["Time"], format='%Y%m%d')
-            rainfall_data[item].set_index('Time', inplace=True)
+            data['Time'] = pd.to_datetime(data["Time"], format='%Y%m%d')
+            data.set_index('Time', inplace=True)
 
             # Replace missing values with NaN
-            rainfall_data[item].replace(-999, np.nan, inplace=True)
+            data.replace(-999, np.nan, inplace=True)
 
             # Ensure the 'r' column is treated as a Series
-            rainfall_series[item] = rainfall_data[item]['r'].astype(float)
+            rainfall_series[idx] = data['r'].astype(float)
 
         # Concatenate into a single Series
         processed_series = pd.concat(rainfall_series.values()).sort_index().squeeze()
