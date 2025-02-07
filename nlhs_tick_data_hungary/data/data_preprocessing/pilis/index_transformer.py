@@ -85,9 +85,9 @@ class IndexTransformer:
             'Min - RH(%)': 'mean',
             'Max - RH(%)': 'mean',
             'Gyűjtés helye': 'first',  # erre szükség van?
-            **{col: 'sum' for col in self.data.columns if col not in ['Date',
-                                                                      'Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)',
-                                                                      'Max - RH(%)', 'Gyűjtés helye']}
+            **{col: 'sum' for col in df if col not in ['Date',
+                                                       'Min - T (°C)', 'Max - T (°C)', 'Min - RH(%)',
+                                                       'Max - RH(%)', 'Gyűjtés helye']}
         }).reset_index()
 
         df.set_index('Date', inplace=True)
