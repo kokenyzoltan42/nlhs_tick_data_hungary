@@ -16,6 +16,8 @@ class RainfallDataLoader:
         with open(config_path + f'/links.json', 'r+') as file:
             self.links = json.load(file)
 
+        self.run()
+
     def run(self) -> None:
         raw_rainfall_data = self.load_rainfall_data()
 

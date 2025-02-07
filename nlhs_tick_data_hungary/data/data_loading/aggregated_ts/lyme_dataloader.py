@@ -14,6 +14,8 @@ class LymeDataLoader:
         with open(config_path + f'/links.json', 'r+') as file:
             self.links = json.load(file)
 
+        self.run()
+
     def run(self) -> None:
 
         lyme_raw = self.load_lyme_data()

@@ -15,6 +15,8 @@ class PilisTickDataLoader:
         with open(config_path + f'/links.json', 'r+') as file:
             self.links = json.load(file)
 
+        self.run()
+
     def run(self) -> None:
         raw_pilis_tick_data = self.load_raw_data()
         self.result = self.preprocess_data(raw_pilis_tick_data=raw_pilis_tick_data)
