@@ -6,9 +6,6 @@ import pandas as pd
 from nlhs_tick_data_hungary import config_path
 from nlhs_tick_data_hungary.data.utils.google_data_downloader import GoogleDataDownloader
 
-
-# TODO: importokat __init__.py-ba?
-
 class RainfallDataLoader:
     def __init__(self):
         self.result = None
@@ -74,6 +71,5 @@ class RainfallDataLoader:
 
         # Concatenate into a single Series
         processed_series = pd.concat(rainfall_series.values()).sort_index().squeeze()
-        # TODO: letesztelni, hogy működik-e így a squeeze
 
         return processed_series

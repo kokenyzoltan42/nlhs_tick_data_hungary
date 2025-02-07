@@ -20,31 +20,6 @@ class ColumnTransformer:
 
     def rename_unnamed_columns(self) -> None:
 
-        # self.data = self.data.rename(columns={
-        #    "Unnamed: 7": "RH(%)",
-        #    "Kullancs mennyiség/faj (db)": "I. ricinus nőstény",
-        #    "Unnamed: 11": "I. ricinus hím",
-        #    "Unnamed: 12": "I. ricinus nimfa",
-        #    "Unnamed: 13": "I. lárva",
-        #    "Unnamed: 14": "H. inermis nőstény",
-        #    "Unnamed: 15": "H. inermis hím",
-        #    "Unnamed: 16": "H. inermis nimfa",
-        #    "Unnamed: 17": "H. concinna nőstény",
-        #    "Unnamed: 18": "H. concinna hím",
-        #    "Unnamed: 19": "H. concinna nimfa",
-        #    "Unnamed: 20": "H. lárva",
-        #    "Unnamed: 21": "D. marginatus nőstény",
-        #    "Unnamed: 22": "D. marginatus hím",
-        #    "Unnamed: 23": "D. marginatus nimfa",
-        #    "Unnamed: 24": "D. marginatus lárva",
-        #    "Unnamed: 25": "D. reticulatus nőstény",
-        #    "Unnamed: 26": "D. reticulatus hím",
-        #    "Unnamed: 27": "D. reticulatus nimfa",
-        #    "Unnamed: 28": "D. reticulatus lárva",
-        # })
-
-        # TODO: LEELLENŐRIZNI!!!
-
         self.data = self.data.rename(columns={"Unnamed: 7": "RH(%)"})
 
         kullancs_index = self.data.columns.get_loc("Összes kullancs (db)") + 1
