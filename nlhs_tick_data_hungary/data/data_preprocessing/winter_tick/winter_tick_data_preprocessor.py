@@ -10,18 +10,16 @@ class WinterTickDataPreprocessor:
     This class is responsible for preprocessing winter tick data. It adjusts the dataframe structure, prepares it
     for further analysis, and divides it into different groups based on predefined categories.
 
-    Attributes:
-        data (pd.DataFrame): The raw data to be processed.
-        result (dict): The final processed data organized into different groups.
-        groups (dict): The predefined groups (loaded from a `.json` file).
+    data (pd.DataFrame): The raw data to be processed.
+    result (dict): The final processed data organized into different groups.
+    groups (dict): The predefined groups (loaded from a `.json` file).
     """
 
     def __init__(self, data: pd.DataFrame):
         """
         Initializes the WinterTickDataPreprocessor with the provided data.
 
-        Args:
-            data (pd.DataFrame): The raw data to be preprocessed.
+        :param data: The raw data to be preprocessed.
         """
         self.data = data
         self.result = None
