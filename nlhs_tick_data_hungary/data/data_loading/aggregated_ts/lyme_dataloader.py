@@ -6,9 +6,10 @@ from nlhs_tick_data_hungary import url_path
 from nlhs_tick_data_hungary.data.utils.google_data_downloader import GoogleDataDownloader
 
 
+# TODO: add docstrings
 class LymeDataLoader:
     def __init__(self):
-        self.result = {}  # Ez a jó
+        self.result = None
 
         with open(url_path + f'/links.json', 'r+') as file:
             self.links = json.load(file)
