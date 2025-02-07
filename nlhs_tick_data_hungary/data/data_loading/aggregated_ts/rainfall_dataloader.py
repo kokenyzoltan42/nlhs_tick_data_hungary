@@ -51,8 +51,7 @@ class RainfallDataLoader:
 
         The raw data for each location (Piliscsaba and Pilisszentkereszt) is  and loaded into pandas DataFrames.
 
-        Return:
-            dict: A dictionary containing lists of DataFrames for both Piliscsaba and Pilisszentkereszt.
+        :return dict: A dictionary containing lists of DataFrames for both Piliscsaba and Pilisszentkereszt.
                   The keys are 'piliscsaba' and 'pilisszentkereszt', and the values are lists of DataFrames.
         """
         # Download rainfall data for Piliscsaba (2002-2023 and 2024)
@@ -95,8 +94,7 @@ class RainfallDataLoader:
 
         rainfall_datas (list): A list of pandas DataFrames, each containing raw rainfall data.
 
-        Return:
-            pd.Series: A pandas Series containing the processed rainfall data, indexed by the 'Time' column.
+        :return pd.Series: A pandas Series containing the processed rainfall data, indexed by the 'Time' column.
         """
         rainfall_series = {}
 

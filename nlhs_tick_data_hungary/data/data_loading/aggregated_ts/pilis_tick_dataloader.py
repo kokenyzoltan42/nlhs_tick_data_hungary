@@ -48,8 +48,7 @@ class PilisTickDataLoader:
         The raw data is loaded using the GoogleSheetDataLoader class, which downloads
         the data from a URL and returns it as a pandas DataFrame.
 
-        Return:
-            pd.DataFrame: The raw Pilis tick data loaded from Google Sheets.
+        :return pd.DataFrame: The raw Pilis tick data loaded from Google Sheets.
         """
         # Use the GoogleSheetDataLoader to download and load the data from the specified URL
         dataloader = GoogleSheetDataLoader(url=self.links['pilis_tick'])
@@ -68,9 +67,8 @@ class PilisTickDataLoader:
 
         raw_pilis_tick_data (pd.DataFrame): The raw tick data to be preprocessed.
 
-        Return:
-            dict: A dictionary containing the preprocessed data. The keys will likely correspond to different stages or
-            categories of the processed data, and the values will be the corresponding pandas DataFrames.
+        :return dict: A dictionary containing the preprocessed data. The keys will likely correspond to different stages
+         or categories of the processed data, and the values will be the corresponding pandas DataFrames.
         """
         # Initialize and run the preprocessor with the raw tick data
         preprocessor = PilisTickDataPreprocessor(raw_pilis_tick_data=raw_pilis_tick_data)

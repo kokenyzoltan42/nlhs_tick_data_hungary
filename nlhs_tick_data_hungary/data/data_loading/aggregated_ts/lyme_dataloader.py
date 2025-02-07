@@ -11,10 +11,9 @@ class LymeDataLoader:
     A class to load and process Lyme disease data from `.csv` files stored on Google Drive.
     The data is loaded, processed by year or month, and stored in a dictionary.
 
-    Attributes:
-        result (dict): A dictionary that stores the processed Lyme disease data,
-                       organized by year and month.
-        links (dict): A dictionary containing the URLs for the raw Lyme disease data files.
+    result (dict): A dictionary that stores the processed Lyme disease data,
+                   organized by year and month.
+    links (dict): A dictionary containing the URLs for the raw Lyme disease data files.
     """
 
     def __init__(self):
@@ -49,8 +48,7 @@ class LymeDataLoader:
         """
         Downloads the raw Lyme disease data files from Google Drive and loads them into pandas DataFrames.
 
-        Return:
-            dict: A dictionary containing the raw Lyme disease data for both monthly and yearly periods.
+        :return dict: A dictionary containing the raw Lyme disease data for both monthly and yearly periods.
                   The keys are 'lyme_month' and 'lyme_year', and the values are the corresponding DataFrames.
         """
         # Download the Lyme disease monthly data using the GoogleDataDownloader
@@ -80,8 +78,7 @@ class LymeDataLoader:
         lyme_data (pd.Series): The raw Lyme disease data to be processed, with a 'Date' column and 'Values'.
         period (str): The period type for the data ('M' for monthly, 'Y' for yearly).
 
-        Return:
-            pd.Series: A pandas Series indexed by the specified period (monthly or yearly), containing the 'Values'.
+        :return pd.Series: A pandas Series indexed by the specified period (monthly or yearly), containing the 'Values'.
         """
         # Determine the time format based on the period type (monthly or yearly)
         time_format = None
