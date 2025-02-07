@@ -1,17 +1,35 @@
-from typing import Tuple
+import json
 
 import pandas as pd
+from pandas import DataFrame
+
+from nlhs_tick_data_hungary import url_path
+from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
+from nlhs_tick_data_hungary.data.data_preprocessing.pilis.pilis_tick_data_preprocessor import PilisTickDataPreprocessor
 
 
 class PilisTickDataLoader:
     def __init__(self):
-        pass
+        self.result = None
+
+        with open(url_path + f'/links.json', 'r+') as file:
+            self.links = json.load(file)
 
     def run(self) -> None:
-        pass
+        raw_pilis_tick_data = self.load_raw_data()
+        self.result = self.preprocess_data(raw_pilis_tick_data=raw_pilis_tick_data)
 
     def load_raw_data(self) -> pd.DataFrame:
-        pass
 
-    def preprocess_data(self, raw_pilis_tick_data: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        pass
+        dataloader = GoogleSheetDataLoader(url=self.links['pilis_tick'])
+        return dataloader.load_data()
+
+    @staticmethod
+    def preprocess_data(raw_pilis_tick_data: pd.DataFrame) -> dict[DataFrame, DataFrame]:
+        preprocessor = PilisTickDataPreprocessor(raw_pilis_tick_data=raw_pilis_tick_data)
+
+        df_regular_data, df_monthly_data = preprocessor.run()
+        return {
+            'monthly_data': df_monthly_data,
+            'regular_data': df_regular_data
+        }
