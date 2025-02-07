@@ -1,13 +1,50 @@
+import json
 from typing import Tuple
 
 import pandas as pd
 
+from nlhs_tick_data_hungary import config_path
+
 
 class IndexTransformer:
+    """
+    A class for transforming and adjusting the indices of a DataFrame based on date and collection data.
+
+    This class performs the following operations on the DataFrame:
+    - Removes specific rows based on predefined red dates.
+    - Transforms collection dates to a proper datetime index.
+    - Adjusts the month in the 'Date' column to ensure continuity in month values.
+    - Creates two different DataFrame representations:
+        - A basic transformation with datetime as the index.
+        - A transformation that adjusts the indices to a monthly period format, aggregating data accordingly.
+
+    data (pd.DataFrame): The DataFrame that will be transformed.
+    """
     def __init__(self, data: pd.DataFrame):
+        """
+        Initializes the IndexTransformer with the given DataFrame.
+
+        :param data: A pandas DataFrame containing the raw data to be transformed.
+        """
         self.data = data
 
+        with open(config_path + f'/long_lists.json', 'r+') as file:
+            long_lists = json.load(file)
+
+        self.red_dates = long_lists['red_dates']
+
     def run(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """
+        Runs the transformation pipeline, applying all necessary steps.
+
+        This method will call the following transformations:
+        - Remove specific rows based on red dates.
+        - Transform the indices to a basic datetime format and monthly period format.
+
+        :return: A tuple containing two DataFrames:
+                 - Basic transformed DataFrame with datetime as index.
+                 - Monthly transformed DataFrame with period as index.
+        """
         self.remove_reds()
 
         return self.transform_indices_basic(), self.transform_indices_monthly_period()
@@ -41,13 +78,26 @@ class IndexTransformer:
         return df
 
     def remove_reds(self) -> None:
-        red_dates = ['2015-05-13', '2015-06-05', '2015-07-01', '2016-06-22']
-        self.data = self.data[~self.data['Gyűjtési dátum'].isin(red_dates)]
+        """
+        Removes rows with specific dates (marked as red in the Google Spreadsheet).
+
+        The red dates are predefined and listed in the method. Rows with these dates will be removed
+        from the DataFrame.
+        """
+        self.data = self.data[~self.data['Gyűjtési dátum'].isin(self.red_dates)]
 
         # Reset the index after filtering
         self.data.reset_index(drop=True, inplace=True)
 
     def transform_indices_basic(self) -> pd.DataFrame:
+        """
+        Transforms the indices of the DataFrame to a basic datetime format.
+
+        The method converts the 'Gyűjtési dátum' column to a datetime format and sets it as the index,
+        dropping the original 'Gyűjtési dátum' column.
+
+        :return: The DataFrame with the transformed datetime index.
+        """
         df = self.data.copy()
 
         df['Date'] = pd.to_datetime(df['Gyűjtési dátum'], format='mixed')
@@ -59,11 +109,14 @@ class IndexTransformer:
 
     def transform_indices_monthly_period(self) -> pd.DataFrame:
         """
-        Adjusts the DataFrame indices based on the collection dates.
+        Transforms the indices of the DataFrame to a monthly period format.
 
-        This method converts the 'Gyűjtési dátum' to a period format (monthly),
-        groups the data by date, and aggregates the columns accordingly.
-        Additionally, it reindexes the DataFrame to cover the full date range.
+        This method converts the 'Gyűjtési dátum' to a period format representing months ('M'),
+        groups the data by this monthly period, and performs aggregation on the columns.
+        Additionally, it adjusts the months to ensure continuity and reindexes the DataFrame
+        to cover the full date range, resampling by month-end.
+
+        :return: The DataFrame with monthly period as index and aggregated data.
         """
         df = self.data.copy()
 
