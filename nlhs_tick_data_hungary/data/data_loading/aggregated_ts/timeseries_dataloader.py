@@ -37,7 +37,7 @@ class TimeseriesDataLoader:
 
         # Aggregate the results from each data loader and store them in the `self.data` dictionary
         self.data = {
-            'lyme_data': lyme_dataloader.result,  # Lyme disease data loaded and processed by LymeDataLoader
-            'pilis_data': pilis_dataloader.result,  # Pilis tick data loaded and processed by PilisTickDataLoader
-            'rainfall_data': rainfall_dataloader.result  # Rainfall data loaded and processed by RainfallDataLoader
+            'lyme_data': lyme_dataloader.result,
+            'pilis_data': pilis_dataloader.result,
+            'rainfall_data': rainfall_dataloader.result
         }
