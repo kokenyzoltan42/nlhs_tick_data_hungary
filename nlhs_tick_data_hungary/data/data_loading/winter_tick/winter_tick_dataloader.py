@@ -1,15 +1,29 @@
+import json
+
 import pandas as pd
 
+from nlhs_tick_data_hungary import url_path
+from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
+from ...data_preprocessing.winter_tick.winter_tick_data_preprocessor import WinterTickDataPreprocessor
 
-class WinterTickDataloader:
+
+class WinterTickDataLoader:
     def __init__(self):
-        pass
+        self.result = {}
+
+        with open(url_path + f'/links.json', 'r+') as file:
+            self.links = json.load(file)
 
     def run(self) -> None:
-        pass
+        raw_data = self.load_raw_data()
+        self.result = self.preprocess_data(raw_data=raw_data)
 
     def load_raw_data(self) -> pd.DataFrame:
-        pass
+        dataloader = GoogleSheetDataLoader(url=self.links['winter_tick'])
+        return dataloader.load_data()
 
-    def preprocess_data(self, df: pd.DataFrame) -> dict:
-        pass
+    @staticmethod
+    def preprocess_data(raw_data: pd.DataFrame) -> dict:
+        preprocessor = WinterTickDataPreprocessor(data=raw_data)
+
+        return preprocessor.run()
