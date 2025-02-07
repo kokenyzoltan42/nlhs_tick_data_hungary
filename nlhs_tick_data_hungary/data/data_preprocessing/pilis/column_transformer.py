@@ -59,8 +59,6 @@ class ColumnTransformer:
 
         # Defining columns that need to be converted to float
         columns_to_float = self.long_lists["tick_species_and_stages"] + ['Gyűjtők száma', 'Összes kullancs (db)']
-        print("Columns_to_float:", columns_to_float)
-        print("COlumns in self.data:", self.data.columns)
 
         # Convert specific columns to float
         self.data[columns_to_float] = self.data[columns_to_float].astype(float)
