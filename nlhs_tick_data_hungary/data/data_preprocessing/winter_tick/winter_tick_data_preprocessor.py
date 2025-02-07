@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from nlhs_tick_data_hungary import long_list_path
+from nlhs_tick_data_hungary import group_path
 
 
 class WinterTickDataPreprocessor:
@@ -11,7 +11,7 @@ class WinterTickDataPreprocessor:
 
         self.result = None
 
-        with open(long_list_path + f'/long_lists.json', 'r+') as file:
+        with open(group_path + f'/groups.json', 'r+') as file:
             self.groups = json.load(file)
 
     def run(self) -> None:
