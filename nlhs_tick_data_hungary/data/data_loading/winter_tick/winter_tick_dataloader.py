@@ -25,5 +25,6 @@ class WinterTickDataLoader:
     @staticmethod
     def preprocess_data(raw_data: pd.DataFrame) -> dict:
         preprocessor = WinterTickDataPreprocessor(data=raw_data)
+        preprocessor.run()
 
-        return preprocessor.run()
+        return preprocessor.result
