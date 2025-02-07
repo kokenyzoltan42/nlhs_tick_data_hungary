@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 
-from nlhs_tick_data_hungary import url_path
+from nlhs_tick_data_hungary import config_path
 from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
 from ...data_preprocessing.winter_tick.winter_tick_data_preprocessor import WinterTickDataPreprocessor
 
@@ -11,7 +11,7 @@ class WinterTickDataLoader:
     def __init__(self):
         self.result = {}
 
-        with open(url_path + f'/links.json', 'r+') as file:
+        with open(config_path + f'/links.json', 'r+') as file:
             self.links = json.load(file)
 
     def run(self) -> None:

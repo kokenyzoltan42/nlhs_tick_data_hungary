@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from pandas import DataFrame
 
-from nlhs_tick_data_hungary import url_path
+from nlhs_tick_data_hungary import config_path
 from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
 from nlhs_tick_data_hungary.data.data_preprocessing.pilis.pilis_tick_data_preprocessor import PilisTickDataPreprocessor
 
@@ -12,7 +12,7 @@ class PilisTickDataLoader:
     def __init__(self):
         self.result = None
 
-        with open(url_path + f'/links.json', 'r+') as file:
+        with open(config_path + f'/links.json', 'r+') as file:
             self.links = json.load(file)
 
     def run(self) -> None:
@@ -28,8 +28,6 @@ class PilisTickDataLoader:
     def preprocess_data(raw_pilis_tick_data: pd.DataFrame) -> dict[DataFrame, DataFrame]:
         preprocessor = PilisTickDataPreprocessor(raw_pilis_tick_data=raw_pilis_tick_data)
 
-        df_regular_data, df_monthly_data = preprocessor.run()
-        return {
-            'monthly_data': df_monthly_data,
-            'regular_data': df_regular_data
-        }
+        preprocessor.run()
+
+        return preprocessor.result
