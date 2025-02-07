@@ -49,7 +49,6 @@ class IndexTransformer:
 
         return self.transform_indices_basic(), self.transform_indices_monthly_period()
 
-    # TODO: hozzáadni az implementációs diagramhoz
     @staticmethod
     def adjust_months(df: pd.DataFrame) -> pd.DataFrame:
         """
