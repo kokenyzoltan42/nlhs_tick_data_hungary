@@ -23,8 +23,18 @@ class WinterTickDataLoader:
         and loading the links to the necessary datasets.
 
         The links are loaded from the `links.json` file, which contains URLs to the raw data.
+
+        Structure of the `data` attribute after the `run` method is called:
+        `self.data` = {
+            'every_bacteria': a pd.DataFrame containing the data of every bacterium
+            'removed_catch_all': a pd.DataFrame containing the data of every bacterium except the ones whose name
+                                contain 'catch all'
+            'group_1': a pd.DataFrame containing the data of every bacterium from the "first group"
+            'group_2': a pd.DataFrame containing the data of every bacterium from the "second group"
+            'group_3': a pd.DataFrame containing the data of every bacterium from the "third group"
+        }
         """
-        self.result = {}
+        self.data = {}
 
         # Load the URLs from the config file (links.json)
         with open(config_path + f'/links.json', 'r+') as file:
@@ -41,7 +51,7 @@ class WinterTickDataLoader:
         raw_data = self.load_raw_data()
 
         # Preprocess the raw data and store the result
-        self.result = self.preprocess_data(raw_data=raw_data)
+        self.data = self.preprocess_data(raw_data=raw_data)
 
     def load_raw_data(self) -> pd.DataFrame:
         """

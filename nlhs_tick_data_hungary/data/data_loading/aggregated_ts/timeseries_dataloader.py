@@ -7,10 +7,23 @@ class TimeseriesDataLoader:
     """
     A class to load and aggregate time-series data for Lyme disease, tick data from Pilis, and rainfall data.
 
-    This class serves as a central data loader, initializing and running individual data loaders for Lyme disease,
-    Pilis tick data, and rainfall data. The results are stored in a dictionary.
+    This class serves as a central data loader or timeseries related datas. The results are stored in a dictionary.
 
     data (dict): A dictionary holding the processed results of Lyme disease data, Pilis tick data, and rainfall data.
+
+
+    Structure of the `data` attribute after the `run` method is called:
+    `self.data` = {
+        - 'lyme_data':
+            - 'lyme_data_year': number of Lyme diseases in each year
+            - 'lyme_data_month': number of Lyme diseases in each month
+        - 'rainfall_data':
+            - 'piiscsaba': rainfall data in Piliscsaba
+            - 'pilisszentkereszt': rainfall data in Pilisszentkereszt
+        'pilis_tick_data':
+            - 'monthly_data': data of ticks found at Pilis aggregated monthly
+            - 'regular_data': data of ticks found at Pilis without aggregation
+    }
     """
 
     def __init__(self):
