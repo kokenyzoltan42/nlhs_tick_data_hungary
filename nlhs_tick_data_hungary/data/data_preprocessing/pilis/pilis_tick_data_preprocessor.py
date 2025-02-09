@@ -114,10 +114,7 @@ class PilisTickDataPreprocessor:
             df[species] = df[columns].sum(axis=1)
 
         # Add new columns for adult stages by summing male and female counts
-        df['I. ricinus adult'] = df['I. ricinus hím'] + df['I. ricinus nőstény']
-        df['H. inermis adult'] = df['H. inermis hím'] + df['H. inermis nőstény']
-        df['H. concinna adult'] = df['H. concinna hím'] + df['H. concinna nőstény']
-        df['D. marginatus adult'] = df['D. marginatus hím'] + df['D. marginatus nőstény']
-        df['D. reticulatus adult'] = df['D. reticulatus hím'] + df['D. reticulatus nőstény']
+        for species in species_groups:
+            df[f"{species} adult"] = df[f"{species} hím"] + df[f"{species} nőstény"]
 
         return df
