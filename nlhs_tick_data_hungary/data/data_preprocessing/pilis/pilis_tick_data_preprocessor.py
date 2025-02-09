@@ -115,6 +115,11 @@ class PilisTickDataPreprocessor:
 
         # Add new columns for adult stages by summing male and female counts
         for species in species_groups:
-            df[f"{species} adult"] = df[f"{species} hím"] + df[f"{species} nőstény"]
+            male_col = f"{species} hím"
+            female_col = f"{species} nőstény"
+            if male_col in df.columns and female_col in df.columns:
+                df[f"{species} adult"] = df[male_col] + df[female_col]
+
+        return df
 
         return df
