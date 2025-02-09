@@ -80,7 +80,7 @@ class WinterTickDataPreprocessor:
         of the data, and the result will be stored in the `self.result` attribute.
 
         - THe group called 'every_bacteria' that contains all data.
-        - THe group called 'removed_catch_all' that excludes rows with 'catch-all' in their index.
+        - THe group called 'removed_catch_all' excludes rows with 'catch-all' in their names.
         - Additional groups for each predefined category in the 'groups.json' file
         ('1.csoport', '2.csoport', '3.csoport').
 
