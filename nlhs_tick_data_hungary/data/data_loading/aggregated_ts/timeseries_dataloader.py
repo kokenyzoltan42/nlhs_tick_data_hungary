@@ -20,7 +20,7 @@ class TimeseriesDataLoader:
             - 'rainfall_data':
                 - 'piiscsaba': rainfall data in Piliscsaba
                 - 'pilisszentkereszt': rainfall data in Pilisszentkereszt
-            'pilis_tick_data':
+            - 'pilis_tick_data':
                 - 'monthly_data': data of ticks found at Pilis aggregated monthly
                 - 'regular_data': data of ticks found at Pilis without aggregation
         }
@@ -40,7 +40,7 @@ class TimeseriesDataLoader:
 
         The dictionary `self.data` will contain the following keys:
         - 'lyme_data': Loaded and processed Lyme disease data.
-        - 'pilis_data': Loaded and processed tick data for Pilis.
+        - 'pilis_tick_data': Loaded and processed tick data for Pilis.
         - 'rainfall_data': Loaded and processed rainfall data.
         """
         # Initialize the individual data loaders for Lyme disease, Pilis tick data, and rainfall data
@@ -51,6 +51,6 @@ class TimeseriesDataLoader:
         # Aggregate the results from each data loader and store them in the `self.data` dictionary
         self.data = {
             'lyme_data': lyme_dataloader.result,
-            'pilis_data': pilis_dataloader.result,
+            'pilis_tick_data': pilis_dataloader.result,
             'rainfall_data': rainfall_dataloader.result
         }
