@@ -13,17 +13,17 @@ class TimeseriesDataLoader:
 
 
     Structure of the `data` attribute after the `run` method is called:
-    `self.data` = {
-        - 'lyme_data':
-            - 'lyme_data_year': number of Lyme diseases in each year
-            - 'lyme_data_month': number of Lyme diseases in each month
-        - 'rainfall_data':
-            - 'piiscsaba': rainfall data in Piliscsaba
-            - 'pilisszentkereszt': rainfall data in Pilisszentkereszt
-        'pilis_tick_data':
-            - 'monthly_data': data of ticks found at Pilis aggregated monthly
-            - 'regular_data': data of ticks found at Pilis without aggregation
-    }
+        `self.data` = {
+            - 'lyme_data':
+                - 'lyme_data_year': number of Lyme diseases in each year
+                - 'lyme_data_month': number of Lyme diseases in each month
+            - 'rainfall_data':
+                - 'piiscsaba': rainfall data in Piliscsaba
+                - 'pilisszentkereszt': rainfall data in Pilisszentkereszt
+            'pilis_tick_data':
+                - 'monthly_data': data of ticks found at Pilis aggregated monthly
+                - 'regular_data': data of ticks found at Pilis without aggregation
+        }
     """
 
     def __init__(self):

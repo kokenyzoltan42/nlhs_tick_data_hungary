@@ -49,7 +49,7 @@ class RainfallDataLoader:
         """
         Loads the raw rainfall data from the specified Google Sheets files.
 
-        The raw data for each location (Piliscsaba and Pilisszentkereszt) is  and loaded into pandas DataFrames.
+        The raw data for each location (Piliscsaba and Pilisszentkereszt) are loaded into pandas DataFrames.
 
         :return dict: A dictionary containing lists of DataFrames for both Piliscsaba and Pilisszentkereszt.
                   The keys are 'piliscsaba' and 'pilisszentkereszt', and the values are lists of DataFrames.

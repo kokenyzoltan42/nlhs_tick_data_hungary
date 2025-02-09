@@ -9,22 +9,14 @@ from ...data_preprocessing.winter_tick.winter_tick_data_preprocessor import Wint
 
 class WinterTickDataLoader:
     """
-    A class responsible for loading and preprocessing winter tick data.
+    A class responsible for loading winter tick data.
 
     This class loads raw winter tick data from a Google Sheet, preprocesses it using the `WinterTickDataPreprocessor`,
     and stores the resulting processed data.
 
     result (dict): A dictionary to store the processed winter tick data.
-    """
 
-    def __init__(self):
-        """
-        Initializes the WinterTickDataLoader class by setting up the `result` attribute to store processed data
-        and loading the links to the necessary datasets.
-
-        The links are loaded from the `links.json` file, which contains URLs to the raw data.
-
-        Structure of the `data` attribute after the `run` method is called:
+    Structure of the `data` attribute after the `run` method is called:
         `self.data` = {
             'every_bacteria': a pd.DataFrame containing the data of every bacterium
             'removed_catch_all': a pd.DataFrame containing the data of every bacterium except the ones whose name
@@ -33,6 +25,14 @@ class WinterTickDataLoader:
             'group_2': a pd.DataFrame containing the data of every bacterium from the "second group"
             'group_3': a pd.DataFrame containing the data of every bacterium from the "third group"
         }
+    """
+
+    def __init__(self):
+        """
+        Initializes the WinterTickDataLoader class by setting up the `result` attribute to store processed data
+        and loading the links to the necessary datasets.
+
+        The links are loaded from the `links.json` file, which contains URLs to the raw data.
         """
         self.data = {}
 
@@ -56,7 +56,7 @@ class WinterTickDataLoader:
     def load_raw_data(self) -> pd.DataFrame:
         """
         Loads raw winter tick data from a Google Sheet.
-        This method uses the `GoogleSheetDataLoader` class to fetch data from the provided URL stored in `links.json`.
+        This method uses the `GoogleSheetDataLoader` class to get data from the provided URL stored in `links.json`.
 
         :return: A pandas DataFrame containing the raw winter tick data.
         """
