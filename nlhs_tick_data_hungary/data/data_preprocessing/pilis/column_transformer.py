@@ -33,7 +33,7 @@ class ColumnTransformer:
         """
         Runs the full transformation pipeline on the DataFrame.
 
-        This method sequentially applies renaming, column adjustments, and splits temperature and RH columns
+        This method (sequentially) applies renaming, column adjustments, and splits temperature and RH columns
         into min and max values.
         """
         self.rename_unnamed_columns()
@@ -51,15 +51,14 @@ class ColumnTransformer:
         The renaming is necessary because during the load of the data many column names go missing, because in the
         original Google Spreadsheet for example the tick stages' names are in the second row.
         """
-        # Rename the column 'Unnamed: 7' to 'RH(%)'
+        # Most of the wrongly loaded column names (except "RH(%)") are after the column named "Összes kullancs (db)"
         self.data = self.data.rename(columns={"Unnamed: 7": "RH(%)"})
-
         # Find the index of the column 'Összes kullancs (db)' and create a dictionary for renaming
         kullancs_index = self.data.columns.get_loc("Összes kullancs (db)") + 1
         rename_dict = {self.data.columns[i]: self.long_lists["tick_species_and_stages"][i - kullancs_index] for i in
                        range(kullancs_index, len(self.data.columns))}
 
-        # Rename the columns based on the dictionary
+        # Rename the columns based on the created dictionary
         self.data = self.data.rename(columns=rename_dict)
 
         # Drop the first row and reset the index
@@ -70,7 +69,7 @@ class ColumnTransformer:
         Adjusts the columns of the DataFrame, specifically converting certain columns to float.
 
         The columns listed in 'tick_species_and_stages' as well as some additional columns are converted to float.
-        The 'Gyűjtés időtartama (h)' column is also converted, replacing commas with dots first.
+        The 'Gyűjtés időtartama (h)' column is also converted, replacing commas with dots to identify floating numbers.
         """
         # Define the columns that need to be converted to float
         columns_to_float = self.long_lists["tick_species_and_stages"] + ['Gyűjtők száma', 'Összes kullancs (db)']

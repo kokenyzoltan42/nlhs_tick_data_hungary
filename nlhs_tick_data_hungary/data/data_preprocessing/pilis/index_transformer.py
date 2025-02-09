@@ -8,7 +8,7 @@ from nlhs_tick_data_hungary import config_path
 
 class IndexTransformer:
     """
-    A class for transforming and adjusting the indices of a DataFrame based on date and collection data.
+    A class for transforming and adjusting the indices of a DataFrame.
 
     This class performs the following operations on the DataFrame:
     - Removes specific rows based on predefined red dates.
@@ -60,15 +60,15 @@ class IndexTransformer:
         first date in the month ('2019.09.16') should be in August.
 
         This method doesn't produce duplicates in the rows because the only instance (except the first couple of rows)
-        where there are duplicates in the indices is when there wasn't any data recorded in the previous month.
+        when there are duplicates in the indices is when there wasn't any data recorded in the previous month.
 
         :param df: The DataFrame containing a 'Date' column.
         :return: The DataFrame with adjusted month values.
         """
         prev_month = None
         for idx, row in df.iterrows():
-            # In the first couple of rows this logic fails beacause there are more than two dates in one month
-            # Therefore we skip those rows and only manipulate them in the transform_indices_monthly_period method
+            # In the first couple of rows this logic fails because there are more than two dates in one month
+            # Therefore we skip those rows and only manipulate them later in the transform_indices_monthly_period method
             if idx > 7:
                 if prev_month == row['Date']:  # If the previous row is in the same month
                     # Move the previous row to the previous month
@@ -79,9 +79,7 @@ class IndexTransformer:
     def remove_reds(self) -> None:
         """
         Removes rows with specific dates (marked as red in the Google Spreadsheet).
-
-        The red dates are predefined and listed in the method. Rows with these dates will be removed
-        from the DataFrame.
+        The red dates are predefined and listed in the method.
         """
         self.data = self.data[~self.data['Gyűjtési dátum'].isin(self.red_dates)]
 
