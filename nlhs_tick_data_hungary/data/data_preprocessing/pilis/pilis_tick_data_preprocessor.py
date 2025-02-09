@@ -121,5 +121,3 @@ class PilisTickDataPreprocessor:
                 df[f"{species} adult"] = df[male_col] + df[female_col]
 
         return df
-
-        return df
