@@ -112,7 +112,4 @@ class RainfallDataLoader:
             # Ensure the 'r' column is treated as a numeric Series
             rainfall_series[idx] = data['r'].astype(float)
 
-        # Concatenate all the processed data into a single Series and sort by time index
-        processed_series = pd.concat(rainfall_series.values()).sort_index().squeeze()
-
-        return processed_series
+        return pd.concat(rainfall_series.values()).sort_index().squeeze()
