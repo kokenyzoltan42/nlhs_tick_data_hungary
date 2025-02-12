@@ -12,9 +12,6 @@ from nlhs_tick_data_hungary.data.data_preprocessing.pilis.pilis_tick_data_prepro
 class PilisTickDataLoader(CoreDataLoader):
     """
     A class to load and preprocess tick data from a Google Sheets source.
-
-    result (dict): A dictionary that stores the processed tick data after preprocessing.
-    links (dict): A dictionary containing the URLs for the raw data (in Google Sheets).
     """
 
     def __init__(self, use_cache: bool = False):

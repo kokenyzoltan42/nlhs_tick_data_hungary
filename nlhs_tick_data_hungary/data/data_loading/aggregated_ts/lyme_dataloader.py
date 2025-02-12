@@ -12,9 +12,6 @@ class LymeDataLoader(CoreDataLoader):
     A class to load and process Lyme disease data from `.csv` files stored on Google Drive.
     The data is loaded, processed by year or month, and stored in a dictionary.
 
-    result (dict): A dictionary that stores the processed Lyme disease data,
-                   organized by year and month.
-    links (dict): A dictionary containing the URLs for the raw Lyme disease data files.
     """
     def __init__(self, use_cache: bool = False):
         """

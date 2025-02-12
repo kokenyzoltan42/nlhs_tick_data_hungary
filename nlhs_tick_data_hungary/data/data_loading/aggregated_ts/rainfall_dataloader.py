@@ -12,10 +12,6 @@ class RainfallDataLoader(CoreDataLoader):
     """
     A class to load and preprocess rainfall data from Google Sheets for two locations: Piliscsaba and Pilisszentkereszt.
     The data is processed into pandas Series, handling missing values and time indexing.
-
-    result (dict): A dictionary containing processed rainfall data for the specified locations.
-    links (dict): A dictionary containing the URLs for the rainfall data files
-                  (for Piliscsaba and Pilisszentkereszt).
     """
     def __init__(self, use_cache: bool = False):
         """

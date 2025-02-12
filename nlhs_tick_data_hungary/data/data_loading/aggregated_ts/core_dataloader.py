@@ -5,10 +5,12 @@ import typing
 from nlhs_tick_data_hungary import config_path
 
 
-# TODO: osztályok attribútumaira vonatkozó docstring részleteket idehozni
 class CoreDataLoader(ABC):
     """
     A base class for all the data loaders that handle aggregated timeseries data.
+
+    result (dict): A dictionary that stores the processed data.
+    links (dict): A dictionary containing the URLs for the data files.
     """
 
     def __init__(self, use_cache: bool = False):
