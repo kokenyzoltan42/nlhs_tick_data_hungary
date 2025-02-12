@@ -92,7 +92,7 @@ class RainfallDataLoader:
         """
         Processes the raw rainfall data by cleaning and combining the data into a single pandas Series.
 
-        :param rainfall_datas: A list of pandas DataFrames, each containing raw rainfall data.
+        :param list rainfall_datas: A list of pandas DataFrames, each containing raw rainfall data.
 
         :return pd.Series: A pandas Series containing the processed rainfall data, indexed by the 'Time' column.
         """

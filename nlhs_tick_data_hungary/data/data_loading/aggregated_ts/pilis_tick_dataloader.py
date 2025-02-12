@@ -65,10 +65,11 @@ class PilisTickDataLoader:
         - dataframe with modified (monthly) indices
         - dataframe with the original dates
 
-        :param raw_pilis_tick_data: The raw tick data to be preprocessed.
+        :param pd.DataFrame raw_pilis_tick_data: The raw tick data to be preprocessed.
 
-        :return dict: A dictionary containing the preprocessed data. The keys will likely correspond to different stages
-         or categories of the processed data, and the values will be the corresponding pandas DataFrames.
+        :return typing.Dict[str, pd.DataFrame]: A dictionary containing the preprocessed data.
+         The keys will correspond to different stages or categories of the processed data,
+         and the values will be the corresponding pandas DataFrames.
         """
         # Initialize and run the preprocessor with the raw tick data
         preprocessor = PilisTickDataPreprocessor(raw_pilis_tick_data=raw_pilis_tick_data)

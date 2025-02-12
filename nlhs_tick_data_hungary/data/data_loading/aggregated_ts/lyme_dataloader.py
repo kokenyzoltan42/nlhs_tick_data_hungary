@@ -75,8 +75,8 @@ class LymeDataLoader:
         Processes Lyme disease data by formatting the 'Date' column and converting it into a pandas Series indexed
         by the specified period (monthly or yearly).
 
-        :param lyme_data: The raw Lyme disease data to be processed, with a 'Date' column and 'Values'.
-        :param period: The period type for the data ('M' for monthly, 'Y' for yearly).
+        :param pd.Series lyme_data: The raw Lyme disease data to be processed, with a 'Date' column and 'Values'.
+        :param str period: The period type for the data ('M' for monthly, 'Y' for yearly).
 
         :return pd.Series: A pd.Series indexed by the specified period (monthly or yearly), containing the 'Values'.
         """

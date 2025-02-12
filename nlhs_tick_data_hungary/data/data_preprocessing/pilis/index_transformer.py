@@ -24,7 +24,7 @@ class IndexTransformer:
         """
         Initializes the IndexTransformer with the given DataFrame.
 
-        :param data: A pandas DataFrame containing the raw data to be transformed.
+        :param pd.DataFrame data: A pandas DataFrame containing the raw data to be transformed.
         """
         self.data = data
 
@@ -41,7 +41,7 @@ class IndexTransformer:
         - Remove specific rows based on red dates.
         - Transform the indices to a basic datetime format and monthly period format.
 
-        :return: A tuple containing two DataFrames:
+        :return Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing two DataFrames:
                  - Basic transformed DataFrame with datetime as index.
                  - Monthly transformed DataFrame with period as index.
         """
@@ -62,8 +62,8 @@ class IndexTransformer:
         This method doesn't produce duplicates in the rows because the only instance (except the first couple of rows)
         when there are duplicates in the indices is when there wasn't any data recorded in the previous month.
 
-        :param df: The DataFrame containing a 'Date' column.
-        :return: The DataFrame with adjusted month values.
+        :param pd.DataFrame df: The DataFrame containing a 'Date' column.
+        :return pd.DataFrame: The DataFrame with adjusted month values.
         """
         prev_month = None
         for idx, row in df.iterrows():
@@ -93,7 +93,7 @@ class IndexTransformer:
         The method converts the 'Gyűjtési dátum' column to a datetime format and sets it as the index,
         dropping the original 'Gyűjtési dátum' column.
 
-        :return: The DataFrame with the transformed datetime index.
+        :return pd.DataFrame: The DataFrame with the transformed datetime index.
         """
         df = self.data.copy()
 
@@ -113,7 +113,7 @@ class IndexTransformer:
         Additionally, it adjusts the months to ensure continuity and reindexes the DataFrame
         to cover the full date range, resampling by month-end.
 
-        :return: The DataFrame with monthly period as index and aggregated data.
+        :return pd.DataFrame: The DataFrame with monthly period as index and aggregated data.
         """
         df = self.data.copy()
 

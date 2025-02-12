@@ -21,8 +21,8 @@ class GoogleSheetDataLoader:
         """
         Converts a Google Sheets URL into a CSV export URL.
 
-        :param url: The original Google Sheets URL.
-        :return: A modified URL that allows downloading the sheet as a CSV file.
+        :param str url: The original Google Sheets URL.
+        :return str: A modified URL that allows downloading the sheet as a CSV file.
         """
         # Regular expression to match and extract the necessary parts from the URL
         pattern = r'https://docs\.google\.com/spreadsheets/d/([a-zA-Z0-9-_]+)(?:/.*?gid=(\d+))?.*'

@@ -1,4 +1,5 @@
 import json
+import typing
 
 import pandas as pd
 
@@ -67,15 +68,15 @@ class WinterTickDataLoader:
         return dataloader.load_data()
 
     @staticmethod
-    def preprocess_data(raw_data: pd.DataFrame) -> dict:
+    def preprocess_data(raw_data: pd.DataFrame) -> typing.Dict[str, pd.DataFrame]:
         """
         Preprocesses the raw winter tick data.
 
         This method creates an instance of `WinterTickDataPreprocessor`, which handles the data cleaning,
         transformation, and other preprocessing steps. It then returns the processed data.
 
-        :param raw_data: A pandas DataFrame containing the raw winter tick data to be processed.
-        :return: A dictionary containing the processed winter tick datas.
+        :param pd.DataFrame raw_data: A pandas DataFrame containing the raw winter tick data to be processed.
+        :return dict: A dictionary containing the processed winter tick datas.
         """
         # Initialize the preprocessor with the raw data
         preprocessor = WinterTickDataPreprocessor(data=raw_data)

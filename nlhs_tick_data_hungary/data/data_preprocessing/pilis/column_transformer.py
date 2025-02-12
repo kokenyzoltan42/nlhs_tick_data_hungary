@@ -101,8 +101,8 @@ class ColumnTransformer:
         If a value is a single number, both min and max will be set to that number. If it's an interval
         (e.g., "10-20"), it splits it into min and max.
 
-        :param temp: A pandas Series containing temperature or RH values to be split.
-        :return: A pandas Series containing minimum and maximum values.
+        :param pd.Series temp: A pandas Series containing temperature or RH values to be split.
+        :return pd.Series: A pandas Series containing minimum and maximum values.
         """
         temp = str(temp).replace(',', '.').strip()
         if re.match(pattern=r"^\s*\d+([.,]\d+)?\s*$", string=temp):

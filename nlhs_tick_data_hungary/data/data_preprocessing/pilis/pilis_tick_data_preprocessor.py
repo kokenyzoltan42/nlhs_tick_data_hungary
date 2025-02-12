@@ -22,7 +22,7 @@ class PilisTickDataPreprocessor:
         """
         Initializes the preprocessor with raw tick data.
 
-        :param raw_pilis_tick_data: A pandas DataFrame containing the raw tick data for preprocessing.
+        :param pd.DataFrame raw_pilis_tick_data: A pandas DataFrame containing the raw tick data for preprocessing.
         """
         self.raw_data = raw_pilis_tick_data
         self.result = None
@@ -63,8 +63,8 @@ class PilisTickDataPreprocessor:
         - The 'Gyűjtők száma' column's missing values are filled using the values in 'Eredeti csövek száma'.
         - Other columns are filled with 0, except for specific columns that allow NaN values.
 
-        :param df: The DataFrame containing the data with missing values.
-        :return: The DataFrame with missing values filled.
+        :param pd.DataFrame df: The DataFrame containing the data with missing values.
+        :return pd.DataFrame: The DataFrame with missing values filled.
         """
         # List of columns where NaN values should remain (i.e., not filled with 0)
         remain_nans = ['Eredeti csövek száma', 'Válogatott csövek száma', 'Gyűjtés időtartama (h)',
@@ -91,8 +91,8 @@ class PilisTickDataPreprocessor:
         The method also creates new columns for the adult stages by summing the male and female counts
         for each species. The resulting DataFrame includes summed species data for both larvae and adults.
 
-        :param df: The DataFrame containing tick species data with individual life stages.
-        :return: The DataFrame with summed species data for larvae and adults.
+        :param pd.DataFrame df: The DataFrame containing tick species data with individual life stages.
+        :return pd.DataFrame: The DataFrame with summed species data for larvae and adults.
         """
         # Renaming specific columns for easier management
         df = df.rename(columns={

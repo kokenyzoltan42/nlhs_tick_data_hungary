@@ -19,7 +19,7 @@ class WinterTickDataPreprocessor:
         """
         Initializes the WinterTickDataPreprocessor with the provided data.
 
-        :param data: The raw data to be preprocessed.
+        :param pd.DataFrame data: The raw data to be preprocessed.
         """
         self.data = data
         self.result = None
