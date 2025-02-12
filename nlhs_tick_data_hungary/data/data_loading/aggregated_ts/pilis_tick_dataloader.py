@@ -1,4 +1,5 @@
 import json
+import typing
 
 import pandas as pd
 
@@ -55,7 +56,7 @@ class PilisTickDataLoader:
         return dataloader.load_data()
 
     @staticmethod
-    def preprocess_data(raw_pilis_tick_data: pd.DataFrame) -> dict[pd.DataFrame, pd.DataFrame]:
+    def preprocess_data(raw_pilis_tick_data: pd.DataFrame) -> typing.Dict[str, pd.DataFrame]:
         """
         Preprocesses the raw Pilis tick data by running it through the PilisTickDataPreprocessor.
 
