@@ -80,6 +80,19 @@ class ColumnTransformer:
         # Convert the 'Gyűjtés időtartama (h)' column by replacing commas with dots and then converting to float
         self.data["Gyűjtés időtartama (h)"] = self.data["Gyűjtés időtartama (h)"].str.replace(',', '.').astype(float)
 
+    def split_temps_and_rhs(self) -> None:
+        """
+        Splits the 'T (°C)' and 'RH(%)' columns into separate minimum and maximum columns.
+
+        This function calls the split_min_max method to process each respective column
+        and then drops the original columns after extraction.
+        """
+        self.data[['Min - T (°C)', 'Max - T (°C)']] = self.data['T (°C)'].apply(self.split_min_max)
+        self.data[['Min - RH(%)', 'Max - RH(%)']] = self.data['RH(%)'].apply(self.split_min_max)
+
+        # Drop the original columns
+        self.data.drop(columns=['T (°C)', 'RH(%)'], inplace=True)
+
     @staticmethod
     def split_min_max(temp: pd.Series) -> pd.Series:
         """
@@ -102,16 +115,3 @@ class ColumnTransformer:
             return pd.Series([min_val, max_val])
         else:
             return pd.Series([None, None])  # Return None if the format is invalid
-
-    def split_temps_and_rhs(self) -> None:
-        """
-        Splits the 'T (°C)' and 'RH(%)' columns into separate minimum and maximum columns.
-
-        This function calls the split_min_max method to process each respective column
-        and then drops the original columns after extraction.
-        """
-        self.data[['Min - T (°C)', 'Max - T (°C)']] = self.data['T (°C)'].apply(self.split_min_max)
-        self.data[['Min - RH(%)', 'Max - RH(%)']] = self.data['RH(%)'].apply(self.split_min_max)
-
-        # Drop the original columns
-        self.data.drop(columns=['T (°C)', 'RH(%)'], inplace=True)
