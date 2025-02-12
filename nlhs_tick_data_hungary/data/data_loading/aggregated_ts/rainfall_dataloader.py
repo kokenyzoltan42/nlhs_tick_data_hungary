@@ -47,7 +47,7 @@ class RainfallDataLoader(CoreDataLoader):
             }
             # Make a directory for saving the results in a `.pkl` file
             os.makedirs(os.path.dirname(cache_file), exist_ok=True)
-            # Save processed data to a `.pck` file
+            # Save processed data to a `.pkl` file
             with open(cache_file, 'wb') as f:
                 pickle.dump(self.result, f)
 
