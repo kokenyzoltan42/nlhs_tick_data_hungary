@@ -1,21 +1,20 @@
-import json
+import os
+import pickle
 import typing
 
 import pandas as pd
 
-from nlhs_tick_data_hungary import config_path
+from nlhs_tick_data_hungary.data.data_loading.aggregated_ts.core_dataloader import CoreDataLoader
 from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
 from ...data_preprocessing.winter_tick.winter_tick_data_preprocessor import WinterTickDataPreprocessor
 
 
-class WinterTickDataLoader:
+class WinterTickDataLoader(CoreDataLoader):
     """
     A class responsible for loading winter tick data.
 
     This class loads raw winter tick data from a Google Sheet, preprocesses it using the `WinterTickDataPreprocessor`,
     and stores the resulting processed data.
-
-    result (dict): A dictionary to store the processed winter tick data.
 
     Structure of the `data` attribute after the `run` method is called:
         `self.data` = {
@@ -28,18 +27,15 @@ class WinterTickDataLoader:
         }
     """
 
-    def __init__(self):
+    def __init__(self, use_cache: bool = False):
         """
         Initializes the WinterTickDataLoader class by setting up the `result` attribute to store processed data
         and loading the links to the necessary datasets.
 
-        The links are loaded from the `links.json` file, which contains URLs to the raw data.
+        :param bool use_cache: Whether to load the data from the cached files.
         """
-        self.data = {}
-
-        # Load the URLs from the config file (links.json)
-        with open(config_path + f'/links.json', 'r+') as file:
-            self.links = json.load(file)
+        super().__init__(use_cache=use_cache)
+        self.run()
 
     def run(self) -> None:
         """
@@ -48,11 +44,24 @@ class WinterTickDataLoader:
         Loads the raw winter tick data from the Google Sheet using the `load_raw_data` method then preprocesses the
         raw data using the `preprocess_data` method and stores the result in the `result` attribute.
         """
-        # Load raw data
-        raw_data = self.load_raw_data()
+        cache_file = 'cache/winter_tick_data.pkl'
 
-        # Preprocess the raw data and store the result
-        self.data = self.preprocess_data(raw_data=raw_data)
+        if self.use_cache and os.path.exists(cache_file):
+            # If the cache is enabled AND the file exists, load it
+            with open(cache_file, 'rb') as f:
+                self.result = pickle.load(f)
+        else:
+            # Load raw data
+            raw_data = self.load_raw_data()
+
+            # Preprocess the raw data and store the result
+            self.result = self.preprocess_data(raw_data=raw_data)
+
+            # Make a directory for saving the results in a `.pkl` file
+            os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+            # Save processed data to a `.pck` file
+            with open(cache_file, 'wb') as f:
+                pickle.dump(self.result, f)
 
     def load_raw_data(self) -> pd.DataFrame:
         """
