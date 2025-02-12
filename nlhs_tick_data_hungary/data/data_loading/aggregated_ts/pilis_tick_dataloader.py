@@ -1,3 +1,5 @@
+import os
+import pickle
 import typing
 
 import pandas as pd
@@ -15,14 +17,16 @@ class PilisTickDataLoader(CoreDataLoader):
     links (dict): A dictionary containing the URLs for the raw data (in Google Sheets).
     """
 
-    def __init__(self):
+    def __init__(self, use_cache: bool = False):
         """
         Initializes the PilisTickDataLoader.
 
         This constructor calls the `run` method to automatically load and process
         tick data collected from the Pilis region upon initialization.
+
+        :param bool use_cache: Whether to load the data from the cached files.
         """
-        super().__init__()
+        super().__init__(use_cache=use_cache)
         self.run()
 
     def run(self) -> None:
@@ -31,11 +35,22 @@ class PilisTickDataLoader(CoreDataLoader):
         - Loads the raw Pilis tick data from Google Sheets.
         - Preprocesses the data and stores the result.
         """
-        # Load the raw tick data from the Google Sheets using the links from the config file
-        raw_pilis_tick_data = self.load_raw_data()
+        cache_file = 'cache/pilis_tick_data.pkl'
+        if self.use_cache and os.path.exists(cache_file):
+            # If the cache is enabled AND the file exists, load it
+            with open(cache_file, 'rb') as f:
+                self.result = pickle.load(f)
+        else:
+            # Load the raw tick data from the Google Sheets using the links from the config file
+            raw_pilis_tick_data = self.load_raw_data()
 
-        # Preprocess the raw data and store it
-        self.result = self.preprocess_data(raw_pilis_tick_data=raw_pilis_tick_data)
+            # Preprocess the raw data and store it
+            self.result = self.preprocess_data(raw_pilis_tick_data=raw_pilis_tick_data)
+            # Make a directory for saving the results in a `.pkl` file
+            os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+            # Save processed data to a `.pck` file
+            with open(cache_file, 'wb') as f:
+                pickle.dump(self.result, f)
 
     def load_raw_data(self) -> pd.DataFrame:
         """

@@ -1,3 +1,6 @@
+import os
+import pickle
+
 import numpy as np
 import pandas as pd
 
@@ -14,14 +17,16 @@ class RainfallDataLoader(CoreDataLoader):
     links (dict): A dictionary containing the URLs for the rainfall data files
                   (for Piliscsaba and Pilisszentkereszt).
     """
-    def __init__(self):
+    def __init__(self, use_cache: bool = False):
         """
         Initializes the RainfallDataLoader.
 
         This constructor calls the `run` method to automatically load and process
         rainfall data upon initialization.
+
+        :param bool use_cache: Whether to load the data from the cached files.
         """
-        super().__init__()
+        super().__init__(use_cache=use_cache)
         self.run()
 
     def run(self) -> None:
@@ -30,14 +35,25 @@ class RainfallDataLoader(CoreDataLoader):
         - Loads the raw rainfall data for Piliscsaba and Pilisszentkereszt.
         - Processes the data and stores the result.
         """
-        # Load the raw rainfall data for both locations
-        raw_rainfall_data = self.load_rainfall_data()
+        cache_file = 'cache/rainfall_data.pkl'
 
-        # Process the raw rainfall data for both locations and store the results
-        self.result = {
-            'piliscsaba': self.preprocess_data(raw_rainfall_data['piliscsaba']),
-            'pilisszentkereszt': self.preprocess_data(raw_rainfall_data['pilisszentkereszt']),
-        }
+        if self.use_cache and os.path.exists(cache_file):
+            # If the cache is enabled AND the file exists, load it
+            with open(cache_file, 'rb') as f:
+                self.result = pickle.load(f)
+        else:
+            raw_rainfall_data = self.load_rainfall_data()
+
+            # Process the raw rainfall data for both locations and store the results
+            self.result = {
+                'piliscsaba': self.preprocess_data(raw_rainfall_data['piliscsaba']),
+                'pilisszentkereszt': self.preprocess_data(raw_rainfall_data['pilisszentkereszt']),
+            }
+            # Make a directory for saving the results in a `.pkl` file
+            os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+            # Save processed data to a `.pck` file
+            with open(cache_file, 'wb') as f:
+                pickle.dump(self.result, f)
 
     def load_rainfall_data(self) -> dict:
         """

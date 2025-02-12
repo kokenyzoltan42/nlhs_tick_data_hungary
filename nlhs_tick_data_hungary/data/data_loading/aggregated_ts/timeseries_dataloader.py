@@ -26,11 +26,14 @@ class TimeseriesDataLoader:
         }
     """
 
-    def __init__(self):
+    def __init__(self, use_cache: bool = False):
         """
         Initializes the TimeseriesDataLoader with an empty dictionary to store the results of the data loading process.
+
+        :param bool use_cache: Whether to load the data from the cached files.
         """
         self.data = {}
+        self.use_cache = use_cache
 
     def run(self) -> None:
         """
@@ -44,9 +47,9 @@ class TimeseriesDataLoader:
         - 'rainfall_data': Loaded and processed rainfall data.
         """
         # Initialize the individual data loaders for Lyme disease, Pilis tick data, and rainfall data
-        lyme_dataloader = LymeDataLoader()
-        pilis_dataloader = PilisTickDataLoader()
-        rainfall_dataloader = RainfallDataLoader()
+        lyme_dataloader = LymeDataLoader(use_cache=self.use_cache)
+        pilis_dataloader = PilisTickDataLoader(use_cache=self.use_cache)
+        rainfall_dataloader = RainfallDataLoader(use_cache=self.use_cache)
 
         # Aggregate the results from each data loader and store them in the `self.data` dictionary
         self.data = {

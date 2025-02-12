@@ -5,17 +5,20 @@ import typing
 from nlhs_tick_data_hungary import config_path
 
 
-# TODO: attribútumokra vinatkozó docstring részleteket idehozni
+# TODO: osztályok attribútumaira vonatkozó docstring részleteket idehozni
 class CoreDataLoader(ABC):
     """
     A base class for all the data loaders that handle aggregated timeseries data.
     """
 
-    def __init__(self):
+    def __init__(self, use_cache: bool = False):
         """
         Initializes the core data loader by loading the config links.
         The `run` method is not called automatically, subclasses call it when needed.
+
+        :param bool use_cache: Whether to load the data from the cached files.
         """
+        self.use_cache = use_cache
         self.result = None
         self.links = self.load_links()
 

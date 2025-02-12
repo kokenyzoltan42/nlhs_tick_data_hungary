@@ -1,3 +1,6 @@
+import os
+import pickle
+
 import pandas as pd
 
 from nlhs_tick_data_hungary.data.data_loading.aggregated_ts.core_dataloader import CoreDataLoader
@@ -13,14 +16,16 @@ class LymeDataLoader(CoreDataLoader):
                    organized by year and month.
     links (dict): A dictionary containing the URLs for the raw Lyme disease data files.
     """
-    def __init__(self):
+    def __init__(self, use_cache: bool = False):
         """
         Initializes the LymeDataLoader.
 
         This constructor calls the `run` method to automatically load and process
         Lyme disease data upon initialization.
+
+        :param bool use_cache: Whether to load the data from the cached files.
         """
-        super().__init__()
+        super().__init__(use_cache=use_cache)
         self.run()
 
     def run(self) -> None:
@@ -29,14 +34,26 @@ class LymeDataLoader(CoreDataLoader):
         - Loads the raw Lyme disease data (monthly and yearly).
         - Processes the data and organizes it into a dictionary.
         """
-        # Load the raw Lyme data from Google Drive using the links from the config file
-        lyme_raw = self.load_lyme_data()
+        cache_file = 'cache/lyme_data.pkl'
 
-        # Process the raw data and store the results
-        self.result = {
-            'lyme_year': self.preprocess_data(lyme_data=lyme_raw['lyme_year'], period='Y'),
-            'lyme_month': self.preprocess_data(lyme_data=lyme_raw['lyme_month'], period='M'),
-        }
+        if self.use_cache and os.path.exists(cache_file):
+            # If the cache is enabled AND the file exists, load it
+            with open(cache_file, 'rb') as f:
+                self.result = pickle.load(f)
+        else:
+            # Load the raw Lyme data from Google Drive using the links from the config file
+            lyme_raw = self.load_lyme_data()
+
+            # Process the raw data and store the results
+            self.result = {
+                'lyme_year': self.preprocess_data(lyme_data=lyme_raw['lyme_year'], period='Y'),
+                'lyme_month': self.preprocess_data(lyme_data=lyme_raw['lyme_month'], period='M'),
+            }
+            # Make a directory for saving the results in a `.pkl` file
+            os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+            # Save processed data to a `.pck` file
+            with open(cache_file, 'wb') as f:
+                pickle.dump(self.result, f)
 
     def load_lyme_data(self) -> dict:
         """
