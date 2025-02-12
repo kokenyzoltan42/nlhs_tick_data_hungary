@@ -1,13 +1,11 @@
-import json
-
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary import config_path
+from nlhs_tick_data_hungary.data.data_loading.aggregated_ts.core_dataloader import CoreDataLoader
 from nlhs_tick_data_hungary.data.utils.google_data_downloader import GoogleDataDownloader
 
 
-class RainfallDataLoader:
+class RainfallDataLoader(CoreDataLoader):
     """
     A class to load and preprocess rainfall data from Google Sheets for two locations: Piliscsaba and Pilisszentkereszt.
     The data is processed into pandas Series, handling missing values and time indexing.
@@ -16,18 +14,14 @@ class RainfallDataLoader:
     links (dict): A dictionary containing the URLs for the rainfall data files
                   (for Piliscsaba and Pilisszentkereszt).
     """
-
     def __init__(self):
         """
-        Initializes the Rainfall by loading the URLs for the tick data file and then runs the data loading
-        and preprocessing.
+        Initializes the RainfallDataLoader.
+
+        This constructor calls the `run` method to automatically load and process
+        rainfall data upon initialization.
         """
-        self.result = None
-
-        # Load the links for the rainfall data files from the 'links.json' config file
-        with open(config_path + f'/links.json', 'r+') as file:
-            self.links = json.load(file)
-
+        super().__init__()
         self.run()
 
     def run(self) -> None:
@@ -41,8 +35,8 @@ class RainfallDataLoader:
 
         # Process the raw rainfall data for both locations and store the results
         self.result = {
-            'piliscsaba': self.process_rainfall_data(raw_rainfall_data['piliscsaba']),
-            'pilisszentkereszt': self.process_rainfall_data(raw_rainfall_data['pilisszentkereszt']),
+            'piliscsaba': self.preprocess_data(raw_rainfall_data['piliscsaba']),
+            'pilisszentkereszt': self.preprocess_data(raw_rainfall_data['pilisszentkereszt']),
         }
 
     def load_rainfall_data(self) -> dict:
@@ -88,7 +82,7 @@ class RainfallDataLoader:
         }
 
     @staticmethod
-    def process_rainfall_data(rainfall_datas: list) -> pd.Series:
+    def preprocess_data(rainfall_datas: list) -> pd.Series:
         """
         Processes the raw rainfall data by cleaning and combining the data into a single pandas Series.
 

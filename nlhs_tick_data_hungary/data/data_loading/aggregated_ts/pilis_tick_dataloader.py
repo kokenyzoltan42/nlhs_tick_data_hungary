@@ -1,14 +1,13 @@
-import json
 import typing
 
 import pandas as pd
 
-from nlhs_tick_data_hungary import config_path
+from nlhs_tick_data_hungary.data.data_loading.aggregated_ts.core_dataloader import CoreDataLoader
 from nlhs_tick_data_hungary.data.utils.google_sheet_dataloader import GoogleSheetDataLoader
 from nlhs_tick_data_hungary.data.data_preprocessing.pilis.pilis_tick_data_preprocessor import PilisTickDataPreprocessor
 
 
-class PilisTickDataLoader:
+class PilisTickDataLoader(CoreDataLoader):
     """
     A class to load and preprocess tick data from a Google Sheets source.
 
@@ -18,15 +17,12 @@ class PilisTickDataLoader:
 
     def __init__(self):
         """
-        Initializes the PilisTickDataLoader by loading the URLs for the tick data file and then runs the data loading
-        and preprocessing.
+        Initializes the PilisTickDataLoader.
+
+        This constructor calls the `run` method to automatically load and process
+        tick data collected from the Pilis region upon initialization.
         """
-        self.result = None
-
-        # Load the links for the Pilis tick data from the 'links.json' config file
-        with open(config_path + f'/links.json', 'r+') as file:
-            self.links = json.load(file)
-
+        super().__init__()
         self.run()
 
     def run(self) -> None:

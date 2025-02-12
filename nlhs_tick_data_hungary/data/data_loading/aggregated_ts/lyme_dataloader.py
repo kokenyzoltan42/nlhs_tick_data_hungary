@@ -1,12 +1,10 @@
-import json
-
 import pandas as pd
 
-from nlhs_tick_data_hungary import config_path
+from nlhs_tick_data_hungary.data.data_loading.aggregated_ts.core_dataloader import CoreDataLoader
 from nlhs_tick_data_hungary.data.utils.google_data_downloader import GoogleDataDownloader
 
 
-class LymeDataLoader:
+class LymeDataLoader(CoreDataLoader):
     """
     A class to load and process Lyme disease data from `.csv` files stored on Google Drive.
     The data is loaded, processed by year or month, and stored in a dictionary.
@@ -15,18 +13,14 @@ class LymeDataLoader:
                    organized by year and month.
     links (dict): A dictionary containing the URLs for the raw Lyme disease data files.
     """
-
     def __init__(self):
         """
-        Initializes the LymeDataLoader by loading the URLs for the Lyme data files from the `links.json` file and
-        running the data loading and processing steps.
+        Initializes the LymeDataLoader.
+
+        This constructor calls the `run` method to automatically load and process
+        Lyme disease data upon initialization.
         """
-        self.result = None
-
-        # Load the links for the Lyme data `.csv` files from the `links.json` config file
-        with open(config_path + f'/links.json', 'r+') as file:
-            self.links = json.load(file)
-
+        super().__init__()
         self.run()
 
     def run(self) -> None:
@@ -40,8 +34,8 @@ class LymeDataLoader:
 
         # Process the raw data and store the results
         self.result = {
-            'lyme_year': self.process_lyme_data(lyme_data=lyme_raw['lyme_year'], period='Y'),
-            'lyme_month': self.process_lyme_data(lyme_data=lyme_raw['lyme_month'], period='M'),
+            'lyme_year': self.preprocess_data(lyme_data=lyme_raw['lyme_year'], period='Y'),
+            'lyme_month': self.preprocess_data(lyme_data=lyme_raw['lyme_month'], period='M'),
         }
 
     def load_lyme_data(self) -> dict:
@@ -70,7 +64,7 @@ class LymeDataLoader:
         return lyme_raw
 
     @staticmethod
-    def process_lyme_data(lyme_data: pd.Series, period: str) -> pd.Series:
+    def preprocess_data(lyme_data: pd.Series, period: str) -> pd.Series:
         """
         Processes Lyme disease data by formatting the 'Date' column and converting it into a pandas Series indexed
         by the specified period (monthly or yearly).
