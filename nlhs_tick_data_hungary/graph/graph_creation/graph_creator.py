@@ -6,6 +6,7 @@ import pandas as pd
 
 from nlhs_tick_data_hungary.graph.graph_preparation.general_graph_preprocessor import GeneralGraphPreprocessor
 from nlhs_tick_data_hungary.graph.graph_preparation.cooccurence_graph_preprocessor import CooccurenceGraphPreprocessor
+from nlhs_tick_data_hungary.graph.graph_preparation.sparcc.SparCCRunner import SparCCRunner
 
 
 class GraphCreator:
@@ -18,7 +19,8 @@ class GraphCreator:
     # TODO: átírni az összes docstring-et
     def __init__(self, df: pd.DataFrame, type_of_data: str, percentage: bool,
                  year: str, month: str,
-                 type_of_graph: str):
+                 type_of_graph: str,
+                 sparcc_args: dict) -> None:
         """
         Initialize the GraphPreProcessor with the specified parameters.
 
@@ -35,8 +37,9 @@ class GraphCreator:
         self.year = year
         self.month = month
         self.type_of_graph = type_of_graph
+        self.sparcc_args = sparcc_args
 
-        self.processed_df = None  # Dataframe to store processed data
+        self.final_table = None  # Dataframe to store processed data
         self.G = None  # Graph object
 
     # TODO: png név colab-ba
@@ -46,7 +49,7 @@ class GraphCreator:
         Execute the full processing pipeline: generate PNG name, load data, apply percentage, and create the
         graph.
         """
-        # TODO: jobb név
+        # TODO: jobb név mindenhol
         self._get_df_to_convert_to_graph()
         self.create_graph()  # Construct the graph from the processed data
 
@@ -58,28 +61,33 @@ class GraphCreator:
                                                     to_type=self.type_of_data,
                                                     year=self.year,
                                                     month=self.month)
-            self.processed_df = preprocessor.preprocessed_df
+            processed_df = preprocessor.preprocessed_df
+
+            sparcc = SparCCRunner(df=processed_df,
+                                  args=self.sparcc_args)
+            self.final_table = sparcc.run()
+
         elif self.type_of_graph == 'Cooccurrence network':
             preprocessor = CooccurenceGraphPreprocessor(df=self.df,
                                                         type_of_data=self.type_of_data,
                                                         percentage=self.percentage,
                                                         year=self.year,
                                                         month=self.month)
-            self.processed_df = preprocessor.preprocessed_df
+            self.final_table = preprocessor.preprocessed_df
 
     def create_graph(self):
         """
         Construct a graph using NetworkX from the processed data stored in my_df_s.
         """
-        self.G = nx.Graph()  # Initialize a new graph
+        self.G = nx.Graph()
 
         # Add nodes to the graph for each bacterium
-        for bacterium in self.processed_df.columns:
+        for bacterium in self.final_table.columns:
             self.G.add_node(bacterium)
 
         # Add edges between nodes based on the DataFrame's values
-        for i in range(self.processed_df.shape[0]):
+        for i in range(self.final_table.shape[0]):
             for j in range(0, i):  # Only consider lower triangle to avoid duplicate edges
-                weight = self.processed_df.iloc[i, j]
+                weight = self.final_table.iloc[i, j]
                 if weight != 0:  # Only add edges with non-zero weights
-                    self.G.add_edge(self.processed_df.index[i], self.processed_df.columns[j], weight=weight)
+                    self.G.add_edge(self.final_table.index[i], self.final_table.columns[j], weight=weight)
