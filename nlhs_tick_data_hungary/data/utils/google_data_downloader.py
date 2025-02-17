@@ -14,8 +14,7 @@ class GoogleDataDownloader:
     def download(self, file_url: str):
         """
         Method for downloading data from GDrive.
-        :param file_url:
-        :return:
+        :param file_url: Google Drive link to the data
         """
         os.makedirs(self.data_folder, exist_ok=True)
         if not os.path.isfile(self.file_path):
