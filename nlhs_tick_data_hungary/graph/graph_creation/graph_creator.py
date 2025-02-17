@@ -1,0 +1,3 @@
+"""
+Gráf létrehozása
+"""

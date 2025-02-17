@@ -1,0 +1,3 @@
+"""
+Nem, időszak kiválasztása
+"""
