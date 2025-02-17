@@ -3,6 +3,8 @@ Nem, időszak kiválasztása
 """
 import pandas as pd
 
+from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
+
 
 class GeneralGraphPreprocessor:
     def __init__(self, df: pd.DataFrame, to_type: str, year: str, month: str):
@@ -14,16 +16,12 @@ class GeneralGraphPreprocessor:
         self.preprocessed_df = None
 
         self.select_year_and_month()
-        self.select_type()
+        self.select_type_of_data()
 
     # TODO: ennek az osztálynak az lenne a célja, hogy előkészítse a pd.dataframe-t a gráfnak
-    def select_type(self):
-        if self.to_type == 'Hím':
-            self.df = self.df.filter(like='Male')
-        elif self.to_type == 'Nőstény':
-            self.df = self.df.filter(like='Female')
-        elif self.to_type == '':
-            pass
+    def select_type_of_data(self):
+        self.df = AssistingMethods.select_type(df=self.df,
+                                               to_type=self.to_type)
 
         # Convert the DataFrame values to numeric integer where possible
         self.df = self.df.apply(pd.to_numeric, errors='coerce', downcast='integer')
