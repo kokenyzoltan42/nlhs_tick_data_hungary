@@ -35,8 +35,8 @@ class GeneralGraphPreprocessor:
         if self.year == '' and self.month == '':
             return
 
-        mask = (self.df.columns.get_level_values('Year') == self.year) if self.year else True
-        mask &= (self.df.columns.get_level_values('Month') == self.month) if self.month else True
+        mask = (self.df.columns.get_level_values('Year') == self.year) if self.year == '' else True
+        mask &= (self.df.columns.get_level_values('Month') == self.month) if self.month == '' else True
 
         self.preprocessed_df = self.df.loc[:, mask]
 
@@ -50,5 +50,5 @@ class GeneralGraphPreprocessor:
         #        [self.df[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
         #         (self.year, m) in self.df.columns], axis=1
         #    )
-        #else:
+        # else:
         #    self.preprocessed_df = self.df[(self.year, self.month)]
