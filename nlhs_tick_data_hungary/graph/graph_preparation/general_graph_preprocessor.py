@@ -15,7 +15,7 @@ class GeneralGraphPreprocessor:
 
         self.preprocessed_df = None
 
-        self.select_year_and_month()
+        self.prepare_dataframe_by_time()
         self.select_type_of_data()
 
     # TODO: ennek az osztálynak az lenne a célja, hogy előkészítse a pd.dataframe-t a gráfnak
@@ -26,23 +26,29 @@ class GeneralGraphPreprocessor:
         # Convert the DataFrame values to numeric integer where possible
         self.df = self.df.apply(pd.to_numeric, errors='coerce', downcast='integer')
 
-    def select_year_and_month(self):
+    def prepare_dataframe_by_time(self) -> None:
         # TODO: ezt a dataloader-be (és kivenni a számokat a dataloader-nél, pl.: 'Female 19' -> 'Female')
         self.df.columns = pd.MultiIndex.from_tuples(
             [(year, month, individual) for year, month, individual in self.df.columns],
             names=('Year', 'Month', 'Gender')
         )
         if self.year == '' and self.month == '':
-            pass
+            return
 
-        if self.year == '' and self.month != '':
-            avalaible_combs = [y for y in ['2022', '2023'] if (y, self.month) in self.df.columns]
-            self.preprocessed_df = pd.concat([self.df[(y, self.month)] for y in avalaible_combs], axis=1)
+        mask = (self.df.columns.get_level_values('Year') == self.year) if self.year else True
+        mask &= (self.df.columns.get_level_values('Month') == self.month) if self.month else True
 
-        elif self.year != '' and self.month == '':
-            self.preprocessed_df = pd.concat(
-                [self.df[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
-                 (self.year, m) in self.df.columns], axis=1
-            )
-        else:
-            self.preprocessed_df = self.df[(self.year, self.month)]
+        self.preprocessed_df = self.df.loc[:, mask]
+
+        # TODO: erre valszeg van valami elegánsabb megoldás
+        # if self.year == '' and self.month != '':
+        #    avalaible_combs = [y for y in ['2022', '2023'] if (y, self.month) in self.df.columns]
+        #    self.preprocessed_df = pd.concat([self.df[(y, self.month)] for y in avalaible_combs], axis=1)
+        #
+        # elif self.year != '' and self.month == '':
+        #    self.preprocessed_df = pd.concat(
+        #        [self.df[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
+        #         (self.year, m) in self.df.columns], axis=1
+        #    )
+        #else:
+        #    self.preprocessed_df = self.df[(self.year, self.month)]
