@@ -12,11 +12,11 @@ class AssistingMethods:
 
     @staticmethod
     def select_type(df, to_type):
-        if to_type == 'Hím':
+        if to_type == 'Hímek':
             df = df.filter(like='Male')
-        elif to_type == 'Nőstény':
+        elif to_type == 'Nőstények':
             df = df.filter(like='Female')
-        elif to_type == '':
+        elif to_type == 'Összes':
             pass
 
         return df
