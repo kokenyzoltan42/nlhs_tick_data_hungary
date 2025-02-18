@@ -17,7 +17,7 @@ class GraphCreator:
     # TODO: df-nél jobb név
     # TODO: leírni docstringbe, hogy ez a df, már a kiválasztott baktériumokat tartalmazó táblázatot kapja meg
     # TODO: átírni az összes docstring-et
-    def __init__(self, df: pd.DataFrame, type_of_data: str, percentage: bool,
+    def __init__(self, df: pd.DataFrame, type_of_data: str, convert_to_percentage: bool,
                  year: str, month: str,
                  type_of_graph: str,
                  sparcc_args: dict) -> None:
@@ -33,7 +33,7 @@ class GraphCreator:
         """
         self.df = df
         self.type_of_data = type_of_data
-        self.percentage = percentage
+        self.convert_to_percentage = convert_to_percentage
         self.year = year
         self.month = month
         self.type_of_graph = type_of_graph
@@ -70,9 +70,10 @@ class GraphCreator:
         elif self.type_of_graph == 'Cooccurrence network':
             preprocessor = CooccurenceGraphPreprocessor(df=self.df,
                                                         type_of_data=self.type_of_data,
-                                                        percentage=self.percentage,
+                                                        convert_to_percentage=self.convert_to_percentage,
                                                         year=self.year,
                                                         month=self.month)
+            preprocessor.run()
             self.final_table = preprocessor.preprocessed_df
 
     def create_graph(self):
