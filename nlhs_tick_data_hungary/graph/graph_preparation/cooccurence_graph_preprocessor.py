@@ -18,6 +18,7 @@ class CooccurenceGraphPreprocessor:
         self.num_of_samples = None
         self.epsilon = 1e-5  # Small value to prevent division by zero
 
+        self.general_preprocessed_df = None
         self.preprocessed_df = None
 
     def run(self):
@@ -33,21 +34,19 @@ class CooccurenceGraphPreprocessor:
         # This is DataFrame has been reduced to a specific timeframe(?) and if the
         # `type_of_data` attribute is either 'Nőstények', 'Hímek' or 'Összes', then this
         # DataFrame only contains either data of females, males or every gender
-        general_preprocessed_df = preprocessor.preprocessed_df
+        self.general_preprocessed_df = preprocessor.preprocessed_df
 
-        self.num_of_samples = general_preprocessed_df.shape[1]
-        self.preprocessed_df = AssistingMethods.create_crosstable(df=general_preprocessed_df)
+        self.num_of_samples = self.general_preprocessed_df.shape[1]
 
-        # Debugging
-        if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
-            print('filteres függvénybeli df: \n\n\n', self.preprocessed_df)
+        if self.type_of_data in ['Nőstények', 'Hímek', 'Összes']:
+            self.preprocessed_df = AssistingMethods.create_crosstable(df=self.general_preprocessed_df)
 
     def create_crosstable_based_on_type_of_data(self):
         if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
             # Load data for both genders to calculate differences
-            fem_df = AssistingMethods.select_type(df=self.preprocessed_df,
+            fem_df = AssistingMethods.select_type(df=self.general_preprocessed_df,
                                                   to_type='Nőstények')
-            male_df = AssistingMethods.select_type(df=self.preprocessed_df,
+            male_df = AssistingMethods.select_type(df=self.general_preprocessed_df,
                                                    to_type='Hímek')
 
             print('\n\n fem_df:', fem_df)
