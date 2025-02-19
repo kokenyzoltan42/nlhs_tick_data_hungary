@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-class AssistingMethods:
+class NetworkHelper:
     """
     A utility class that provides helper methods for data processing, such as creating a crosstable and filtering
     DataFrame columns based on a specified type.

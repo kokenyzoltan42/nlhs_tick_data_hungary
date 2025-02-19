@@ -1,6 +1,6 @@
 import pandas as pd
 
-from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
+from nlhs_tick_data_hungary.utils.network_helper import NetworkHelper
 
 
 class GeneralNetworkPreprocessor:
@@ -37,7 +37,7 @@ class GeneralNetworkPreprocessor:
         Filters the DataFrame based on the specified type (e.g., 'Male', 'Female').
         Converts values to numeric format where applicable.
         """
-        self.df = AssistingMethods.select_type(df=self.df, to_type=self.to_type)
+        self.df = NetworkHelper.select_type(df=self.df, to_type=self.to_type)
 
         # Convert the DataFrame values to numeric integers where possible
         self.df = self.df.apply(pd.to_numeric, errors='coerce', downcast='integer')

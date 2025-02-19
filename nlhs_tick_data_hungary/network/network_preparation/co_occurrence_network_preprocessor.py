@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
+from nlhs_tick_data_hungary.utils.network_helper import NetworkHelper
 from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
 
 
@@ -36,11 +36,11 @@ class CoOccurrenceNetworkPreprocessor:
         self.year = year
         self.month = month
 
-        self.num_of_samples = None
-        self.epsilon = 1e-5  # Small value to prevent division by zero
+        self.num_of_samples: int = None
+        self.epsilon: float = 1e-5  # Small value to prevent division by zero
 
-        self.general_preprocessed_df = None
-        self.preprocessed_df = None
+        self.general_preprocessed_df: pd.DataFrame = None
+        self.preprocessed_df: pd.DataFrame = None
 
     def run(self):
         """
@@ -71,7 +71,7 @@ class CoOccurrenceNetworkPreprocessor:
         # If the type is either 'Nőstények', 'Hímek', or 'Összes', then the previous preprocessing already selected
         # the type so no further transformation needed
         if self.type_of_data in ['Nőstények', 'Hímek', 'Összes']:
-            self.preprocessed_df = AssistingMethods.create_crosstable(df=self.general_preprocessed_df)
+            self.preprocessed_df = NetworkHelper.create_crosstable(df=self.general_preprocessed_df)
 
     def create_crosstable_based_on_type_of_data(self):
         """
@@ -80,14 +80,14 @@ class CoOccurrenceNetworkPreprocessor:
         """
         if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
             # Load data for both genders to calculate differences
-            fem_df = AssistingMethods.select_type(df=self.general_preprocessed_df,
-                                                  to_type='Nőstények')
-            male_df = AssistingMethods.select_type(df=self.general_preprocessed_df,
-                                                   to_type='Hímek')
+            fem_df = NetworkHelper.select_type(df=self.general_preprocessed_df,
+                                               to_type='Nőstények')
+            male_df = NetworkHelper.select_type(df=self.general_preprocessed_df,
+                                                to_type='Hímek')
 
             # Create crosstables for female and male data and fill missing values with zero
             fem_crosstable, male_crosstable = map(
-                lambda df: AssistingMethods.create_crosstable(df).fillna(0), [fem_df, male_df]
+                lambda df: NetworkHelper.create_crosstable(df).fillna(0), [fem_df, male_df]
             )
 
             # Define operations for calculating differences (to avoid so many 'if' operations)
