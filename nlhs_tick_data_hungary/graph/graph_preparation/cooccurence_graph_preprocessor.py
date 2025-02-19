@@ -99,14 +99,14 @@ class CooccurenceGraphPreprocessor:
 
             # Define operations for calculating differences in percentage (to avoid so many 'if' operations)
             diff_calc_operations_percentage = {
-                'Hím - Nőstény': lambda: np.log((male_crosstable + self.epsilon) / (fem_crosstable + self.epsilon)),
-                'Nőstény - Hím': lambda: np.log((fem_crosstable + self.epsilon) / (male_crosstable + self.epsilon)),
-                'Különbség': lambda: abs(np.log((male_crosstable + self.epsilon) / (fem_crosstable + self.epsilon)))
+                'Hím - Nőstény': np.log((male_crosstable + self.epsilon) / (fem_crosstable + self.epsilon)),
+                'Nőstény - Hím': np.log((fem_crosstable + self.epsilon) / (male_crosstable + self.epsilon)),
+                'Különbség': abs(np.log((male_crosstable + self.epsilon) / (fem_crosstable + self.epsilon)))
             }
 
             # Select the appropriate calculation based on whether to convert to percentage
             if self.convert_to_percentage:
-                self.preprocessed_df = diff_calc_operations_percentage.get(self.type_of_data, lambda: None)()
+                self.preprocessed_df = diff_calc_operations_percentage.get(self.type_of_data, None)
             else:
                 self.preprocessed_df = diff_calc_operations.get(self.type_of_data, None)
 
