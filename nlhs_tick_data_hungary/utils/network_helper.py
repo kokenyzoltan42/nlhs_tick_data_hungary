@@ -11,7 +11,7 @@ class NetworkHelper:
     @staticmethod
     def create_crosstable(df: pd.DataFrame) -> pd.DataFrame:
         """
-        Method for generating a crosstable for the cooccurence network. The number in the ith row nad jth column means
+        Method for creating a crosstable for the co-occurrence network. The number in the ith row nad jth column means
         how many times the ith AND the jth bactria was found on every tick. The diagonal values are replaced with NaN.
 
         :param pd.DataFrame df: A DataFrame where rows are the bacteria and columns are the samples
@@ -32,7 +32,6 @@ class NetworkHelper:
         Filters the DataFrame columns based on the specified type.
         It retains columns that contain 'Male' or 'Female' in their names,
         or returns the unmodified DataFrame if 'Összes' (All) is selected.
-
 
         :param pd.DataFrame df: A DataFrame with column names indicating gender categories
         :param str to_type: The type of selection - 'Hímek' (Males), 'Nőstények' (Females), or 'Összes' (All)
