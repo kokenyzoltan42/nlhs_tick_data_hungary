@@ -2,12 +2,12 @@ import numpy as np
 import pandas as pd
 
 from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
-from nlhs_tick_data_hungary.graph.graph_preparation.general_graph_preprocessor import GeneralGraphPreprocessor
+from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
 
 
-class CooccurenceGraphPreprocessor:
+class CooccurenceNetworkPreprocessor:
     """
-    A class to preprocess co-occurrence graphs from a given DataFrame.
+    A class to preprocess co-occurrence networks from a given DataFrame.
 
     df (DataFrame): The input data as a DataFrame.
     type_of_data (str): The type of data to process (e.g., 'Nőstények', 'Hímek', etc.).
@@ -22,7 +22,7 @@ class CooccurenceGraphPreprocessor:
 
     def __init__(self, df: pd.DataFrame, type_of_data: str, convert_to_percentage: bool, year: str, month: str):
         """
-        Initializes the CooccurenceGraphPreprocessor with provided data and parameters.
+        Initializes the CooccurenceNetworkPreprocessor with provided data and parameters.
 
         :param pd.DataFrame df: The input DataFrame containing the raw data.
         :param str type_of_data: The type of data to process (e.g., 'Nőstények', 'Hímek', etc.).
@@ -53,12 +53,12 @@ class CooccurenceGraphPreprocessor:
     def filter_and_transform_dataframe(self):
         """
         Filters and transforms the input DataFrame based on the specified type of data.
-        This method utilizes GeneralGraphPreprocessor to prepare the DataFrame for further processing.
+        This method utilizes GeneralNetworkPreprocessor to prepare the DataFrame for further processing.
         """
-        preprocessor = GeneralGraphPreprocessor(df=self.df,
-                                                to_type=self.type_of_data,
-                                                year=self.year,
-                                                month=self.month)
+        preprocessor = GeneralNetworkPreprocessor(df=self.df,
+                                                  to_type=self.type_of_data,
+                                                  year=self.year,
+                                                  month=self.month)
         # This DataFrame has been reduced to a specific timeframe and, if the `type_of_data` attribute is
         # either 'Nőstények', 'Hímek', or 'Összes', then this DataFrame only contains data for
         # either females, males, or all genders. If `type_of_data` is something else then this preprocessing only

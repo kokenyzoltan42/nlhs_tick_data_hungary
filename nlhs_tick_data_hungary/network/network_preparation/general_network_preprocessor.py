@@ -3,9 +3,9 @@ import pandas as pd
 from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
 
 
-class GeneralGraphPreprocessor:
+class GeneralNetworkPreprocessor:
     """
-    Prepares a pandas DataFrame for graph processing by selecting relevant data and structuring it by time.
+    Prepares a pandas DataFrame for network processing by selecting relevant data and structuring it by time.
 
     preprocessed_df (pd.DataFrame): The preprocessed DataFrame (with selected type and time)
     """
