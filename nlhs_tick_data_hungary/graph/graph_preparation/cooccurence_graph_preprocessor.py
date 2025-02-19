@@ -66,7 +66,7 @@ class CooccurenceGraphPreprocessor:
                 # TODO: letesztelni
                 self.preprocessed_df = diff_calc_operations_percentage.get(self.type_of_data, lambda: None)()
             else:
-                self.preprocessed_df = diff_calc_operations.get(self.type_of_data, None)()
+                self.preprocessed_df = diff_calc_operations.get(self.type_of_data, None)
 
             # Régi megoldás
             # if self.convert_to_percentage:
