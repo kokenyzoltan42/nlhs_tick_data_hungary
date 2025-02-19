@@ -24,7 +24,7 @@ class GeneralNetworkPreprocessor:
         self.year = year
         self.month = month
 
-        self.preprocessed_df = None
+        self.preprocessed_df: pd.DataFrame = pd.DataFrame()
 
         # Select data based on type (gender category)
         self.select_type_of_data()

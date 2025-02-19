@@ -36,11 +36,11 @@ class CoOccurrenceNetworkPreprocessor:
         self.year = year
         self.month = month
 
-        self.num_of_samples: int = None
+        self.num_of_samples: int = int()
         self.epsilon: float = 1e-5  # Small value to prevent division by zero
 
-        self.general_preprocessed_df: pd.DataFrame = None
-        self.preprocessed_df: pd.DataFrame = None
+        self.general_preprocessed_df: pd.DataFrame = pd.DataFrame()
+        self.preprocessed_df: pd.DataFrame = pd.DataFrame()
 
     def run(self):
         """

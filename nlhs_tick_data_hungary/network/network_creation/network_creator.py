@@ -40,8 +40,8 @@ class NetworkCreator:
         self.type_of_network = type_of_network
         self.sparcc_args = sparcc_args
 
-        self.final_table = None  # Dataframe to store processed data
-        self.network = None  # Object to store created network
+        self.final_table: pd.DataFrame = pd.DataFrame()  # Dataframe to store processed data
+        self.network: nx.Graph = nx.Graph()  # NetworkX object to store created network
 
     def run(self):
         """
