@@ -14,9 +14,9 @@ class AssistingMethods:
         Method for generating a crosstable for the cooccurence network. The number in the ith row nad jth column means
         how many times the ith AND the jth bactria was found on every tick. The diagonal values are replaced with NaN.
 
-        :param pd.DataFrame df: A DataFrame where rows are the bacteria and columns are the samples.
+        :param pd.DataFrame df: A DataFrame where rows are the bacteria and columns are the samples
 
-        :return pd.DataFrame: Crosstable DataFrame with NaN on the diagonal.
+        :return pd.DataFrame: Crosstable DataFrame with NaN on the diagonal
         """
         # Compute the dot product of the DataFrame with its transpose
         final = df.dot(df.T).astype(float)
@@ -34,10 +34,10 @@ class AssistingMethods:
         or returns the unmodified DataFrame if 'Összes' (All) is selected.
 
 
-        :param pd.DataFrame df: A DataFrame with column names indicating gender categories.
-        :param str to_type: The type of selection - 'Hímek' (Males), 'Nőstények' (Females), or 'Összes' (All).
+        :param pd.DataFrame df: A DataFrame with column names indicating gender categories
+        :param str to_type: The type of selection - 'Hímek' (Males), 'Nőstények' (Females), or 'Összes' (All)
 
-        :return pd.DataFrame: Filtered DataFrame based on the selected type.
+        :return pd.DataFrame: Filtered DataFrame based on the selected type
         """
         if to_type == 'Hímek':
             # Keep only columns that contain 'Male'
