@@ -9,15 +9,15 @@ class CoOccurrenceNetworkPreprocessor:
     """
     A class to preprocess co-occurrence networks from a given DataFrame.
 
-    df (DataFrame): The input data as a DataFrame.
-    type_of_data (str): The type of data to process (e.g., 'Nőstények', 'Hímek', etc.).
-    convert_to_percentage (bool): Whether to convert results to percentage.
-    year (str): The year for which the data is being processed (e.g., '2023')
-    month (str): The month for which the data is being processed (e.g., 'January')
-    num_of_samples (int): The number of samples in the preprocessed DataFrame.
-    epsilon (float): A small value to prevent division by zero in calculations.
-    general_preprocessed_df (DataFrame): The DataFrame after general preprocessing.
-    preprocessed_df (DataFrame): The final preprocessed DataFrame based on the type of data.
+    - df (DataFrame): The input data as a DataFrame.
+    - type_of_data (str): The type of data to process (e.g., 'Nőstények', 'Hímek', etc.).
+    - convert_to_percentage (bool): Whether to convert results to percentage.
+    - year (str): The year for which the data is being processed (e.g., '2023')
+    - month (str): The month for which the data is being processed (e.g., 'January')
+    - num_of_samples (int): The number of samples in the preprocessed DataFrame.
+    - epsilon (float): A small value to prevent division by zero in calculations.
+    - general_preprocessed_df (DataFrame): The DataFrame after general preprocessing.
+    - preprocessed_df (DataFrame): The final preprocessed DataFrame based on the type of data.
     """
 
     def __init__(self, df: pd.DataFrame, type_of_data: str, convert_to_percentage: bool, year: str, month: str):

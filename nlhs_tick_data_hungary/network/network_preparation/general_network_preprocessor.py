@@ -7,7 +7,7 @@ class GeneralNetworkPreprocessor:
     """
     Prepares a pandas DataFrame for network processing by selecting relevant data and structuring it by time.
 
-    preprocessed_df (pd.DataFrame): The preprocessed DataFrame (with selected type and time)
+    - preprocessed_df (pd.DataFrame): The preprocessed DataFrame (with selected type and time)
     """
 
     def __init__(self, df: pd.DataFrame, to_type: str, year: str, month: str):
