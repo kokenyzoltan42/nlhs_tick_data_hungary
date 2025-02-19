@@ -38,6 +38,10 @@ class CooccurenceGraphPreprocessor:
         self.num_of_samples = general_preprocessed_df.shape[1]
         self.preprocessed_df = AssistingMethods.create_crosstable(df=general_preprocessed_df)
 
+        # Debugging
+        if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
+            print('filteres függvénybeli df: \n\n\n', self.preprocessed_df)
+
     def create_crosstable_based_on_type_of_data(self):
         if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
             # Load data for both genders to calculate differences
@@ -46,11 +50,13 @@ class CooccurenceGraphPreprocessor:
             male_df = AssistingMethods.select_type(df=self.preprocessed_df,
                                                    to_type='Hímek')
 
+            print('\n\n fem_df:', fem_df)
+
             fem_crosstable, male_crosstable = map(
                 lambda df: AssistingMethods.create_crosstable(df).fillna(0), [fem_df, male_df]
             )
-            print('fem_table:', fem_crosstable)
-            print('male_crosstable:', male_crosstable)
+            print('\n\n fem_table:', fem_crosstable)
+            print('\n\n male_crosstable:', male_crosstable)
 
             diff_calc_operations = {
                 'Nőstény - Hím': fem_crosstable - male_crosstable,
