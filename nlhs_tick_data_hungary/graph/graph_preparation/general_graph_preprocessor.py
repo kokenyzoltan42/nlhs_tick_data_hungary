@@ -44,14 +44,8 @@ class GeneralGraphPreprocessor:
 
     def prepare_dataframe_by_time(self) -> None:
         """
-        Organizes the DataFrame by time using a MultiIndex structure with Year, Month, and Gender.
-        Filters data based on specified year and month values.
+        Method for filtering data based on specified year and month values.
         """
-        # Convert column labels into a MultiIndex with Year, Month, and Gender
-        #self.df.columns = pd.MultiIndex.from_tuples(
-        #    [(year, month, individual) for year, month, individual in self.df.columns],
-        #    names=('Year', 'Month', 'Gender')
-        #)
 
         if self.year == '' and self.month == '':
             self.preprocessed_df = self.df
