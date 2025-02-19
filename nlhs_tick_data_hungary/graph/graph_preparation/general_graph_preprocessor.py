@@ -1,6 +1,3 @@
-"""
-Nem, időszak kiválasztása
-"""
 import pandas as pd
 
 from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
@@ -36,19 +33,14 @@ class GeneralGraphPreprocessor:
             self.preprocessed_df = self.df
             return
 
-        mask = (self.df.columns.get_level_values('Year') == self.year) if self.year == '' else True
-        mask &= (self.df.columns.get_level_values('Month') == self.month) if self.month == '' else True
+        if self.year == '' and self.month != '':
+            avalaible_combs = [y for y in ['2022', '2023'] if (y, self.month) in self.df.columns]
+            self.preprocessed_df = pd.concat([self.df[(y, self.month)] for y in avalaible_combs], axis=1)
 
-        self.preprocessed_df = self.df.loc[:, mask]
-
-        #if self.year == '' and self.month != '':
-        #    avalaible_combs = [y for y in ['2022', '2023'] if (y, self.month) in self.df.columns]
-        #    self.preprocessed_df = pd.concat([self.df[(y, self.month)] for y in avalaible_combs], axis=1)
-        #
-        #elif self.year != '' and self.month == '':
-        #    self.preprocessed_df = pd.concat(
-        #        [self.df[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
-        #         (self.year, m) in self.df.columns], axis=1
-        #    )
-        #else:
-        #    self.preprocessed_df = self.df[(self.year, self.month)]
+        elif self.year != '' and self.month == '':
+            self.preprocessed_df = pd.concat(
+                [self.df[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
+                 (self.year, m) in self.df.columns], axis=1
+            )
+        else:
+            self.preprocessed_df = self.df[(self.year, self.month)]
