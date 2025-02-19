@@ -59,9 +59,9 @@ class GeneralGraphPreprocessor:
         # Filter based on available months if only the year is specified
         elif self.year != '' and self.month == '':
             self.preprocessed_df = pd.concat(
-                [self.df[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
+                [self.df.loc[(self.year, m)] for m in ['January', 'October', 'November', 'December'] if
                  (self.year, m) in self.df.columns], axis=1
             )
         else:
             # Select data for the specified year and month
-            self.preprocessed_df = self.df[(self.year, self.month)]
+            self.preprocessed_df = self.df.loc[(self.year, self.month)]
