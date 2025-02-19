@@ -15,8 +15,8 @@ class GeneralGraphPreprocessor:
 
         self.preprocessed_df = None
 
-        self.select_type_of_data()
         self.prepare_dataframe_by_time()
+        self.select_type_of_data()
 
     # TODO: ennek az osztálynak az lenne a célja, hogy előkészítse a pd.dataframe-t a gráfnak
     def select_type_of_data(self):
