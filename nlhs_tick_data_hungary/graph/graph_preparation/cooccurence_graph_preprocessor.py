@@ -49,6 +49,8 @@ class CooccurenceGraphPreprocessor:
             fem_crosstable, male_crosstable = map(
                 lambda df: AssistingMethods.create_crosstable(df).fillna(0), [fem_df, male_df]
             )
+            print('fem_table:', fem_crosstable)
+            print('male_crosstable:', male_crosstable)
 
             diff_calc_operations = {
                 'Nőstény - Hím': fem_crosstable - male_crosstable,
