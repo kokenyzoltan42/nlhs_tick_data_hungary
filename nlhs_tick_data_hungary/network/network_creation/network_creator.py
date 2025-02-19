@@ -1,7 +1,8 @@
 import networkx as nx
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation.co_occurence_network_preprocessor import CooccurenceNetworkPreprocessor
+from nlhs_tick_data_hungary.network.network_preparation.co_occurence_network_preprocessor import \
+    CooccurenceNetworkPreprocessor
 from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
 from nlhs_tick_data_hungary.network.network_preparation.sparcc.SparCCRunner import SparCCRunner
 
@@ -70,11 +71,13 @@ class NetworkCreator:
 
         elif self.type_of_network == 'Co-occurrence network':
             # Preprocess data for co-occurrence network
-            preprocessor = CooccurenceNetworkPreprocessor(df=self.df,
-                                                          type_of_data=self.type_of_data,
-                                                          convert_to_percentage=self.convert_to_percentage,
-                                                          year=self.year,
-                                                          month=self.month)
+            preprocessor = CooccurenceNetworkPreprocessor(
+                df=self.df,
+                type_of_data=self.type_of_data,
+                convert_to_percentage=self.convert_to_percentage,
+                year=self.year,
+                month=self.month
+            )
             preprocessor.run()
             self.final_table = preprocessor.preprocessed_df
 
