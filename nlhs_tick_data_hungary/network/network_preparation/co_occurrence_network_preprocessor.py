@@ -5,7 +5,7 @@ from nlhs_tick_data_hungary.utils.assisting_methods import AssistingMethods
 from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
 
 
-class CooccurenceNetworkPreprocessor:
+class CoOccurrenceNetworkPreprocessor:
     """
     A class to preprocess co-occurrence networks from a given DataFrame.
 
