@@ -116,4 +116,4 @@ class CooccurenceGraphPreprocessor:
         Only applies to types that are not 'Különbség', 'Nőstény - Hím', or 'Hím - Nőstény'.
         """
         if self.convert_to_percentage and self.type_of_data not in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
-            self.preprocessed_df = (self.preprocessed_df.fillna(0) / self.num_of_samples * 100).round(2)
+            self.preprocessed_df = (self.preprocessed_df.fillna(0) / self.num_of_samples * 100).round(0)
