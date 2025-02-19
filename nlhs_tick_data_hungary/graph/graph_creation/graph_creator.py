@@ -42,8 +42,6 @@ class GraphCreator:
         self.final_table = None  # Dataframe to store processed data
         self.G = None  # Graph object
 
-    # TODO: png név colab-ba
-
     def run(self):
         """
         Execute the full processing pipeline: generate PNG name, load data, apply percentage, and create the
@@ -51,9 +49,7 @@ class GraphCreator:
         """
         # TODO: jobb név mindenhol
         self._get_df_to_convert_to_graph()
-        self.create_graph()  # Construct the graph from the processed data
-
-    # TODO: nem megfeledkezni a weightmultiplier-ökről
+        self.create_graph()
 
     def _get_df_to_convert_to_graph(self):
         if self.type_of_graph == 'SparCC':
