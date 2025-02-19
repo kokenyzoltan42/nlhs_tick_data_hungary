@@ -49,13 +49,9 @@ class CooccurenceGraphPreprocessor:
             male_df = AssistingMethods.select_type(df=self.general_preprocessed_df,
                                                    to_type='Hímek')
 
-            print('\n\n fem_df:', fem_df)
-
             fem_crosstable, male_crosstable = map(
                 lambda df: AssistingMethods.create_crosstable(df).fillna(0), [fem_df, male_df]
             )
-            print('\n\n fem_table:', fem_crosstable)
-            print('\n\n male_crosstable:', male_crosstable)
 
             diff_calc_operations = {
                 'Nőstény - Hím': fem_crosstable - male_crosstable,
@@ -70,7 +66,6 @@ class CooccurenceGraphPreprocessor:
             }
 
             if self.convert_to_percentage:
-                # TODO: letesztelni
                 self.preprocessed_df = diff_calc_operations_percentage.get(self.type_of_data, lambda: None)()
             else:
                 self.preprocessed_df = diff_calc_operations.get(self.type_of_data, None)
