@@ -48,10 +48,10 @@ class GeneralGraphPreprocessor:
         Filters data based on specified year and month values.
         """
         # Convert column labels into a MultiIndex with Year, Month, and Gender
-        self.df.columns = pd.MultiIndex.from_tuples(
-            [(year, month, individual) for year, month, individual in self.df.columns],
-            names=('Year', 'Month', 'Gender')
-        )
+        #self.df.columns = pd.MultiIndex.from_tuples(
+        #    [(year, month, individual) for year, month, individual in self.df.columns],
+        #    names=('Year', 'Month', 'Gender')
+        #)
 
         if self.year == '' and self.month == '':
             self.preprocessed_df = self.df
