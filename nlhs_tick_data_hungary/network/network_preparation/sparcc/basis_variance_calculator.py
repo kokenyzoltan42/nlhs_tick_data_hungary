@@ -5,15 +5,13 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import LogRatioVa
 
 
 class BasisVarianceCalculator:
-    def __init__(self, data: pd.DataFrame, helper_matrix: np.ndarray):  # lehet pandas a helper_matrix
+    def __init__(self, data: pd.DataFrame, helper_matrix: np.ndarray):
         self.data = data
         self.helper_matrix = helper_matrix
 
         self.log_ratio_variance: (np.ndarray | None) = None
 
         self.result: (pd.DataFrame | None) = None
-
-    # TODO: log-ratio var importját rövidíteni
 
     def run(self):
         self.calculate_basis_variance()
