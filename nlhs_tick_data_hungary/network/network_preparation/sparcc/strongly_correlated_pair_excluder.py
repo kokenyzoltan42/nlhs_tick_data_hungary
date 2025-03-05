@@ -63,7 +63,7 @@ class StronglyCorrelatedPairExcluder:
         # Only working in the upper triangle (excluding diagonal)
         corr_temp = np.triu(abs(correlations), 1)
 
-        corr_temp[zip(*previously_excluded_pairs)] = 0
+        corr_temp[tuple(zip(*previously_excluded_pairs))] = 0
 
         # Finding the most correlated pair
         i, j = np.unravel_index(np.argmax(corr_temp), corr_temp.shape)
@@ -73,7 +73,6 @@ class StronglyCorrelatedPairExcluder:
             return i, j
         else:
             return None
-
 
     def exclude_components(self):
         # Searching for new components to exclude
