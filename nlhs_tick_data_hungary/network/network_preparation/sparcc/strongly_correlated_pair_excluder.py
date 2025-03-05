@@ -84,7 +84,7 @@ class StronglyCorrelatedPairExcluder:
         if len(newly_excluded_components) > 0:
             if len(excluded_components) > (self.num_of_components - 4):
                 raise ValueError("Túl sok komponenst kellett kihagyni az elemzésből")
-                # TODO: itt máshol clr-t alkalmaznak és azzal térnek vissza, lehet itt is azt kellene
+                # TODO: ilyenkor máshol clr-t alkalmaznak és azzal térnek vissza, lehet itt is azt kellene
                 #  és ValueError helyett csak egy warning-ot kiírni
             for excluded_component in newly_excluded_components:
                 self.helper_matrix[excluded_component, :] = 0
