@@ -36,10 +36,11 @@ class LogRatioVarianceCalculator:
         """
 
         # Apply the Dirichlet resampling to each row in the DataFrame
-        self.data = self.data.apply(
-            lambda x: np.random.mtrand.dirichlet(x + 1),
-            axis=1
-        )
+        #self.data = self.data.apply(
+        #    lambda x: np.random.mtrand.dirichlet(x + 1),
+        #    axis=1
+        #)
+        self.data = np.apply_along_axis(lambda x: np.random.mtrand.dirichlet(x + 1), 1, self.data)
 
     def calc_log_ratio_var(self):
         """
@@ -56,7 +57,7 @@ class LogRatioVarianceCalculator:
         num_otus, num_samples = variable_data.shape
 
         # Create a 3D array where each element contains a copy of the variable_data along the 3rd dimension
-        data_expanded = np.tile(variable_data.reshape((num_otus, num_samples, 1)), (1, 1, num_samples))
+        data_expanded = np.tile(variable_data.reshape((num_samples, num_otus, 1)), (1, 1, num_otus))
 
         # Transpose the data along the last two axes
         data_transposed = data_expanded.transpose(0, 2, 1)
