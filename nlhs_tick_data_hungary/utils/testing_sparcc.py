@@ -11,12 +11,13 @@ def main():
     args = {
         'n_iter': 50,
         'x_iter': 10,
-        'tol': 0.1
+        'threshold': 0.1
     }
 
-    runner = SparCCRunner(df=fake_data,
+    runner = SparCCRunner(df=fake_data[1:],
                           args=args)
     result = runner.run()
+    # print(fake_data[1:])
     print(result)
 
 

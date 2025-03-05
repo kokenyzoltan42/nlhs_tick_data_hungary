@@ -7,10 +7,10 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import Correlatio
 
 
 class StronglyCorrelatedPairExcluder:
-    def __init__(self, data: pd.DataFrame, x_iter: int, tol: float = 0.1):
+    def __init__(self, data: pd.DataFrame, x_iter: int, threshold: float):
         self.data = data
         self.x_iter = x_iter
-        self.tol = tol
+        self.threshold = threshold
 
         self.num_of_components = self.data.shape[0]
         self.helper_matrix: (np.ndarray | None) = None
@@ -31,7 +31,7 @@ class StronglyCorrelatedPairExcluder:
 
         for xi in range(self.x_iter):
             to_exclude = self.find_new_excluded_pair(correlations=correlations,
-                                                     tol=self.tol,
+                                                     threshold=self.threshold,
                                                      previously_excluded_pairs=self.excluded_pairs)
             if to_exclude is None:
                 break
@@ -58,7 +58,7 @@ class StronglyCorrelatedPairExcluder:
 
     @staticmethod
     def find_new_excluded_pair(correlations: np.ndarray,
-                               tol: float,
+                               threshold: float,
                                previously_excluded_pairs: list) -> Tuple[int, int] | None:
         # Only working in the upper triangle (excluding diagonal)
         corr_temp = np.triu(abs(correlations), 1)
@@ -69,7 +69,7 @@ class StronglyCorrelatedPairExcluder:
         i, j = np.unravel_index(np.argmax(corr_temp), corr_temp.shape)
         corr_max = corr_temp[i, j]
 
-        if corr_max > tol:
+        if corr_max > threshold:
             return i, j
         else:
             return None
