@@ -11,7 +11,7 @@ class SparCCRunner:
 
     def run(self) -> pd.DataFrame:
         correlations = []
-        for ni in self.args['n_iter']:
+        for _ in self.args['n_iter']:
             strongly_correalted_pair_excluder = StronglyCorrelatedPairExcluder(data=self.df,
                                                                                x_iter=self.args['x_iter'],
                                                                                tol=self.args['tol'])
