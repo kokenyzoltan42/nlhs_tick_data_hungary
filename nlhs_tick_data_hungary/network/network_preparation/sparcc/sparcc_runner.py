@@ -11,11 +11,11 @@ class SparCCRunner:
 
     def run(self) -> pd.DataFrame:
         correlations = []
-        for _ in self.args['n_iter']:
-            strongly_correalted_pair_excluder = StronglyCorrelatedPairExcluder(data=self.df,
+        for _ in range(self.args['n_iter']):
+            strongly_correlated_pair_excluder = StronglyCorrelatedPairExcluder(data=self.df,
                                                                                x_iter=self.args['x_iter'],
                                                                                tol=self.args['tol'])
-            strongly_correalted_pair_excluder.run()
-            correlations.append(strongly_correalted_pair_excluder.result)
+            strongly_correlated_pair_excluder.run()
+            correlations.append(strongly_correlated_pair_excluder.result)
 
         return np.nanmedian(np.array(correlations), axis=0)
