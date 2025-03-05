@@ -3,7 +3,7 @@ from typing import Tuple
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.correlation_calculator import CorrelationCalculator
+from nlhs_tick_data_hungary.network.network_preparation.sparcc import CorrelationCalculator
 
 
 class StronglyCorrelatedPairExcluder:

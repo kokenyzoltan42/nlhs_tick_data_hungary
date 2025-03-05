@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.strongly_correlated_pair_excluder import StronglyCorrelatedPairExcluder
+from nlhs_tick_data_hungary.network.network_preparation.sparcc import StronglyCorrelatedPairExcluder
 
 
 class SparCCRunner:

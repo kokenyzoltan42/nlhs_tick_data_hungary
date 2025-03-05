@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.log_ratio_variance_calculator import LogRatioVarianceCalculator
+from nlhs_tick_data_hungary.network.network_preparation.sparcc import LogRatioVarianceCalculator
 
 
 class BasisVarianceCalculator:

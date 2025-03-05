@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.basis_variance_calculator import BasisVarianceCalculator
+from nlhs_tick_data_hungary.network.network_preparation.sparcc import BasisVarianceCalculator
 
 
 class CorrelationCalculator:
