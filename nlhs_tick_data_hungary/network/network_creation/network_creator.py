@@ -69,6 +69,7 @@ class NetworkCreator:
             self.final_table = sparcc.run()
 
         elif self.type_of_network == 'Co-occurrence network':
+            # TODO: ezt átalakítani implementációs diagram szerint
             # Preprocess data for co-occurrence network
             preprocessor = CoOccurrenceNetworkPreprocessor(
                 df=self.df,

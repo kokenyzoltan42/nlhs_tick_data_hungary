@@ -55,6 +55,7 @@ class CoOccurrenceNetworkPreprocessor:
         Filters and transforms the input DataFrame based on the specified type of data.
         This method utilizes GeneralNetworkPreprocessor to prepare the DataFrame for further processing.
         """
+        # TODO: ezt átalakítani implementációs diagram szerint
         preprocessor = GeneralNetworkPreprocessor(df=self.df,
                                                   to_type=self.type_of_data,
                                                   year=self.year,
