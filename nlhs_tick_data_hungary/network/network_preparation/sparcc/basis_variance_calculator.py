@@ -22,7 +22,7 @@ class BasisVarianceCalculator:
 
         self.log_ratio_variance = log_ratio_variance_calculator.result
 
-        helper_matrix_inv = np.linalg.inv(self.helper_matrix)
+        helper_matrix_inv = np.linalg.pinv(self.helper_matrix)
 
         self.result = np.dot(helper_matrix_inv, self.log_ratio_variance.sum(axis=1))
 
