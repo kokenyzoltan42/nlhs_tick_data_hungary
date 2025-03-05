@@ -9,6 +9,8 @@ class BasisVarianceCalculator:
         self.data = data
         self.helper_matrix = helper_matrix
 
+        self.log_ratio_variance: (np.ndarray | None) = None
+
         self.result: (pd.DataFrame | None) = None
     # TODO: change implementation diagram
 
@@ -21,10 +23,10 @@ class BasisVarianceCalculator:
         log_ratio_variance_calculator = LogRatioVarianceCalculator(data=self.data)
         log_ratio_variance_calculator.run()
 
-        log_ratio_variance = log_ratio_variance_calculator.result
+        self.log_ratio_variance = log_ratio_variance_calculator.result
 
         helper_matrix_inv = np.linalg.inv(self.helper_matrix)
 
-        self.result = np.dot(helper_matrix_inv, log_ratio_variance.sum(axis=1))
+        self.result = np.dot(helper_matrix_inv, self.log_ratio_variance.sum(axis=1))
 
         self.result[self.result <= 0] = 1e-6
