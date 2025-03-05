@@ -12,7 +12,6 @@ class BasisVarianceCalculator:
         self.log_ratio_variance: (np.ndarray | None) = None
 
         self.result: (pd.DataFrame | None) = None
-    # TODO: change implementation diagram
 
     # TODO: log-ratio var importját rövidíteni
 

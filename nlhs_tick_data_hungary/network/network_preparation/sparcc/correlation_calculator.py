@@ -11,8 +11,6 @@ class CorrelationCalculator:
 
         self.result: (pd.DataFrame | None) = None
 
-        # TODO: change implementation diagram description
-
     def run(self):
         self.substitute_into_formula()
 
