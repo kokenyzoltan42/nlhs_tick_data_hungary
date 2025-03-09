@@ -17,6 +17,7 @@ class LogRatioVarianceCalculator:
         :param data: A pandas DataFrame where each row represents a sample and each column represents a variable.
         """
         self.data = data
+
         self.result: pd.DataFrame | None = None
 
     def run(self):
@@ -24,23 +25,8 @@ class LogRatioVarianceCalculator:
         Runs the entire process: resampling the data and calculating the log-ratio variance. The log-ratio variance
         matrix is stored in the `result` attribute.
         """
-        self.resample_data_with_dirichlet()
+        #self.resample_data_with_dirichlet()
         self.calc_log_ratio_var()
-
-    def resample_data_with_dirichlet(self):
-        """
-        Resample the data using a Dirichlet distribution applied row-wise.
-
-        Each row of the data is treated as the parameters for the Dirichlet distribution,
-        which generates(?) a new row of samples based on those parameters.
-        """
-
-        # Apply the Dirichlet resampling to each row in the DataFrame
-        #self.data = self.data.apply(
-        #    lambda x: np.random.mtrand.dirichlet(x + 1),
-        #    axis=1
-        #)
-        self.data = np.apply_along_axis(lambda x: np.random.mtrand.dirichlet(x + 1), 1, self.data)
 
     def calc_log_ratio_var(self):
         """
@@ -54,10 +40,12 @@ class LogRatioVarianceCalculator:
         """
         # Convert the DataFrame to a numpy array (of floats)
         variable_data = 1.0 * np.asarray(self.data)
+
         num_otus, num_samples = variable_data.shape
+        #num_samples, num_otus = variable_data.shape
 
         # Create a 3D array where each element contains a copy of the variable_data along the 3rd dimension
-        data_expanded = np.tile(variable_data.reshape((num_samples, num_otus, 1)), (1, 1, num_otus))
+        data_expanded = np.tile(variable_data.reshape((num_otus, num_samples, 1)), (1, 1, num_samples))
 
         # Transpose the data along the last two axes
         data_transposed = data_expanded.transpose(0, 2, 1)

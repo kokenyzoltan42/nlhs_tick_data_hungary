@@ -12,7 +12,7 @@ class StronglyCorrelatedPairExcluder:
         self.x_iter = x_iter
         self.threshold = threshold
 
-        self.num_of_components = self.data.shape[0]
+        self.num_of_components = self.data.shape[1]
         self.helper_matrix: (np.ndarray | None) = None
         self.excluded_pairs = []
         self.excluded_components = np.array([])
@@ -25,15 +25,19 @@ class StronglyCorrelatedPairExcluder:
                         np.diag([self.num_of_components - 2] * self.num_of_components)
 
         correlation_calculator = CorrelationCalculator(data=self.data,
-                                                       helper_matrix=self.helper_matrix)
+                                                       helper_matrix=self.helper_matrix,
+                                                       help_=None,
+                                                       var_temp_copy=None)
         correlation_calculator.run()
         correlations = correlation_calculator.result
+        var_temp_copy = correlation_calculator.var_temp.copy()
 
         for xi in range(self.x_iter):
             to_exclude = self.find_new_excluded_pair(correlations=correlations,
                                                      threshold=self.threshold,
                                                      previously_excluded_pairs=self.excluded_pairs)
             if to_exclude is None:
+                print('\n\nÜdv\n\n', xi)
                 break
 
             self.excluded_pairs.append(to_exclude)
@@ -43,14 +47,20 @@ class StronglyCorrelatedPairExcluder:
             self.helper_matrix[i, i] -= 1
             self.helper_matrix[j, j] -= 1
 
-            # TODO: itt elvileg le kellene nullázni T-ben is ezeket az indexeket, de szerintem nem szükséges (gondold végig)
             self.exclude_components()
 
+            #inda, indb = np.transpose(self.excluded_pairs)
+            #inds = zip(*self.excluded_pairs)
+            inds = tuple(zip(*self.excluded_pairs))
+
             another_correlation_calculator = CorrelationCalculator(data=self.data,
-                                                                   helper_matrix=self.helper_matrix)
+                                                                   helper_matrix=self.helper_matrix,
+                                                                   help_=inds,
+                                                                   var_temp_copy=var_temp_copy)
             another_correlation_calculator.run()
             correlations = another_correlation_calculator.result
             for excluded_component in self.excluded_components:
+                print('\n\nHali\n\n')
                 correlations[excluded_component, :] = np.nan
                 correlations[:, excluded_component] = np.nan
 
@@ -61,32 +71,33 @@ class StronglyCorrelatedPairExcluder:
                                threshold: float,
                                previously_excluded_pairs: list) -> Tuple[int, int] | None:
         # Only working in the upper triangle (excluding diagonal)
-        corr_temp = np.triu(abs(correlations), 1)
-
-        corr_temp[tuple(zip(*previously_excluded_pairs))] = 0
+        corr_temp = np.triu(np.abs(correlations), 1)
+        if len(previously_excluded_pairs) > 0:
+            corr_temp[tuple(zip(*previously_excluded_pairs))] = 0
 
         # Finding the most correlated pair
         i, j = np.unravel_index(np.argmax(corr_temp), corr_temp.shape)
         corr_max = corr_temp[i, j]
-
         if corr_max > threshold:
             return i, j
         else:
             return None
 
     def exclude_components(self):
-        # Searching for new components to exclude
+        # Kiszámolja, mely komponenseket kell kizárni
         num_of_excluded = np.bincount(np.ravel(self.excluded_pairs))
         previously_excluded_components = set(self.excluded_components.copy())
-        excluded_components = np.where(num_of_excluded >= self.num_of_components - 3)[0]
-        newly_excluded_components = set(excluded_components) - previously_excluded_components
+        self.excluded_components = set(np.where(num_of_excluded >= self.num_of_components - 3)[0])
+        newly_excluded_components = self.excluded_components - previously_excluded_components
 
-        if len(newly_excluded_components) > 0:
-            if len(excluded_components) > (self.num_of_components - 4):
+        if newly_excluded_components:
+            print('\n\nHelló\n\n')
+            if len(self.excluded_components) > (self.num_of_components - 4):
                 raise ValueError("Túl sok komponenst kellett kihagyni az elemzésből")
-                # TODO: ilyenkor máshol clr-t alkalmaznak és azzal térnek vissza, lehet itt is azt kellene
-                #  és ValueError helyett csak egy warning-ot kiírni
-            for excluded_component in newly_excluded_components:
-                self.helper_matrix[excluded_component, :] = 0
-                self.helper_matrix[:, excluded_component] = 0
-                self.helper_matrix[excluded_component:excluded_component] = 0
+                # TODO: implement clr?
+            for comp in newly_excluded_components:
+                self.helper_matrix[comp, :] = 0
+                self.helper_matrix[:, comp] = 0
+                self.helper_matrix[comp, comp] = 1  # megfelelő nullázás
+            # Frissítés: új kizárt komponensek hozzáadása
+            self.excluded_components = np.array(list(self.excluded_components))
