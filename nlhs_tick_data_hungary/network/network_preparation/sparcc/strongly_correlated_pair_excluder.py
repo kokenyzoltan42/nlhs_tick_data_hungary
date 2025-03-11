@@ -8,15 +8,23 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import Correlatio
 
 class StronglyCorrelatedPairExcluder:
     def __init__(self, data: pd.DataFrame, x_iter: int, threshold: float):
+        # Resampled data
         self.data = data
+        # Number of times to run the iteration of excluding
         self.x_iter = x_iter
+        # Above this threshold the most correlating pair added to the list of excluded pairs
         self.threshold = threshold
 
+        # Number of components (bacteria)
         self.num_of_components = self.data.shape[1]
+        # This matrix is referred in the Wiki as M
         self.helper_matrix: (np.ndarray | None) = None
+        # List that collects the most correlated pairs
         self.excluded_pairs = []
+        # List that collects components that have been excluded from the analysis
         self.excluded_components = np.array([])
 
+        # Attribute to save the correlation after the iteration
         self.result: (pd.DataFrame | None) = None
 
     def run(self):
@@ -26,11 +34,11 @@ class StronglyCorrelatedPairExcluder:
 
         correlation_calculator = CorrelationCalculator(data=self.data,
                                                        helper_matrix=self.helper_matrix,
-                                                       help_=None,
                                                        var_temp_copy=None)
+        # Calculating (initial) correlations
         correlation_calculator.run()
         correlations = correlation_calculator.result
-        var_temp_copy = correlation_calculator.var_temp.copy()
+        var_temp_copy = correlation_calculator.var_temp
 
         for xi in range(self.x_iter):
             to_exclude = self.find_new_excluded_pair(correlations=correlations,
@@ -51,11 +59,10 @@ class StronglyCorrelatedPairExcluder:
 
             #inda, indb = np.transpose(self.excluded_pairs)
             #inds = zip(*self.excluded_pairs)
-            inds = tuple(zip(*self.excluded_pairs))
+            #inds = tuple(zip(*self.excluded_pairs))
 
             another_correlation_calculator = CorrelationCalculator(data=self.data,
                                                                    helper_matrix=self.helper_matrix,
-                                                                   help_=inds,
                                                                    var_temp_copy=var_temp_copy)
             another_correlation_calculator.run()
             correlations = another_correlation_calculator.result
