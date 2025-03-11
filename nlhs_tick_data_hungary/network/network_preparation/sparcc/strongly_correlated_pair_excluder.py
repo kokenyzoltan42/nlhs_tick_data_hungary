@@ -41,6 +41,7 @@ class StronglyCorrelatedPairExcluder:
         var_temp_copy = correlation_calculator.var_temp
 
         for xi in range(self.x_iter):
+            # FInd pairs to add lists of excluded pairs
             to_exclude = self.find_new_excluded_pair(correlations=correlations,
                                                      threshold=self.threshold,
                                                      previously_excluded_pairs=self.excluded_pairs)
@@ -55,22 +56,25 @@ class StronglyCorrelatedPairExcluder:
             self.helper_matrix[i, i] -= 1
             self.helper_matrix[j, j] -= 1
 
+            # Exclues components if necessary
             self.exclude_components()
 
             #inda, indb = np.transpose(self.excluded_pairs)
             #inds = zip(*self.excluded_pairs)
             #inds = tuple(zip(*self.excluded_pairs))
 
+            # Calculate the correlations again
             another_correlation_calculator = CorrelationCalculator(data=self.data,
                                                                    helper_matrix=self.helper_matrix,
                                                                    var_temp_copy=var_temp_copy)
             another_correlation_calculator.run()
             correlations = another_correlation_calculator.result
+            # Replace excluded components with nan values
             for excluded_component in self.excluded_components:
                 print('\n\nHali\n\n')
                 correlations[excluded_component, :] = np.nan
                 correlations[:, excluded_component] = np.nan
-
+        # Store results
         self.result = correlations
 
     @staticmethod
@@ -82,7 +86,7 @@ class StronglyCorrelatedPairExcluder:
         if len(previously_excluded_pairs) > 0:
             corr_temp[tuple(zip(*previously_excluded_pairs))] = 0
 
-        # Finding the most correlated pair
+        # Find the most correlated pair
         i, j = np.unravel_index(np.argmax(corr_temp), corr_temp.shape)
         corr_max = corr_temp[i, j]
         if corr_max > threshold:
@@ -105,6 +109,5 @@ class StronglyCorrelatedPairExcluder:
             for comp in newly_excluded_components:
                 self.helper_matrix[comp, :] = 0
                 self.helper_matrix[:, comp] = 0
-                self.helper_matrix[comp, comp] = 1  # megfelelő nullázás
-            # Frissítés: új kizárt komponensek hozzáadása
+                self.helper_matrix[comp, comp] = 1
             self.excluded_components = np.array(list(self.excluded_components))
