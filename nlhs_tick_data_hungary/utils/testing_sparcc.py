@@ -12,7 +12,7 @@ def main():
     args = {
         'n_iter': 20,
         'x_iter': 70,
-        'threshold': 0.2
+        'threshold': 0.1
     }
     # print(fake_data[1:].head())
 
