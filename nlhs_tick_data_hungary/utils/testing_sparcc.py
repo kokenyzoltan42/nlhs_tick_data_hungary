@@ -16,15 +16,11 @@ def main():
     }
     # print(fake_data[1:].head())
 
-    runner = SparCCRunner(df=fake_data.T,# / fake_data[1:].sum(axis=0),
+    runner = SparCCRunner(df=fake_data.T,
                           args=args)
     result = runner.run()
 
     print(pd.DataFrame(result))
-    print(result[result < (0.99)].max().max())
-    print(np.unravel_index(np.argmax(result[result < 0.99]), result.shape))
-    print(result[np.unravel_index(np.argmax(result[result < 0.99]), result.shape)])
-
 
 if __name__ == '__main__':
     main()
