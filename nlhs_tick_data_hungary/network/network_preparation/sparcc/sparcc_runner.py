@@ -12,17 +12,20 @@ class SparCCRunner:
         self.data = None
 
     def run(self) -> pd.DataFrame:
+        # List to store computed correlations
         correlations = []
         for _ in range(self.args['n_iter']):
             print('N_iter: ' + str(_))
+            # Resampling data with dirichlet
             self.resample_data_with_dirichlet()
+            # Calculate the correlations and exclude components that violate the conditions of the algorithm
             strongly_correlated_pair_excluder = StronglyCorrelatedPairExcluder(data=self.data,
                                                                                x_iter=self.args['x_iter'],
                                                                                threshold=self.args['threshold'])
             strongly_correlated_pair_excluder.run()
+            # Storing the results of the algorithm
             correlations.append(strongly_correlated_pair_excluder.result)
-            #print(strongly_correlated_pair_excluder.result)
-
+        # Return the median of the correlations
         return np.nanmedian(np.array(correlations), axis=0)
 
     def resample_data_with_dirichlet(self):
@@ -32,7 +35,7 @@ class SparCCRunner:
         Each row of the data is treated as the parameters for the Dirichlet distribution,
         which generates(?) a new row of samples based on those parameters.
         """
-
+        # TODO: függvény definiálása helyett lambda kerüljön az `apply_along_axis` argumentumába
         def dir_func(x):
             a = x + 1
             f = np.random.mtrand.dirichlet(a)
