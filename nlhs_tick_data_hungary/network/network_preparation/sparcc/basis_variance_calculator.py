@@ -5,8 +5,7 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import LogRatioVa
 
 
 class BasisVarianceCalculator:
-    def __init__(self, data: pd.DataFrame, helper_matrix: np.ndarray,
-                 var_temp_copy):
+    def __init__(self, data: pd.DataFrame, helper_matrix: np.ndarray, var_temp_copy: np.ndarray):
         # Resampled data
         self.data = data
         # Helper matrix (M)
@@ -21,7 +20,7 @@ class BasisVarianceCalculator:
 
     def run(self):
         """
-        This method runs the pipeline of the estimaton of the basis variances.
+        This method runs the pipeline of the estimation of the basis variances.
         """
         self.calculate_basis_variance()
 
