@@ -3,6 +3,7 @@ import pandas as pd
 
 
 class LogRatioVarianceCalculator:
+    # TODO: rewrite docstrings
     """
     A class to calculate the log-ratio variance of a set of variables from a DataFrame.
 
@@ -25,7 +26,6 @@ class LogRatioVarianceCalculator:
         Runs the entire process: resampling the data and calculating the log-ratio variance. The log-ratio variance
         matrix is stored in the `result` attribute.
         """
-        #self.resample_data_with_dirichlet()
         self.calc_log_ratio_var()
 
     def calc_log_ratio_var(self):
