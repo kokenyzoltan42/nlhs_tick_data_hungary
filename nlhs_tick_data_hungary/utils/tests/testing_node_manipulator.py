@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 
 from nlhs_tick_data_hungary.network.network_analyzing.node_manipulator import NodeManipulator
 
-matplotlib.use('Qt5Agg')  # or another backend available in your environment
+matplotlib.use('Qt5Agg')  # e nélkül hibát dob:
+# AttributeError: 'FigureCanvasInterAgg' object has no attribute 'tostring_rgb'. Did you mean: 'tostring_argb'?
+# (valószínűleg pycharm-os dolog)
 
 
 def create_connected_weighted_graph():
