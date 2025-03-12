@@ -54,8 +54,6 @@ class CorrelationCalculator:
 
         # Create a meshgrid for basis variances
         omega_i, omega_j = np.meshgrid(basis_variance, basis_variance)
-        # Calculating the numerator (basis covariance(?))
-        numerator = 0.5 * (omega_i + omega_j - self.var_temp)
         # Storing correlations
         numerator = 0.5 * (omega_i + omega_j - self.variation_matrix)
         # Compute and store the correlation matrix
