@@ -8,8 +8,8 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import Correlatio
 
 class StronglyCorrelatedPairExcluder:
     # TODO: jobb név kell, mert előszöris fura, hogy ilyen nevű osztályt futtatunk a SparCCRunner-ben, másodszor pedig
-    #  itt nem is vesszük ki az erősen korreláló párokat, csak a komponenseket (lehet kel kellene robbantani ezt
-    #  az osztályt)
+    #  itt nem is vesszük ki az erősen korreláló párokat, csak a komponenseket (lehet fel kellene robbantani ezt
+    #  az osztályt valahogy)
     """
     This class identifies and excludes highly correlated pairs of components (e.g., bacterial species)
     from a dataset based on a specified correlation threshold. The process iterates for a given number
