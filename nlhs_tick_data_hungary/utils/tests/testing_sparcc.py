@@ -1,5 +1,6 @@
 import json
 
+import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
@@ -25,25 +26,26 @@ def main():
     fake_data = pd.read_table(fake_data_dl.file_path, sep='\t')
     true_basis_cor = pd.read_table(true_basis_cor_dl.file_path, sep='\t')
 
-    #print(pd.DataFrame(true_basis_cor.iloc[:, 1:]))
-
     args = {
         'n_iter': 20,
         'x_iter': 70,
         'threshold': 0.1
     }
 
-    runner = SparCCRunner(df=fake_data.T,
+    runner = SparCCRunner(df=fake_data.T,  # Próbáltam megoldani hogy transzponálás nélkül is működjön, de
+                          # nem akar összejönni
                           args=args)
     result = runner.run()
 
     print(pd.DataFrame(result))
 
+    # Rájöttem, hogy ezek a metrikák sokat nem érnek, mert sok 0-hoz közeli érték van és azokanál nem igazán számít
+    # a különbség
     mae = mean_absolute_error(true_basis_cor.iloc[:, 1:], result)
     print(f"\n\nMean Absolute Error: {mae}")
 
     mse = mean_squared_error(true_basis_cor.iloc[:, 1:], result)
-    print(f"\nMean Squared Error: {mse}")
+    print(f"\nMean Squared Error: {np.sqrt(mse)}")
 
 
 if __name__ == '__main__':
