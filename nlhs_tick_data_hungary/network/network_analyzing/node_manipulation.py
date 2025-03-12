@@ -8,6 +8,8 @@ class NodeManipulation:
     # TODO: utánanéni, hogy pontosan hogyan máküdik a csúcs hozzáadás. Itt úgy oldottam meg, hogy random, és be lehet
     #  álítani, hogy hány csúcshoz kösse hozzá (legyen ez is random?). Cikkben csak annyi van írva, hogy
     #  véletlenszerűen köti hozzá a hálózathoz.
+
+    # TODO: valami nem stimmel az LCC-vel (sima y=x lineáris egyenes az eredmény (valamit félreértettem biztosan))
     """
     A class that simulates node manipulation (addition for network defending and removal for network attacking)
     on a given network graph. The simulation behavior is determined by the provided configuration dictionary.
