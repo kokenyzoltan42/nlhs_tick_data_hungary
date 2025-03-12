@@ -67,7 +67,7 @@ class NetworkAnalyzer:
         (Larger value means more robust network)
         :return int: The largest connected component as a set of nodes.
         """
-        lcc =  sorted(nx.connected_components(G=self.network), key=len, reverse=True)[0]
+        lcc = sorted(nx.connected_components(G=self.network), key=len, reverse=False)[0]
         return len(self.network.subgraph(lcc))
 
     def calc_average_path_length(self) -> float:
