@@ -12,7 +12,7 @@ matplotlib.use('Qt5Agg')  # e nélkül hibát dob:
 
 
 def create_connected_weighted_graph():
-    network = nx.connected_watts_strogatz_graph(100, 30, 0.1, seed=69)
+    network = nx.connected_watts_strogatz_graph(n=100, k=30, p=0.1, seed=69)
     # network = nx.barabasi_albert_graph(n=40, m=12)
     for (u, v) in network.edges():
         network[u][v]['weight'] = random.uniform(0.1, 10)
