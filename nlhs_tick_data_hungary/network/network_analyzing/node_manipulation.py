@@ -86,6 +86,7 @@ class NodeManipulation:
                     self.simulation_network.add_edge(new_node, neighbor, weight=1)
 
             # Compute the chosen metric using NetworkAnalyzer
+            # TODO: ez legyen inkább tagváltozó? (úgy mőködik?)
             analyzer = NetworkAnalyzer(config={}, network=self.simulation_network)
             if metric == 'APL':
                 metric_value = analyzer.calc_average_path_length()
@@ -113,8 +114,7 @@ class NodeManipulation:
 
         In each iteration the following are recorded:
           - Fraction of nodes removed (x-axis).
-          - Connectivity loss (y-axis), defined as:
-              (initial LCC size - current LCC size) / initial LCC size.
+          - Connectivity
 
         The simulation stops when 1 node remains.
 
@@ -164,9 +164,7 @@ class NodeManipulation:
 
             fraction_removed = removed_count / initial_num_nodes  # Calculate fraction of nodes removed
 
-            # Compute the current largest connected component (LCC) size using NetworkAnalyzer.
             analyzer_current = NetworkAnalyzer(config={}, network=self.simulation_network)
-
             current_lcc = analyzer_current.calc_largest_connected_component()  # Calculate current LCC size
 
             # Calculate connectivity loss as the difference in LCC sizes relative to the initial LCC size.
