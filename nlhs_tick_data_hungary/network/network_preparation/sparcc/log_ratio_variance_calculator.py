@@ -3,11 +3,13 @@ import pandas as pd
 
 
 class LogRatioVarianceCalculator:
+    # TODO: A cikkben erre "variation matrix"-ként utalnak, de nem vagyok biztos benne, hogy az annyira jó megnevezés
     """
-    A class to calculate the log-ratio variance of a set of variables from a DataFrame.
+    A class to calculate the log-ratio variance (T matrix) of a set of variables from a DataFrame.
 
     The log-ratio variance (referenced as T matrix on the Wiki page) is calculated by comparing the log of the ratio
-    of each pair of OTUs across all samples. This measure captures the variability in the relationships between variables.
+    of each pair of OTUs across all samples. This measure captures the variability in the relationships between
+    variables.
     """
 
     def __init__(self, data: pd.DataFrame):
@@ -40,7 +42,6 @@ class LogRatioVarianceCalculator:
         variable_data = 1.0 * np.asarray(self.data)
 
         num_samples, num_otus = variable_data.shape
-        #num_samples, num_otus = variable_data.shape
 
         # Create a 3D array where each element contains a copy of the variable_data along the 3rd dimension
         data_expanded = np.tile(variable_data.reshape((num_samples, num_otus, 1)), (1, 1, num_otus))
