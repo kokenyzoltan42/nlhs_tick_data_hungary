@@ -4,7 +4,7 @@ import random
 import matplotlib
 import matplotlib.pyplot as plt
 
-from nlhs_tick_data_hungary.network.network_analyzing.node_manipulator import NodeManipulation
+from nlhs_tick_data_hungary.network.network_analyzing.node_manipulator import NodeManipulator
 
 matplotlib.use('Qt5Agg')  # or another backend available in your environment
 
@@ -24,7 +24,7 @@ def run_defending_simulation(network):
         'k': 4,
         'metric': 'APL'  # Valamiért LCC-nél csak egy lineáris egyenest ad vissza
     }
-    nm_defend = NodeManipulation(network, config_defending)
+    nm_defend = NodeManipulator(network, config_defending)
     return nm_defend.run_simulation()
 
 
@@ -34,7 +34,7 @@ def run_attacking_simulation(network):
         'attack_type': 'cascading_degree'
         # Can be 'random', 'betweenness', 'degree', 'cascading_betweenness', or 'cascading_degree'
     }
-    nm_attack = NodeManipulation(network=network, config=config_attacking)
+    nm_attack = NodeManipulator(network=network, config=config_attacking)
     return nm_attack.run_simulation()
 
 

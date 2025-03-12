@@ -4,7 +4,7 @@ import random
 from nlhs_tick_data_hungary.network.network_analyzing.network_analyzer import NetworkAnalyzer
 
 
-class NodeManipulation:
+class NodeManipulator:
     # TODO: utánanéni, hogy pontosan hogyan máküdik a csúcs hozzáadás. Itt úgy oldottam meg, hogy random, és be lehet
     #  álítani, hogy hány csúcshoz kösse hozzá (legyen ez is random?). Cikkben csak annyi van írva, hogy
     #  véletlenszerűen köti hozzá a hálózathoz.
