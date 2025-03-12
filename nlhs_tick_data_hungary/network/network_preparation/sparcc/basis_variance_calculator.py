@@ -6,6 +6,14 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import LogRatioVa
 
 class BasisVarianceCalculator:
     def __init__(self, data: pd.DataFrame, helper_matrix: np.ndarray, var_temp_copy: np.ndarray):
+        """
+       Initializes the basis variance calculator with input data, a helper matrix, and a variation matrix copy.
+
+       :param pd.DataFrame data: Resampled data
+       :param np.ndarray helper_matrix: A matrix used for tracking exclusions and modifications.
+       :param (np.ndarray | None) var_temp_copy: A copy of the variation matrix (if it has been calculated
+       previously) used in calculations.
+       """
         # Resampled data
         self.data = data
         # Helper matrix (M)
