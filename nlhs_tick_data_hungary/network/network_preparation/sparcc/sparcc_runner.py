@@ -35,9 +35,8 @@ class SparCCRunner:
         Each row of the data is treated as the parameters for the Dirichlet distribution,
         which generates(?) a new row of samples based on those parameters.
         """
-        # TODO: függvény definiálása helyett lambda kerüljön az `apply_along_axis` argumentumába
-        def dir_func(x):
-            a = x + 1
-            f = np.random.mtrand.dirichlet(a)
-            return f
-        self.data = np.apply_along_axis(dir_func, 0, self.df) # axis=1
+        self.data = np.apply_along_axis(
+            lambda x: np.random.mtrand.dirichlet(x + 1),
+            axis=0,
+            arr=self.df
+        )
