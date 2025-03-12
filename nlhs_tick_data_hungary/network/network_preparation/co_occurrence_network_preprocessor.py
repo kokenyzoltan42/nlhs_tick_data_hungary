@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 
 from nlhs_tick_data_hungary.network.network_preparation import NetworkHelper
-from nlhs_tick_data_hungary.network.network_preparation import GeneralNetworkPreprocessor
 
 
 class CoOccurrenceNetworkPreprocessor:

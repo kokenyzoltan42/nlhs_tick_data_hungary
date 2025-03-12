@@ -1,5 +1,3 @@
-from typing import Sized
-
 import networkx as nx
 
 
