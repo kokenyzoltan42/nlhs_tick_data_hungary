@@ -45,7 +45,7 @@ def main():
     print(f"\n\nMean Absolute Error: {mae}")
 
     mse = mean_squared_error(true_basis_cor.iloc[:, 1:], result)
-    print(f"\nMean Squared Error: {np.sqrt(mse)}")
+    print(f"\nMean Squared Error: {mse}")
 
 
 if __name__ == '__main__':
