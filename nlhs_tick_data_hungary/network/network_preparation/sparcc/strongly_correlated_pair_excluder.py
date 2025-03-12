@@ -35,6 +35,8 @@ class StronglyCorrelatedPairExcluder:
         self.num_of_components = self.data.shape[1]
         # Helper matrix (referred to as M in documentation) for tracking exclusions
         self.helper_matrix: (np.ndarray | None) = None
+        # Copy of the firstly calculated variation matrix
+        self.variation_matrix_copy = None
         # List that collects the most correlated pairs to be excluded
         self.excluded_pairs = []
         # List that collects components that have been entirely excluded from analysis
@@ -57,7 +59,7 @@ class StronglyCorrelatedPairExcluder:
                                                        var_temp_copy=None)
         correlation_calculator.run()
         correlations = correlation_calculator.result
-        variation_matrix_copy = correlation_calculator.variation_matrix
+        self.variation_matrix_copy = correlation_calculator.variation_matrix
 
         for xi in range(self.x_iter):
             # Find the next most correlated pair to exclude
@@ -81,7 +83,7 @@ class StronglyCorrelatedPairExcluder:
             # Recalculate correlations with the updated helper matrix
             another_correlation_calculator = CorrelationCalculator(data=self.data,
                                                                    helper_matrix=self.helper_matrix,
-                                                                   var_temp_copy=variation_matrix_copy)
+                                                                   var_temp_copy=self.variation_matrix_copy)
             another_correlation_calculator.run()
             correlations = another_correlation_calculator.result
 
@@ -135,6 +137,8 @@ class StronglyCorrelatedPairExcluder:
                 raise ValueError("Too many components had to be excluded from the analysis")
             # Update the helper matrix to remove newly excluded components
             for comp in newly_excluded_components:
+                self.variation_matrix_copy[comp, :] = 0
+                self.variation_matrix_copy[:, comp] = 0
                 self.helper_matrix[comp, :] = 0
                 self.helper_matrix[:, comp] = 0
                 self.helper_matrix[comp, comp] = 1
