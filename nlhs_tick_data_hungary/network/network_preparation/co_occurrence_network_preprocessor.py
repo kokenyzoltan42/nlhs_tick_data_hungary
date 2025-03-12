@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 
 from nlhs_tick_data_hungary.network.network_preparation import NetworkHelper
-from nlhs_tick_data_hungary.network.network_preparation import GeneralNetworkPreprocessor
 
 
 class CoOccurrenceNetworkPreprocessor:
@@ -36,53 +35,34 @@ class CoOccurrenceNetworkPreprocessor:
         self.year = year
         self.month = month
 
-        self.num_of_samples: int = int()
+        self.num_of_samples = self.df.shape[1]
         self.epsilon: float = 1e-5  # Small value to prevent division by zero
 
-        self.general_preprocessed_df: pd.DataFrame = pd.DataFrame()
         self.preprocessed_df: pd.DataFrame = pd.DataFrame()
 
     def run(self):
         """
         Runs the preprocessing steps: filtering, transforming, creating crosstable, and applying percentage.
         """
-        self.filter_and_transform_dataframe()
         self.create_crosstable_based_on_type_of_data()
         self.apply_percentage()
-
-    def filter_and_transform_dataframe(self):
-        """
-        Filters and transforms the input DataFrame based on the specified type of data.
-        This method utilizes GeneralNetworkPreprocessor to prepare the DataFrame for further processing.
-        """
-        preprocessor = GeneralNetworkPreprocessor(df=self.df,
-                                                  to_type=self.type_of_data,
-                                                  year=self.year,
-                                                  month=self.month)
-        # This DataFrame has been reduced to a specific timeframe and, if the `type_of_data` attribute is
-        # either 'Nőstények', 'Hímek', or 'Összes', then this DataFrame only contains data for
-        # either females, males, or all genders. If `type_of_data` is something else then this preprocessing only
-        # changes the timeframe.
-        self.general_preprocessed_df = preprocessor.preprocessed_df
-
-        # Store the number of samples in the DataFrame (for the calculation of percentages and possibly for plotting)
-        self.num_of_samples = self.general_preprocessed_df.shape[1]
-
-        # If the type is either 'Nőstények', 'Hímek', or 'Összes', then the previous preprocessing already selected
-        # the type so no further transformation needed
-        if self.type_of_data in ['Nőstények', 'Hímek', 'Összes']:
-            self.preprocessed_df = NetworkHelper.create_crosstable(df=self.general_preprocessed_df)
 
     def create_crosstable_based_on_type_of_data(self):
         """
         Creates crosstables for male and female data based on the preprocessed data to calculate the differences between
         male and female data if applicable.
         """
+        # If the type is either 'Nőstények', 'Hímek', or 'Összes', then the previous preprocessing
+        # (GeneralNetworkPreprocessing) in the NetworkCreator class already selected the type so
+        # no further transformation needed
+        if self.type_of_data in ['Nőstények', 'Hímek', 'Összes']:
+            self.preprocessed_df = NetworkHelper.create_crosstable(df=self.df)
+
         if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
             # Load data for both genders to calculate differences
-            fem_df = NetworkHelper.select_type(df=self.general_preprocessed_df,
+            fem_df = NetworkHelper.select_type(df=self.df,
                                                to_type='Nőstények')
-            male_df = NetworkHelper.select_type(df=self.general_preprocessed_df,
+            male_df = NetworkHelper.select_type(df=self.df,
                                                 to_type='Hímek')
 
             # Create crosstables for female and male data and fill missing values with zero
