@@ -15,7 +15,7 @@ class SparCCRunner:
         # List to store computed correlations
         correlations = []
         for _ in range(self.args['n_iter']):
-            print('N_iter: ' + str(_))
+            print(f'A SparCC a(z) {str(_)}-edik iterációnál tart.')
             # Resampling data with dirichlet
             self.resample_data_with_dirichlet()
             # Calculate the correlations and exclude components that violate the conditions of the algorithm
