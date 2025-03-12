@@ -21,12 +21,12 @@ class NodeManipulation:
         """
         Initializes the NodeManipulation instance.
 
-        :param nx.Graph network: A NetworkX graph.
+        :param nx.Graph network: A networkx graph object.
         :param dict config: A dictionary specifying the simulation configuration. It must include a key 'mode'
                        with value either 'defending' (node addition) or 'attacking' (node removal).
         """
         self.original_graph = network
-        # Work on a copy so that the original network remains unchanged. (It may come in handy later)
+        # Work on a copy so that the original network remains unchanged. (It may or may not come in handy later)
         self.simulation_network = network.copy()
         self.config = config
 
