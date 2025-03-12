@@ -5,13 +5,25 @@ from nlhs_tick_data_hungary.network.network_preparation.sparcc import StronglyCo
 
 
 class SparCCRunner:
+    """
+    A class that runs the SparCC algorithm.
+    """
     def __init__(self, df: pd.DataFrame, args: dict):
+        """
+        Initializes the SparCCRunner with given dataframe and arguments.
+        :param pd.DataFrame df: Original dataframe
+        :param dict args: parameters of the SparCC algorithm
+        """
         self.df = df
         self.args = args
 
         self.data = None
 
-    def run(self) -> pd.DataFrame:
+    def run(self) -> np.ndarray:
+        """
+        Method that runs the SparCC algorithm.
+        :return np.ndarray: A 2D array containing the correlation coefficients computed by the SparCC algorithm.
+        """
         # List to store computed correlations
         correlations = []
         for _ in range(self.args['n_iter']):
