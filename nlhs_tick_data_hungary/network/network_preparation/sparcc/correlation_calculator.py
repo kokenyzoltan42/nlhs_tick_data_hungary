@@ -7,20 +7,17 @@ class CorrelationCalculator:
     This class computes correlation values based on log-ratio variances and estimated basis variances.
     """
 
-    def __init__(self, log_ratio_variance: np.ndarray, basis_variances: np.ndarray, helper_matrix: np.ndarray):
+    def __init__(self, log_ratio_variance: np.ndarray, basis_variances: np.ndarray):
         """
         Initializes the correlation calculator with input data, a helper matrix, and a variation matrix copy.
 
         :param np.ndarray log_ratio_variance: A matrix containing log-ratio variances for each OTU
         :param np.ndarray basis_variances: A matrix containing basis variances for each OTU
-        :param np.ndarray helper_matrix: A matrix used for tracking exclusions and modifications.
         """
         # Array containing the log-ratio variances (Variation matrix, also referenced as T matrix)
         self.log_ratio_variance = log_ratio_variance
         # Array containing the basis variances
         self.basis_variances = basis_variances
-        # Helper matrix (M)
-        self.helper_matrix = helper_matrix
         # Attribute to store correlation results
         self.result: (pd.DataFrame | None) = None
 
