@@ -64,7 +64,7 @@ class NetworkCreator:
             processed_df = preprocessor.preprocessed_df
 
             # Run SparCC algorithm on the preprocessed data
-            sparcc = SparCCRunner(df=processed_df,
+            sparcc = SparCCRunner(data=processed_df,
                                   args=self.sparcc_args)
             self.final_table = sparcc.run()
 
