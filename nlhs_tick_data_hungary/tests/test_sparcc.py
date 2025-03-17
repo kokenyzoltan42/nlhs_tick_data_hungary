@@ -32,7 +32,7 @@ def main():
         'threshold': 0.1
     }
 
-    runner = SparCCRunner(data=fake_data.T,  # Próbáltam megoldani hogy transzponálás nélkül is működjön, de
+    runner = SparCCRunner(df=fake_data.T,  # Próbáltam megoldani hogy transzponálás nélkül is működjön, de
                           # nem akar összejönni
                           args=args)
     result = runner.run()
