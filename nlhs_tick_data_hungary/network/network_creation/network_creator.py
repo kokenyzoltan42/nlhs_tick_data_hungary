@@ -55,30 +55,29 @@ class NetworkCreator:
         Preprocess the input data based on the selected network type and transform it into a format suitable for
         network creation.
         """
-        if self.type_of_network == 'SparCC':
-            # Preprocess data for SparCC
-            preprocessor = GeneralNetworkPreprocessor(df=self.df,
-                                                      to_type=self.type_of_data,
-                                                      year=self.year,
-                                                      month=self.month)
-            processed_df = preprocessor.preprocessed_df
+        # Preprocess data for networks
+        preprocessor = GeneralNetworkPreprocessor(df=self.df,
+                                                  to_type=self.type_of_data,
+                                                  year=self.year,
+                                                  month=self.month)
 
+        if self.type_of_network == 'SparCC':
             # Run SparCC algorithm on the preprocessed data
-            sparcc = SparCCRunner(df=processed_df,
+            sparcc = SparCCRunner(df=preprocessor.preprocessed_df,
                                   args=self.sparcc_args)
             self.final_table = sparcc.run()
 
         elif self.type_of_network == 'Co-occurrence network':
             # Preprocess data for co-occurrence network
-            preprocessor = CoOccurrenceNetworkPreprocessor(
-                df=self.df,
+            co_occurrence_preprocessor = CoOccurrenceNetworkPreprocessor(
+                df=preprocessor.preprocessed_df,
                 type_of_data=self.type_of_data,
                 convert_to_percentage=self.convert_to_percentage,
                 year=self.year,
                 month=self.month
             )
-            preprocessor.run()
-            self.final_table = preprocessor.preprocessed_df
+            co_occurrence_preprocessor.run()
+            self.final_table = co_occurrence_preprocessor.preprocessed_df
 
     def create_network(self):
         """
