@@ -62,10 +62,8 @@ class NetworkCreator:
                                                   month=self.month)
 
         if self.type_of_network == 'SparCC':
-            processed_df = preprocessor.preprocessed_df
-
             # Run SparCC algorithm on the preprocessed data
-            sparcc = SparCCRunner(df=processed_df,
+            sparcc = SparCCRunner(df=preprocessor.preprocessed_df,
                                   args=self.sparcc_args)
             self.final_table = sparcc.run()
 
