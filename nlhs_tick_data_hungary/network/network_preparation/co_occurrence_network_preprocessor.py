@@ -56,6 +56,7 @@ class CoOccurrenceNetworkPreprocessor:
         # (GeneralNetworkPreprocessing) in the NetworkCreator class already selected the type so
         # no further transformation needed
         if self.type_of_data in ['Nőstények', 'Hímek', 'Összes']:
+            print(self.df)
             self.preprocessed_df = NetworkHelper.create_crosstable(df=self.df)
 
         if self.type_of_data in ['Különbség', 'Nőstény - Hím', 'Hím - Nőstény']:
