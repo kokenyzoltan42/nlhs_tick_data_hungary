@@ -14,26 +14,40 @@ class SparCCRunner:
         self.df = df
         self.args = args
 
-        self.num_of_components = None  # self.df.shape[1]
-        self.helper_matrix = None
         self.data = None
-        self.variances = None
-
-        self.excluded_pairs = []
-        self.excluded_components = np.array([])
-
-    # TODO: először úgy implementáld, hogy az excludion is ide kerüljön, utána gondolkozz azon, hogyan lehet külön osztály
 
     def run(self) -> pd.DataFrame:
 
-        correlations = []
+        correlation_results = []
 
         for _ in range(self.args['n_iter']):
             self.estimate_component_fractions()
-            result = self.calc_correlations_with_sparcc()
-            correlations.append(result)
+            log_ratio_variances = LogRatioVarianceCalculator(data=self.data)
+            log_ratio_variances.run()
+            variation_matrix = log_ratio_variances.result.copy()
+            num_of_components = variation_matrix.shape[1]
 
-        return np.nanmedian(np.array(correlations), axis=0)
+            helper_matrix = (np.ones((num_of_components, num_of_components)) +
+                             np.diag([num_of_components - 2] * num_of_components))
+
+            basis_variances = BasisVarianceCalculator(log_ratio_variance=variation_matrix,
+                                                      helper_matrix=helper_matrix)
+            basis_variances.run()
+            correlation_calculator = CorrelationCalculator(basis_variances=basis_variances.result,
+                                                           log_ratio_variance=variation_matrix)
+            correlation_calculator.run()
+            correlations = correlation_calculator.result.copy()
+
+            iterative_process = IterativeExclusion(variation_matrix=variation_matrix,
+                                                   correlations=correlations,
+                                                   helper_matrix=helper_matrix,
+                                                   exclusion_threshold=self.args['threshold'],
+                                                   exclusion_iterations=self.args['x_iter'])
+
+            iterative_process.calc_correlations_with_sparcc()
+            correlation_results.append(correlations)
+
+        return np.nanmedian(np.array(correlation_results), axis=0)
 
     def estimate_component_fractions(self):
         """
@@ -49,29 +63,70 @@ class SparCCRunner:
             arr=self.df
         )
 
-    @staticmethod
-    def find_new_excluded_pair(correlations: np.ndarray,
-                               threshold: float,
-                               previously_excluded_pairs: list) -> Tuple[int, int] | None:
+
+class IterativeExclusion:
+    def __init__(self, variation_matrix: np.ndarray, correlations: np.ndarray, helper_matrix: np.ndarray,
+                 exclusion_threshold: float, exclusion_iterations: int):
+        self.variation_matrix = variation_matrix
+        self.correlations = correlations
+        self.helper_matrix = helper_matrix
+        self.exclusion_threshold = exclusion_threshold
+        self.exclusion_iterations = exclusion_iterations
+
+        self.num_of_components = variation_matrix.shape[1]
+        self.variation_matrix_copy = self.variation_matrix.copy()
+        self.excluded_pairs = []
+        self.excluded_components = np.array([])
+
+    def calc_correlations_with_sparcc(self):
+        for _ in range(self.exclusion_iterations):
+            to_exclude = self.find_new_excluded_pair()
+            if to_exclude is None:
+                break
+
+            self.excluded_pairs.append(to_exclude)
+            i, j = to_exclude
+
+            self.helper_matrix[i, j] -= 1
+            self.helper_matrix[j, i] -= 1
+            self.helper_matrix[i, i] -= 1
+            self.helper_matrix[j, j] -= 1
+
+            inds = tuple(zip(*self.excluded_pairs))
+            self.variation_matrix[inds] = 0
+            self.variation_matrix.T[inds] = 0
+
+            self.exclude_components()
+
+            another_basis_variance_calculator = BasisVarianceCalculator(log_ratio_variance=self.variation_matrix,
+                                                                        helper_matrix=self.helper_matrix)
+            another_basis_variance_calculator.run()
+            basis_variances = another_basis_variance_calculator.result
+            another_correlation_calculator = CorrelationCalculator(log_ratio_variance=self.variation_matrix,
+                                                                   # Ennek szigorún ennek kell lennie
+                                                                   basis_variances=basis_variances)
+            another_correlation_calculator.run()
+            self.correlations = another_correlation_calculator.result
+
+            for excluded_component in self.excluded_components:
+                self.correlations[excluded_component, :] = np.nan
+                self.correlations[:, excluded_component] = np.nan
+
+    def find_new_excluded_pair(self) -> Tuple[int, int] | None:
         """
         Identifies the most correlated pair in the dataset that has not yet been excluded.
-
-        :param np.ndarray correlations: A 2D array containing correlation values.
-        :param float threshold: The threshold above which a pair will be excluded.
-        :param list previously_excluded_pairs: A list of previously excluded pairs to avoid "re-exclusion".
-        :return Tuple[int, int] | None: The indices of the most correlated pair or None if no such pair exists.
         """
         # Consider only the upper triangle of the correlation matrix (excluding diagonal)
-        corr_temp = np.triu(np.abs(correlations), 1)
-        if previously_excluded_pairs:
-            corr_temp[tuple(zip(*previously_excluded_pairs))] = 0  # Exclude already removed pairs
+        corr_temp = np.triu(np.abs(self.correlations), 1)
+        if self.excluded_pairs:
+            corr_temp[tuple(zip(*self.excluded_pairs))] = 0  # Exclude already removed pairs
 
         # Find the most correlated pair
         i, j = np.unravel_index(np.argmax(corr_temp), corr_temp.shape)
         corr_max = corr_temp[i, j]
 
         # Return the pair if it exceeds the threshold, otherwise return None
-        return (i, j) if corr_max > threshold else None
+        return (i, j) if corr_max > self.exclusion_threshold else None
 
     def exclude_components(self):
         """
@@ -100,56 +155,3 @@ class SparCCRunner:
             # Convert excluded components set to a numpy array for consistency
             self.excluded_components = np.array(list(self.excluded_components))
 
-    def calc_correlations_with_sparcc(self):
-        log_ratio_variances = LogRatioVarianceCalculator(data=self.data)
-        log_ratio_variances.run()
-        self.variation_matrix = log_ratio_variances.result.copy()
-        self.num_of_components = self.variation_matrix.shape[1]
-
-        self.helper_matrix = (np.ones((self.num_of_components, self.num_of_components)) +
-                              np.diag([self.num_of_components - 2] * self.num_of_components))
-
-        basis_variances = BasisVarianceCalculator(log_ratio_variance=self.variation_matrix,
-                                                  helper_matrix=self.helper_matrix)
-        basis_variances.run()
-        correlation_calculator = CorrelationCalculator(basis_variances=basis_variances.result,
-                                                       log_ratio_variance=self.variation_matrix  # ide mindegy melyik megy
-                                                       )
-        correlation_calculator.run()
-        correlations = correlation_calculator.result.copy()
-
-        for _ in range(self.args['x_iter']):
-            to_exclude = self.find_new_excluded_pair(correlations=correlations,
-                                                     threshold=self.args['threshold'],
-                                                     previously_excluded_pairs=self.excluded_pairs)
-            if to_exclude is None:
-                break
-
-            self.excluded_pairs.append(to_exclude)
-            i, j = to_exclude
-
-            self.helper_matrix[i, j] -= 1
-            self.helper_matrix[j, i] -= 1
-            self.helper_matrix[i, i] -= 1
-            self.helper_matrix[j, j] -= 1
-
-            inds = tuple(zip(*self.excluded_pairs))
-            self.variation_matrix[inds] = 0
-            self.variation_matrix.T[inds] = 0
-
-            self.exclude_components()
-
-            another_basis_variance_calculator = BasisVarianceCalculator(log_ratio_variance=self.variation_matrix,
-                                                                        helper_matrix=self.helper_matrix)
-            another_basis_variance_calculator.run()
-            basis_variances = another_basis_variance_calculator.result
-            another_correlation_calculator = CorrelationCalculator(log_ratio_variance=log_ratio_variances.result.copy(),  # Ennek szigorún ennek kell lennie
-                                                                   basis_variances=basis_variances)
-            another_correlation_calculator.run()
-            correlations = another_correlation_calculator.result
-
-            for excluded_component in self.excluded_components:
-                correlations[excluded_component, :] = np.nan
-                correlations[:, excluded_component] = np.nan
-
-        return correlations
