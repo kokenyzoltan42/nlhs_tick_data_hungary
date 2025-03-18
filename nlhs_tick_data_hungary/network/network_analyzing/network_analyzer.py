@@ -10,7 +10,7 @@ class NetworkAnalyzer:
 
     def __init__(self, config: dict, network: nx.Graph):
         """
-        Initializes the NetworkAnalyzer with a configuration dictionary and a network graph.
+        Initializes the NetworkAnalyzer with a configuration dictionary and a network.
 
         :param dict config: Dictionary specifying which analysis methods to run.
         :param nx.Graph network: A NetworkX graph object.
@@ -123,15 +123,15 @@ class NetworkAnalyzer:
 
     def calc_average_degree(self) -> float:
         """
-        Computes the average degree of the network. This method only runs if the network is not a complete graph.
+        Computes the average degree of the network. This method only runs if the network is not a complete network.
 
         :return float: The average degree (not considering weights).
         """
         num_nodes = self.network.number_of_nodes()
         num_edges = self.network.number_of_edges()
-        max_possible_edges = num_nodes * (num_nodes - 1) / 2  # Maximum edges in an undirected simple graph
+        max_possible_edges = num_nodes * (num_nodes - 1) / 2  # Maximum edges in an undirected simple network
 
-        # Check if the graph is complete
+        # Check if the network is complete
         if num_edges < max_possible_edges:
             total_degree = sum(dict(self.network.degree()).values())
             return total_degree / num_nodes
