@@ -1,9 +1,10 @@
+from nlhs_tick_data_hungary.utils.network_helper import NetworkHelper
+
 from nlhs_tick_data_hungary.network.network_preparation.sparcc.basis_variance_calculator import BasisVarianceCalculator
 from nlhs_tick_data_hungary.network.network_preparation.sparcc.correlation_calculator import CorrelationCalculator
 from nlhs_tick_data_hungary.network.network_preparation.sparcc.correlation_updater import CorrelationUpdater
 from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
 from nlhs_tick_data_hungary.network.network_preparation.sparcc.log_ratio_variance_calculator import \
     LogRatioVarianceCalculator
-from nlhs_tick_data_hungary.utils.network_helper import NetworkHelper
 from nlhs_tick_data_hungary.network.network_preparation.sparcc.strongly_correlated_pair_excluder import \
     StronglyCorrelatedPairHandler
