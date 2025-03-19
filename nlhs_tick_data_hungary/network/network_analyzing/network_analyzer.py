@@ -41,7 +41,7 @@ class NetworkAnalyzer:
     def calc_modularity(self) -> float:
         """
         Computes the modularity of the network based on community detection.
-        :return int: The modularity of the network
+        :return float: The modularity of the network
         """
         return nx.algorithms.community.quality.modularity(
             G=self.network,
@@ -65,7 +65,7 @@ class NetworkAnalyzer:
     def calc_largest_connected_component(self) -> Sized:
         """
         Finds the largest connected component of the network.
-        :return int: The largest connected component as a set of nodes.
+        :return Sized: The largest connected component as a set of nodes.
         """
         return sorted(nx.connected_components(G=self.network), key=len, reverse=True)[0]
 
@@ -73,7 +73,7 @@ class NetworkAnalyzer:
         """
         Measuring the fraction of nodes contained in the largest connected component.
         (Larger value means more robust network)
-        :return:
+        :return int: Size of the largest connected component
         """
         return len(self.network.subgraph(self.calc_largest_connected_component()))
 
@@ -115,7 +115,7 @@ class NetworkAnalyzer:
     def calc_average_weighted_degree(self) -> float:
         """
         Calculates the average weighted degree of the network.
-        :return dict: The average weighted degree.
+        :return float: The average weighted degree.
         """
         total_weighted_degree = sum(dict(self.network.degree(weight='weight')).values())
         num_nodes = self.network.number_of_nodes()
