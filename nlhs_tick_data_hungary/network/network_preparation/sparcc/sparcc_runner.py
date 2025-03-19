@@ -68,7 +68,7 @@ class SparCCRunner:
                                                               exclusion_threshold=self.args['threshold'],
                                                               exclusion_iterations=self.args['x_iter'])
 
-            iterative_process.calc_correlations_with_sparcc()
+            iterative_process.run()
             correlation_results.append(correlations)
 
         # Compute the median correlation matrix across iterations

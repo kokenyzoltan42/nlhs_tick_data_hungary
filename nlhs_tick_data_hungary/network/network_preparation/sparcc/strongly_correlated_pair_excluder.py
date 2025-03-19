@@ -33,7 +33,7 @@ class StronglyCorrelatedPairHandler:
         self.excluded_pairs = []  # List to store excluded pairs
         self.excluded_components = np.array([])  # Array to track components excluded due to excessive exclusions
 
-    def calc_correlations_with_sparcc(self):
+    def run(self):
         """
         Iteratively finds and excludes strongly correlated pairs, updating the correlation matrix at each step.
         """
