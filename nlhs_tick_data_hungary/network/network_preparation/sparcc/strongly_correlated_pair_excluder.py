@@ -2,8 +2,7 @@ from typing import Tuple
 
 import numpy as np
 
-from nlhs_tick_data_hungary.network.network_preparation import BasisVarianceCalculator
-from nlhs_tick_data_hungary.network.network_preparation import CorrelationCalculator
+from nlhs_tick_data_hungary.network.network_preparation import CorrelationUpdater
 
 
 class StronglyCorrelatedPairHandler:

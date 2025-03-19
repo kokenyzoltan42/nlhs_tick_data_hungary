@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation import BasisVarianceCalculator
-from nlhs_tick_data_hungary.network.network_preparation import CorrelationCalculator
+from nlhs_tick_data_hungary.network.network_preparation import CorrelationUpdater
 from nlhs_tick_data_hungary.network.network_preparation import LogRatioVarianceCalculator
 from nlhs_tick_data_hungary.network.network_preparation import StronglyCorrelatedPairHandler
 
