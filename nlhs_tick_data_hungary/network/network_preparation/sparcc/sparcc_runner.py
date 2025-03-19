@@ -47,16 +47,9 @@ class SparCCRunner:
             helper_matrix = (np.ones((num_of_components, num_of_components)) +
                              np.diag([num_of_components - 2] * num_of_components))
 
-            # Compute basis variances
-            basis_variances = BasisVarianceCalculator(log_ratio_variance=variation_matrix,
-                                                      helper_matrix=helper_matrix)
-            basis_variances.run()
-
             # Compute correlations
-            correlation_calculator = CorrelationCalculator(basis_variances=basis_variances.result,
-                                                           log_ratio_variance=variation_matrix)
-            correlation_calculator.run()
-            correlations = correlation_calculator.result.copy()
+            correlations = CorrelationUpdater().calculate_correlation(variation_matrix=variation_matrix,
+                                                                      helper_matrix=helper_matrix)
 
             # Iteratively remove strongly correlated pairs
             iterative_process = StronglyCorrelatedPairHandler(variation_matrix=variation_matrix,
