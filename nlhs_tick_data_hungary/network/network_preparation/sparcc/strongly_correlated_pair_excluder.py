@@ -37,42 +37,44 @@ class StronglyCorrelatedPairHandler:
         Iteratively finds and excludes strongly correlated pairs, updating the correlation matrix at each step.
         """
         for _ in range(self.exclusion_iterations):
-            to_exclude = self.find_new_excluded_pair()
-            if to_exclude is None:
-                break  # Stop if no new pairs exceed the threshold
-
-            self.excluded_pairs.append(to_exclude)
-            i, j = to_exclude
-
-            # Update the helper matrix to reflect exclusions
-            self.helper_matrix[i, j] -= 1
-            self.helper_matrix[j, i] -= 1
-            self.helper_matrix[i, i] -= 1
-            self.helper_matrix[j, j] -= 1
-
-            # Set excluded pairs to zero in variation matrix
-            inds = tuple(zip(*self.excluded_pairs))
-            self.variation_matrix[inds] = 0
-            self.variation_matrix.T[inds] = 0
-
+            if not self.process_exclusion():
+                break
             # Identify components that need exclusion
             self.exclude_components()
+            self.update_correlation_matrix()
 
-            # Recalculate correlation matrix using the updated variation matrix
-            variance_calculator = BasisVarianceCalculator(log_ratio_variance=self.variation_matrix,
-                                                          helper_matrix=self.helper_matrix)
-            variance_calculator.run()
-            basis_variances = variance_calculator.result
+    def process_exclusion(self) -> bool:
+        """
+        Identifies and processes a new exclusion pair, updating the necessary matrices.
 
-            correlation_calculator = CorrelationCalculator(log_ratio_variance=self.variation_matrix,
-                                                           basis_variances=basis_variances)
-            correlation_calculator.run()
-            self.correlations = correlation_calculator.result
+        :return bool: True if an exclusion was performed, otherwise False.
+        """
+        to_exclude = self.find_new_excluded_pair()
+        if to_exclude is None:
+            return False  # Stop if no new pairs exceed the threshold
 
-            # Mark excluded components in correlation matrix as NaN
-            for excluded_component in self.excluded_components:
-                self.correlations[excluded_component, :] = np.nan
-                self.correlations[:, excluded_component] = np.nan
+        self.excluded_pairs.append(to_exclude)
+        i, j = to_exclude
+        # Update helper matrix to reflect exclusion
+        self.helper_matrix[i, j] -= 1
+        self.helper_matrix[j, i] -= 1
+        self.helper_matrix[i, i] -= 1
+        self.helper_matrix[j, j] -= 1
+
+        # Set excluded pairs to zero in variation matrix
+        inds = tuple(zip(*self.excluded_pairs))
+        self.variation_matrix[inds] = 0
+        self.variation_matrix.T[inds] = 0
+
+    def update_correlation_matrix(self):
+        """
+        Updates the correlation matrix using the updated matrix and sets excluded components' values to NaN.
+        """
+        self.correlations = CorrelationUpdater().calculate_correlation(variation_matrix=self.variation_matrix,
+                                                                       helper_matrix=self.helper_matrix)
+        for excluded_component in self.excluded_components:
+            self.correlations[excluded_component, :] = np.nan
+            self.correlations[:, excluded_component] = np.nan
 
     def find_new_excluded_pair(self) -> Tuple[int, int] | None:
         """
