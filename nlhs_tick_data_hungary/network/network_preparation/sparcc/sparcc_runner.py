@@ -1,12 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.basis_variance_calculator import BasisVarianceCalculator
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.correlation_calculator import CorrelationCalculator
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.log_ratio_variance_calculator import \
-    LogRatioVarianceCalculator
-from nlhs_tick_data_hungary.network.network_preparation.sparcc.strongly_correlated_pair_excluder import \
-    StronglyCorrelatedPairHandler
+from nlhs_tick_data_hungary.network.network_preparation import BasisVarianceCalculator
+from nlhs_tick_data_hungary.network.network_preparation import CorrelationCalculator
+from nlhs_tick_data_hungary.network.network_preparation import LogRatioVarianceCalculator
+from nlhs_tick_data_hungary.network.network_preparation import StronglyCorrelatedPairHandler
 
 
 class SparCCRunner:
