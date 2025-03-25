@@ -72,8 +72,10 @@ class StronglyCorrelatedPairHandler:
         """
         Updates the correlation matrix using the updated matrix and sets excluded components' values to NaN.
         """
-        self.correlations = CorrelationUpdater().calculate_correlation(log_ratio_variances=self.log_ratio_variances,
-                                                                       helper_matrix=self.helper_matrix)
+        self.correlations = CorrelationUpdater.calculate_correlation(
+            log_ratio_variances=self.log_ratio_variances,
+            helper_matrix=self.helper_matrix
+        )
         for excluded_component in self.excluded_components:
             self.correlations[excluded_component, :] = np.nan
             self.correlations[:, excluded_component] = np.nan

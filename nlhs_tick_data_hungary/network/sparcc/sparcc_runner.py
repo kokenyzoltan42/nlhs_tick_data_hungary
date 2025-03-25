@@ -48,8 +48,10 @@ class SparCCRunner:
                              np.diag([num_of_components - 2] * num_of_components))
 
             # Compute correlations
-            correlations = CorrelationUpdater().calculate_correlation(log_ratio_variances=log_ratio_variances,
-                                                                      helper_matrix=helper_matrix)
+            correlations = CorrelationUpdater.calculate_correlation(
+                log_ratio_variances=log_ratio_variances,
+                helper_matrix=helper_matrix
+            )
 
             # Iteratively remove strongly correlated pairs
             iterative_process = StronglyCorrelatedPairHandler(log_ratio_variances=log_ratio_variances,
