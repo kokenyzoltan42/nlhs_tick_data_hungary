@@ -11,24 +11,24 @@ class StronglyCorrelatedPairHandler:
     Iteratively removes the most correlated pairs until a defined exclusion threshold is met.
     """
 
-    def __init__(self, variation_matrix: np.ndarray, correlations: np.ndarray, helper_matrix: np.ndarray,
+    def __init__(self, log_ratio_variances: np.ndarray, correlations: np.ndarray, helper_matrix: np.ndarray,
                  exclusion_threshold: float, exclusion_iterations: int):
         """
         Initializes the handler with necessary matrices and exclusion parameters.
 
-        :param np.ndarray variation_matrix: Matrix containing variance information.
+        :param np.ndarray log_ratio_variances: Matrix containing variance information.
         :param np.ndarray correlations: Precomputed correlation matrix.
         :param np.ndarray helper_matrix: Helper matrix to track modifications.
         :param float exclusion_threshold: Threshold above which correlations are considered too strong.
         :param int exclusion_iterations: Maximum number of exclusion iterations allowed.
         """
-        self.variation_matrix = variation_matrix
+        self.log_ratio_variances = log_ratio_variances
         self.correlations = correlations
         self.helper_matrix = helper_matrix
         self.exclusion_threshold = exclusion_threshold
         self.exclusion_iterations = exclusion_iterations
 
-        self.num_of_components = variation_matrix.shape[1]
+        self.num_of_components = log_ratio_variances.shape[1]
         self.excluded_pairs = []  # List to store excluded pairs
         self.excluded_components = np.array([])  # Array to track components excluded due to excessive exclusions
 
@@ -61,16 +61,16 @@ class StronglyCorrelatedPairHandler:
         self.helper_matrix[i, i] -= 1
         self.helper_matrix[j, j] -= 1
 
-        # Set excluded pairs to zero in variation matrix
+        # Set excluded pairs to zero in matrix containing the variances of the log-ratios
         inds = tuple(zip(*self.excluded_pairs))
-        self.variation_matrix[inds] = 0
-        self.variation_matrix.T[inds] = 0
+        self.log_ratio_variances[inds] = 0
+        self.log_ratio_variances.T[inds] = 0
 
     def update_correlation_matrix(self):
         """
         Updates the correlation matrix using the updated matrix and sets excluded components' values to NaN.
         """
-        self.correlations = CorrelationUpdater().calculate_correlation(variation_matrix=self.variation_matrix,
+        self.correlations = CorrelationUpdater().calculate_correlation(log_ratio_variances=self.log_ratio_variances,
                                                                        helper_matrix=self.helper_matrix)
         for excluded_component in self.excluded_components:
             self.correlations[excluded_component, :] = np.nan
@@ -115,8 +115,8 @@ class StronglyCorrelatedPairHandler:
 
             # Update matrices to reflect exclusions
             for comp in newly_excluded_components:
-                self.variation_matrix[comp, :] = 0
-                self.variation_matrix[:, comp] = 0
+                self.log_ratio_variances[comp, :] = 0
+                self.log_ratio_variances[:, comp] = 0
                 self.helper_matrix[comp, :] = 0
                 self.helper_matrix[:, comp] = 0
                 self.helper_matrix[comp, comp] = 1  # Keep diagonal elements to maintain matrix structure

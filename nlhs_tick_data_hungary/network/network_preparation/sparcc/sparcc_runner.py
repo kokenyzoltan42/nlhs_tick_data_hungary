@@ -40,19 +40,19 @@ class SparCCRunner:
             # Compute log-ratio variances
             log_ratio_variances = LogRatioVarianceCalculator(data=self.data)
             log_ratio_variances.run()
-            variation_matrix = log_ratio_variances.result.copy()
-            num_of_components = variation_matrix.shape[1]
+            log_ratio_variances = log_ratio_variances.result.copy()
+            num_of_components = log_ratio_variances.shape[1]
 
             # Initialize helper matrix for variance calculations
             helper_matrix = (np.ones((num_of_components, num_of_components)) +
                              np.diag([num_of_components - 2] * num_of_components))
 
             # Compute correlations
-            correlations = CorrelationUpdater().calculate_correlation(variation_matrix=variation_matrix,
+            correlations = CorrelationUpdater().calculate_correlation(log_ratio_variances=log_ratio_variances,
                                                                       helper_matrix=helper_matrix)
 
             # Iteratively remove strongly correlated pairs
-            iterative_process = StronglyCorrelatedPairHandler(variation_matrix=variation_matrix,
+            iterative_process = StronglyCorrelatedPairHandler(log_ratio_variances=log_ratio_variances,
                                                               correlations=correlations,
                                                               helper_matrix=helper_matrix,
                                                               exclusion_threshold=self.args['threshold'],
