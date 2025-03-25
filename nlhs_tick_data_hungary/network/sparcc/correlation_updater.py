@@ -1,7 +1,7 @@
 import numpy as np
 
-from nlhs_tick_data_hungary.network import BasisVarianceCalculator
-from nlhs_tick_data_hungary.network import CorrelationCalculator
+from nlhs_tick_data_hungary.network.sparcc.basis_variance_calculator import BasisVarianceCalculator
+from nlhs_tick_data_hungary.network.sparcc.correlation_calculator import CorrelationCalculator
 
 
 class CorrelationUpdater:
