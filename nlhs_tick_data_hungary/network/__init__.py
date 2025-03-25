@@ -1,5 +1,5 @@
-from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
 from nlhs_tick_data_hungary.network.sparcc.basis_variance_calculator import BasisVarianceCalculator
+from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
 from nlhs_tick_data_hungary.network.sparcc.correlation_calculator import CorrelationCalculator
 from nlhs_tick_data_hungary.network.sparcc.log_ratio_variance_calculator import \
     LogRatioVarianceCalculator
