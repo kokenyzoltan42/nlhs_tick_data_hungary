@@ -66,6 +66,8 @@ class StronglyCorrelatedPairHandler:
         self.log_ratio_variances[inds] = 0
         self.log_ratio_variances.T[inds] = 0
 
+        return True  # Continue the exclusion process
+
     def update_correlation_matrix(self):
         """
         Updates the correlation matrix using the updated matrix and sets excluded components' values to NaN.
