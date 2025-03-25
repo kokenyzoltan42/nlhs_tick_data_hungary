@@ -2,7 +2,7 @@ from typing import Tuple
 
 import numpy as np
 
-from nlhs_tick_data_hungary.network import CorrelationUpdater
+from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
 
 
 class StronglyCorrelatedPairHandler:
