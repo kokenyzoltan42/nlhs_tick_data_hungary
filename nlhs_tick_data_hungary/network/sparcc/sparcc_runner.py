@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
-from nlhs_tick_data_hungary.network import LogRatioVarianceCalculator
+from nlhs_tick_data_hungary.network.sparcc.log_ratio_variance_calculator import LogRatioVarianceCalculator
 from nlhs_tick_data_hungary.network import StronglyCorrelatedPairHandler
 
 
