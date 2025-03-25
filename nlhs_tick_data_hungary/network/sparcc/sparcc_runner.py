@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_preparation import CorrelationUpdater
-from nlhs_tick_data_hungary.network.network_preparation import LogRatioVarianceCalculator
-from nlhs_tick_data_hungary.network.network_preparation import StronglyCorrelatedPairHandler
+from nlhs_tick_data_hungary.network import CorrelationUpdater
+from nlhs_tick_data_hungary.network import LogRatioVarianceCalculator
+from nlhs_tick_data_hungary.network import StronglyCorrelatedPairHandler
 
 
 class SparCCRunner:
