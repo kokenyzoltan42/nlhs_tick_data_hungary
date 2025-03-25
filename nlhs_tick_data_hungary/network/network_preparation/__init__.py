@@ -1,2 +1,2 @@
-from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
 from nlhs_tick_data_hungary.utils.network_helper import NetworkHelper
+from nlhs_tick_data_hungary.network.network_preparation.general_network_preprocessor import GeneralNetworkPreprocessor
