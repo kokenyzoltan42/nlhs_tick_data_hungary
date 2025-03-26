@@ -1,3 +1,5 @@
+import os
+
 import datetime
 import numpy as np
 import pandas as pd
@@ -32,11 +34,11 @@ class SparCCRunner:
             self.output_dir = f"sparcc_output_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
             os.makedirs(self.output_dir, exist_ok=True)
 
-    def run(self) -> pd.DataFrame:
+    def run(self) -> np.ndarray:
         """
         Executes the SparCC correlation estimation algorithm over multiple iterations.
 
-        :return: Median correlation matrix computed over all iterations.
+        :return np.ndarray: Median correlation matrix computed over all iterations.
         """
         correlation_results = []
 
