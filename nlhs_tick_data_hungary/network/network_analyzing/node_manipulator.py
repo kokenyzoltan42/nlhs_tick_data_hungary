@@ -16,12 +16,13 @@ class NodeManipulator:
         Initializes the NodeManipulator with a network and configuration settings.
 
         Configuration settings (meaning of the keys in the dictionary):
-        - 'mode': Run this kind of simulation, e.g.: 'defending', 'attacking'
-        - 'k': The number of connections to establish at each node addition (only used during 'defending' simulations)
-        - `iterations`: Number of nodes to add (only used during 'defending' simulations)
+        - 'manipulation_type': Run this kind of simulation, e.g.: 'defending', 'attacking'
+        - 'num_of_connections': The number of connections to establish at each node addition (only used
+        during 'defending' simulations)
+        - `nodes_to_add`: Number of nodes to add (only used during 'defending' simulations)
         - 'metric': What metric to use, e.g.: 'APL', 'LCC' (only used during 'defending' simulations)
-        - 'attack_type': Type node removal strategy, e.g.: betweenness, cascading_betweenness, random (only used during
-        'attacking' simulations)
+        - 'attack_type': Type node removal strategy, e.g.: initial_betweenness, cascading_betweenness,
+         random (only used during 'attacking' simulations)
 
 
         (A more thorough description of this class is available at the Wiki page)
@@ -53,7 +54,7 @@ class NodeManipulator:
             'defending': self.run_defending,
             'attacking': self.run_attacking
         }
-        simulation_modes.get(self.config['mode'], lambda: None)()
+        simulation_modes.get(self.config['manipulation_type'], lambda: None)()
 
         return self.results
 
@@ -62,7 +63,7 @@ class NodeManipulator:
         Executes the defending mode by iteratively adding new nodes to the network. The results are stored in the
         `results` member variable.
         """
-        for i in range(1, self.config['iterations'] + 1):
+        for i in range(1, self.config['nodes_to_add'] + 1):
             new_node = self._add_new_node()
             self._connect_to_existing_nodes(new_node)
             metric_value = self._compute_metric()
@@ -128,7 +129,7 @@ class NodeManipulator:
         :param int new_node: The newly added node ID.
         """
         existing_nodes = list(self.simulation_network.nodes - {new_node})
-        neighbors = random.sample(existing_nodes, min(self.config['k'], len(existing_nodes)))
+        neighbors = random.sample(existing_nodes, min(self.config['num_of_connections'], len(existing_nodes)))
 
         min_weight, max_weight = self.weight_range
 
@@ -168,11 +169,11 @@ class NodeManipulator:
 
         :return list: Ordered list of nodes to remove.
         """
-        if self.config['attack_type'] in ['betweenness', 'degree']:
+        if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
             analyzer = NetworkAnalyzer(config={}, network=self.simulation_network)
             centrality_methods = {
-                'betweenness': analyzer.calc_betweenness_centrality,
-                'degree': analyzer.calc_degree_centrality
+                'initial_betweenness': analyzer.calc_betweenness_centrality,
+                'initial_degree': analyzer.calc_degree_centrality
             }
             centrality = centrality_methods.get(self.config['attack_type'], lambda: {})()
             return sorted(centrality, key=centrality.get, reverse=True)
@@ -186,7 +187,7 @@ class NodeManipulator:
         :param list removal_order: Precomputed list of nodes to remove.
         :return dict: The node ID to remove.
         """
-        if self.config['attack_type'] in ['betweenness', 'degree']:
+        if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
             while removal_order:
                 node = removal_order.pop(0)
                 if node in self.simulation_network:
