@@ -133,7 +133,7 @@ class NodeManipulator:
         analyzer = NetworkAnalyzer(config={}, network=self.simulation_network)
         metric_methods = {
             'APL': analyzer.calc_average_path_length,
-            'LCC': analyzer.calc_largest_connected_component
+            'LCC': analyzer.calc_size_of_largest_connected_component
         }
         return metric_methods.get(self.config['metric'], lambda: None)()
 
