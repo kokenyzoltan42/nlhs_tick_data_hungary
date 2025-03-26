@@ -1,7 +1,6 @@
+import datetime
 import numpy as np
 import pandas as pd
-import os
-import datetime
 
 from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
 from nlhs_tick_data_hungary.network.sparcc import LogRatioVarianceCalculator
