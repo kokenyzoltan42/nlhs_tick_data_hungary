@@ -15,8 +15,19 @@ class NodeManipulator:
         """
         Initializes the NodeManipulator with a network and configuration settings.
 
+        Configuration settings (meaning of the keys in the dictionary):
+        - 'mode': Run this kind of simulation, e.g.: 'defending', 'attacking'
+        - 'k': The number of connections to establish at each node addition (only used during 'defending' simulations)
+        - `iterations`: Number of nodes to add (only used during 'defending' simulations)
+        - 'metric': What metric to use, e.g.: 'APL', 'LCC' (only used during 'defending' simulations)
+        - 'attack_type': Type node removal strategy, e.g.: betweenness, cascading_betweenness, random (only used during
+        'attacking' simulations)
+
+
+        (A more thorough description of this class is available at the Wiki page)
+
         :param nx.Graph network: The input network graph.
-        :param dict config: Dictionary containing simulation parameters.
+        :param dict config: A dictionary containing simulation parameters.
         """
         self.original_graph = network
         self.simulation_network = network.copy()
@@ -44,19 +55,19 @@ class NodeManipulator:
 
         return self.results
 
-    def run_defending(self) -> None:
+    def run_defending(self):
         """
         Executes the defending mode by iteratively adding new nodes to the network. The results are stored in the
         `results` member variable.
         """
         for i in range(1, self.config['iterations'] + 1):
             new_node = self._add_new_node()
-            self._connect_to_existing_nodes(new_node, self.config['k'])
+            self._connect_to_existing_nodes(new_node)
             metric_value = self._compute_metric()
             self.results['x'].append(i)
             self.results['y'].append(metric_value)
 
-    def run_attacking(self) -> None:
+    def run_attacking(self):
         """
         Executes the attacking mode by progressively removing nodes from the network.
         At every node removal this method also measures the connectivity loss, which is calculated as follows:
@@ -101,18 +112,21 @@ class NodeManipulator:
             self.simulation_network.nodes,
             default=-1  # In case of the network is empty the newly added node's id should be 0.
         ) + 1
+
         self.simulation_network.add_node(new_node)
+
         return new_node
 
-    def _connect_to_existing_nodes(self, new_node: int, k: int):
+    def _connect_to_existing_nodes(self, new_node: int):
         """
         Connects the newly added node to `k` existing nodes with random weights.
+        The weights for the new edges are drawn from a uniform sample with 'a' and 'b' parameters. Where 'a' is the
+        minimum and 'b' is the maximum of the weights in the original network.
 
         :param int new_node: The newly added node ID.
-        :param int k: Number of connections to establish.
         """
         existing_nodes = list(self.simulation_network.nodes - {new_node})
-        neighbors = random.sample(existing_nodes, min(k, len(existing_nodes)))
+        neighbors = random.sample(existing_nodes, min(self.config['k'], len(existing_nodes)))
 
         min_weight, max_weight = self.weight_range
 
@@ -160,6 +174,7 @@ class NodeManipulator:
             }
             centrality = centrality_methods.get(self.config['attack_type'], lambda: {})()
             return sorted(centrality, key=centrality.get, reverse=True)
+
         return []
 
     def _select_node_to_remove(self, removal_order: list) -> int | None:
