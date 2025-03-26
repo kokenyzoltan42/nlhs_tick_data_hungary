@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import os
+import datetime
 
 from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
 from nlhs_tick_data_hungary.network.sparcc import LogRatioVarianceCalculator
@@ -26,6 +28,11 @@ class SparCCRunner:
         # Attribute to store resampled data
         self.data = None
 
+        # Create output directory if saving is enabled
+        if self.args["do_download_data"]:
+            self.output_dir = f"sparcc_output_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            os.makedirs(self.output_dir, exist_ok=True)
+
     def run(self) -> pd.DataFrame:
         """
         Executes the SparCC correlation estimation algorithm over multiple iterations.
@@ -34,8 +41,14 @@ class SparCCRunner:
         """
         correlation_results = []
 
-        for _ in range(self.args['n_iter']):
+        for iteration in range(self.args['n_iter']):
             self.estimate_component_fractions()
+
+            # Saving resampled data
+            if self.args["do_download_data"]:
+                iteration_dir = os.path.join(self.output_dir, f"iteration_{iteration}")
+                os.makedirs(iteration_dir, exist_ok=True)
+                self.save_generated_data(iteration_dir)
 
             # Compute log-ratio variances
             log_ratio_variances = LogRatioVarianceCalculator(data=self.data)
@@ -63,6 +76,10 @@ class SparCCRunner:
             iterative_process.run()
             correlation_results.append(correlations)
 
+            # Saving correlations
+            if self.args["do_download_data"]:
+                self.save_correlation_matrix(iteration_dir, correlations)
+
         # Compute the median correlation matrix across iterations
         return np.nanmedian(np.array(correlation_results), axis=0)
 
@@ -78,3 +95,23 @@ class SparCCRunner:
             axis=1,
             arr=self.df
         )
+
+    def save_generated_data(self, iteration_dir: str):
+        """
+        Saves the generated data to the specified iteration folder.
+
+        :param str iteration_dir: The directory where the data should be saved.
+        """
+        df_resampled = pd.DataFrame(self.data, columns=self.df.columns)
+        df_resampled.to_csv(os.path.join(iteration_dir, "resampled_data.csv"), index=False)
+
+    @staticmethod
+    def save_correlation_matrix(iteration_dir: str, correlation_matrix: np.ndarray):
+        """
+        Saves the correlation matrix to the specified iteration folder.
+
+        :param str iteration_dir: The directory where the matrix should be saved.
+        :param np.ndarray correlation_matrix: The computed correlation matrix.
+        """
+        df_correlation = pd.DataFrame(correlation_matrix)
+        df_correlation.to_csv(os.path.join(iteration_dir, "correlation_matrix.csv"), index=False)
