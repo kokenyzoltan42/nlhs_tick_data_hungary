@@ -62,10 +62,12 @@ class NetworkCreator:
                                                   month=self.month)
 
         if self.type_of_network == 'SparCC':
-            # Run SparCC algorithm on the preprocessed data
+            node_names = list(preprocessor.preprocessed_df.columns)
+            # Run SparCC algorithm on the transposed preprocessed data
             sparcc = SparCCRunner(df=preprocessor.preprocessed_df,
                                   args=self.sparcc_args)
-            self.final_table = sparcc.run()
+            self.final_table = pd.DataFrame(sparcc.run(),
+                                            index=node_names, columns=node_names)
 
         elif self.type_of_network == 'Co-occurrence network':
             # Preprocess data for co-occurrence network
