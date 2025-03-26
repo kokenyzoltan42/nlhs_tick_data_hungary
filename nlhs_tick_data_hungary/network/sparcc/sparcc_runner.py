@@ -49,7 +49,7 @@ class SparCCRunner:
             if self.args["do_download_data"]:
                 iteration_dir = os.path.join(self.output_dir, f"iteration_{iteration}")
                 os.makedirs(iteration_dir, exist_ok=True)
-                self.save_generated_data(iteration_dir)
+                self.save_resampled_data(iteration_dir)
 
             # Compute log-ratio variances
             log_ratio_variances = LogRatioVarianceCalculator(data=self.data)
@@ -97,9 +97,9 @@ class SparCCRunner:
             arr=self.df
         )
 
-    def save_generated_data(self, iteration_dir: str):
+    def save_resampled_data(self, iteration_dir: str):
         """
-        Saves the generated data to the specified iteration folder.
+        Saves the resampled data to the specified iteration folder.
 
         :param str iteration_dir: The directory where the data should be saved.
         """
