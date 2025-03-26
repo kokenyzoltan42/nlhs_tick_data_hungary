@@ -32,6 +32,8 @@ class NodeManipulator:
         self.original_graph = network
         self.simulation_network = network.copy()
         self.config = config
+
+        # Tuple containing the minimum and the maximum of the weights
         self.weight_range = self._determine_weight_range()
 
         # The results are stored in this way in order to easily plot the results. The values in 'x' key will appear
