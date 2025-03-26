@@ -64,7 +64,7 @@ class NetworkCreator:
         if self.type_of_network == 'SparCC':
             node_names = list(preprocessor.preprocessed_df.columns)
             # Run SparCC algorithm on the transposed preprocessed data
-            sparcc = SparCCRunner(df=preprocessor.preprocessed_df.T,
+            sparcc = SparCCRunner(df=preprocessor.preprocessed_df,
                                   args=self.sparcc_args)
             self.final_table = pd.DataFrame(sparcc.run(),
                                             index=node_names, columns=node_names)
