@@ -94,7 +94,7 @@ class SparCCRunner:
         """
         self.data = np.apply_along_axis(
             lambda x: np.random.mtrand.dirichlet(x + 1),
-            axis=1,
+            axis=0,
             arr=self.df
         )
 
