@@ -1,4 +1,5 @@
 from typing import Tuple
+import warnings
 
 import numpy as np
 
@@ -32,6 +33,8 @@ class StronglyCorrelatedPairHandler:
         self.excluded_pairs = []  # List to store excluded pairs
         self.excluded_components = np.array([])  # Array to track components excluded due to excessive exclusions
 
+        self.did_clr_run: bool = False
+
     def run(self):
         """
         Iteratively finds and excludes strongly correlated pairs, updating the correlation matrix at each step.
@@ -41,6 +44,10 @@ class StronglyCorrelatedPairHandler:
                 break
             # Identify components that need exclusion
             self.exclude_components()
+
+            if self.did_clr_run:
+                break
+
             self.update_correlation_matrix()
 
     def process_exclusion(self) -> bool:
@@ -115,7 +122,8 @@ class StronglyCorrelatedPairHandler:
         if newly_excluded_components:
             # Raise an error if too many components have been excluded
             if len(self.excluded_components) > (self.num_of_components - 4):
-                raise ValueError("Too many components had to be excluded from the analysis")
+                warnings.warn("Too many components had to be excluded from the analysis")
+                self.did_clr_run = True
 
             # Update matrices to reflect exclusions
             for comp in newly_excluded_components:
