@@ -13,7 +13,7 @@ class CLRCalculator:
         Parameters:
         data (np.ndarray): A NumPy array containing the input data.
         """
-        self.data = data
+        self.data = data.T
 
     def run(self) -> np.ndarray:
         """
