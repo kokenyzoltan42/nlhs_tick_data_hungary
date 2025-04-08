@@ -8,3 +8,9 @@ class NodeRemover:
 
     def run(self):
         pass
+
+    def get_removal_order(self):
+        pass
+
+    def select_nodes_to_remove(self):
+        pass

@@ -8,12 +8,3 @@ class NodeDefender:
 
     def run(self):
         pass
-
-    def __add_new_node(self):
-        pass
-
-    def compute_metric(self):
-        pass
-
-    def connecting_existing_nodes(self):
-        pass
