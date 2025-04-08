@@ -97,6 +97,7 @@ class SparCCRunner:
                 "clr_run": iterative_process.did_clr_run
             }
 
+
             if self.args["do_download_data"]:
                 # Delegate saving of correlation matrix and clr_run flag to SparCCResult
                 result_obj.save_iteration_data(iteration_dir=iteration_dir, iteration=iteration)
@@ -116,6 +117,6 @@ class SparCCRunner:
         """
         self.data = np.apply_along_axis(
             lambda x: np.random.mtrand.dirichlet(x + 1),
-            axis=1,
+            axis=0,
             arr=self.df
         )
