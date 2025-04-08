@@ -52,6 +52,7 @@ class StronglyCorrelatedPairHandler:
             # Identify components that need exclusion
             self.exclude_components()
 
+            # If the calculation of clr happened, then stop the iteration
             if self.did_clr_run:
                 break
 
@@ -131,6 +132,7 @@ class StronglyCorrelatedPairHandler:
             # Raise an error if too many components have been excluded
             if len(self.excluded_components) > (self.num_of_components - 4):
                 warnings.warn("Too many components had to be excluded from the analysis. Returning result of CLR.")
+                # Calculate clr
                 clr_calculator = CLRCalculator(data=self.resampled_data)
                 self.correlations = clr_calculator.run()
                 self.did_clr_run = True
