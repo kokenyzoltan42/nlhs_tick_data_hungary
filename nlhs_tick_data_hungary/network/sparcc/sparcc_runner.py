@@ -65,7 +65,7 @@ class SparCCRunner:
             correlations = CorrelationUpdater.calculate_correlation(
                 newly_calculated_log_ratio_variances=log_ratio_variances,
                 helper_matrix=helper_matrix,
-                original_log_ratio_variance=None
+                initial_log_ratio_variance=None
             )
 
             # Iteratively remove strongly correlated pairs
@@ -73,8 +73,7 @@ class SparCCRunner:
                                                               correlations=correlations,
                                                               helper_matrix=helper_matrix,
                                                               exclusion_threshold=self.args['threshold'],
-                                                              exclusion_iterations=self.args['x_iter'],
-                                                              resampled_data=self.data)
+                                                              exclusion_iterations=self.args['x_iter'])
 
             iterative_process.run()
             correlation_results.append(iterative_process.correlations)

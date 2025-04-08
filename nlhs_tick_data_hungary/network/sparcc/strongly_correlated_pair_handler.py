@@ -1,5 +1,4 @@
 from typing import Tuple
-import warnings
 
 import numpy as np
 
@@ -13,7 +12,7 @@ class StronglyCorrelatedPairHandler:
     """
 
     def __init__(self, log_ratio_variances: np.ndarray, correlations: np.ndarray, helper_matrix: np.ndarray,
-                 exclusion_threshold: float, exclusion_iterations: int, resampled_data: np.ndarray):
+                 exclusion_threshold: float, exclusion_iterations: int):
         """
         Initializes the handler with necessary matrices and exclusion parameters.
 
@@ -22,7 +21,6 @@ class StronglyCorrelatedPairHandler:
         :param np.ndarray helper_matrix: Helper matrix to track modifications.
         :param float exclusion_threshold: Threshold above which correlations are considered too strong.
         :param int exclusion_iterations: Maximum number of exclusion iterations allowed.
-        :param np.ndarray resampled_data: Resampled original data.
         """
         self.log_ratio_variances = log_ratio_variances
 
@@ -33,7 +31,6 @@ class StronglyCorrelatedPairHandler:
         self.helper_matrix = helper_matrix
         self.exclusion_threshold = exclusion_threshold
         self.exclusion_iterations = exclusion_iterations
-        self.resampled_data = resampled_data
 
         self.num_of_components = log_ratio_variances.shape[1]
         self.excluded_pairs = []  # List to store excluded pairs
@@ -125,7 +122,7 @@ class StronglyCorrelatedPairHandler:
         if newly_excluded_components:
             # Raise an error if too many components have been excluded
             if len(self.excluded_components) > (self.num_of_components - 4):
-                warnings.warn("Too many components had to be excluded from the analysis. Returning result of CLR.")
+                raise ValueError("Too many components had to be excluded from the analysis")
 
             # Update matrices to reflect exclusions
             for comp in newly_excluded_components:
