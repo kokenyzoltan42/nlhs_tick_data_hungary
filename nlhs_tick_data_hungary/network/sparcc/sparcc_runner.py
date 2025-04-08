@@ -73,7 +73,8 @@ class SparCCRunner:
                                                               correlations=correlations,
                                                               helper_matrix=helper_matrix,
                                                               exclusion_threshold=self.args['threshold'],
-                                                              exclusion_iterations=self.args['x_iter'])
+                                                              exclusion_iterations=self.args['x_iter'],
+                                                              resampled_data=self.data)
 
             iterative_process.run()
             correlation_results.append(iterative_process.correlations)
