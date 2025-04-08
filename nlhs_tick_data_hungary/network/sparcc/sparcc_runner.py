@@ -75,7 +75,7 @@ class SparCCRunner:
                                                               exclusion_iterations=self.args['x_iter'])
 
             iterative_process.run()
-            correlation_results.append(correlations)
+            correlation_results.append(iterative_process.correlations)
 
             # Saving correlations
             if self.args["do_download_data"]:
