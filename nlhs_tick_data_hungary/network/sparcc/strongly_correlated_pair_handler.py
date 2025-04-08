@@ -1,8 +1,10 @@
 from typing import Tuple
+import warnings
 
 import numpy as np
 
 from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
+from nlhs_tick_data_hungary.network.sparcc.clr_calculator import CLRCalculator
 
 
 class StronglyCorrelatedPairHandler:
@@ -12,7 +14,7 @@ class StronglyCorrelatedPairHandler:
     """
 
     def __init__(self, log_ratio_variances: np.ndarray, correlations: np.ndarray, helper_matrix: np.ndarray,
-                 exclusion_threshold: float, exclusion_iterations: int):
+                 exclusion_threshold: float, exclusion_iterations: int, resampled_data: np.ndarray):
         """
         Initializes the handler with necessary matrices and exclusion parameters.
 
@@ -21,20 +23,24 @@ class StronglyCorrelatedPairHandler:
         :param np.ndarray helper_matrix: Helper matrix to track modifications.
         :param float exclusion_threshold: Threshold above which correlations are considered too strong.
         :param int exclusion_iterations: Maximum number of exclusion iterations allowed.
+        :param np.ndarray resampled_data: Resampled original data.
         """
         self.log_ratio_variances = log_ratio_variances
 
-        # We save the original log-ratio variances for the correlation calculation
+        # We save the initial log-ratio variances for the correlation calculation
         self.initial_log_ratio_variances = log_ratio_variances.copy()
 
         self.correlations = correlations
         self.helper_matrix = helper_matrix
         self.exclusion_threshold = exclusion_threshold
         self.exclusion_iterations = exclusion_iterations
+        self.resampled_data = resampled_data
 
         self.num_of_components = log_ratio_variances.shape[1]
         self.excluded_pairs = []  # List to store excluded pairs
         self.excluded_components = np.array([])  # Array to track components excluded due to excessive exclusions
+
+        self.did_clr_run: bool = False
 
     def run(self):
         """
@@ -45,6 +51,11 @@ class StronglyCorrelatedPairHandler:
                 break
             # Identify components that need exclusion
             self.exclude_components()
+
+            # If the clr was calculated, then stop the iteration
+            if self.did_clr_run:
+                break
+
             self.update_correlation_matrix()
 
     def process_exclusion(self) -> bool:
@@ -120,7 +131,10 @@ class StronglyCorrelatedPairHandler:
         if newly_excluded_components:
             # Raise an error if too many components have been excluded
             if len(self.excluded_components) > (self.num_of_components - 4):
-                raise ValueError("Too many components had to be excluded from the analysis")
+                warnings.warn("Too many components had to be excluded from the analysis. Returning result of CLR.")
+                clr_calculator = CLRCalculator(data=self.resampled_data)
+                self.correlations = clr_calculator.run()
+                self.did_clr_run = True
 
             # Update matrices to reflect exclusions
             for comp in newly_excluded_components:
