@@ -63,8 +63,9 @@ class SparCCRunner:
 
             # Compute correlations
             correlations = CorrelationUpdater.calculate_correlation(
-                log_ratio_variances=log_ratio_variances,
-                helper_matrix=helper_matrix
+                newly_calculated_log_ratio_variances=log_ratio_variances,
+                helper_matrix=helper_matrix,
+                initial_log_ratio_variance=None
             )
 
             # Iteratively remove strongly correlated pairs
@@ -75,7 +76,7 @@ class SparCCRunner:
                                                               exclusion_iterations=self.args['x_iter'])
 
             iterative_process.run()
-            correlation_results.append(correlations)
+            correlation_results.append(iterative_process.correlations)
 
             # Saving correlations
             if self.args["do_download_data"]:
@@ -93,7 +94,7 @@ class SparCCRunner:
         """
         self.data = np.apply_along_axis(
             lambda x: np.random.mtrand.dirichlet(x + 1),
-            axis=1,
+            axis=0,
             arr=self.df
         )
 

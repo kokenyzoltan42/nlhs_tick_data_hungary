@@ -23,6 +23,10 @@ class StronglyCorrelatedPairHandler:
         :param int exclusion_iterations: Maximum number of exclusion iterations allowed.
         """
         self.log_ratio_variances = log_ratio_variances
+
+        # We save the original log-ratio variances for the correlation calculation
+        self.initial_log_ratio_variances = log_ratio_variances.copy()
+
         self.correlations = correlations
         self.helper_matrix = helper_matrix
         self.exclusion_threshold = exclusion_threshold
@@ -73,8 +77,9 @@ class StronglyCorrelatedPairHandler:
         Updates the correlation matrix using the updated matrix and sets excluded components' values to NaN.
         """
         self.correlations = CorrelationUpdater.calculate_correlation(
-            log_ratio_variances=self.log_ratio_variances,
-            helper_matrix=self.helper_matrix
+            newly_calculated_log_ratio_variances=self.log_ratio_variances,
+            helper_matrix=self.helper_matrix,
+            initial_log_ratio_variance=self.initial_log_ratio_variances
         )
         for excluded_component in self.excluded_components:
             self.correlations[excluded_component, :] = np.nan
