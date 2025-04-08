@@ -36,8 +36,6 @@ class StronglyCorrelatedPairHandler:
         self.excluded_pairs = []  # List to store excluded pairs
         self.excluded_components = np.array([])  # Array to track components excluded due to excessive exclusions
 
-        self.did_clr_run: bool = False
-
     def run(self):
         """
         Iteratively finds and excludes strongly correlated pairs, updating the correlation matrix at each step.
