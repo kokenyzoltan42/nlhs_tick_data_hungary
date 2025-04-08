@@ -4,7 +4,6 @@ import warnings
 import numpy as np
 
 from nlhs_tick_data_hungary.network.sparcc.correlation_updater import CorrelationUpdater
-from nlhs_tick_data_hungary.network.sparcc.clr_calculator import CLRCalculator
 
 
 class StronglyCorrelatedPairHandler:
@@ -28,7 +27,7 @@ class StronglyCorrelatedPairHandler:
         self.log_ratio_variances = log_ratio_variances
 
         # We save the original log-ratio variances for the correlation calculation
-        self.init_t = log_ratio_variances.copy()
+        self.initial_log_ratio_variances = log_ratio_variances.copy()
 
         self.correlations = correlations
         self.helper_matrix = helper_matrix
@@ -51,11 +50,6 @@ class StronglyCorrelatedPairHandler:
                 break
             # Identify components that need exclusion
             self.exclude_components()
-
-            # If the calculation of clr happened, then stop the iteration
-            if self.did_clr_run:
-                break
-
             self.update_correlation_matrix()
 
     def process_exclusion(self) -> bool:
@@ -90,7 +84,7 @@ class StronglyCorrelatedPairHandler:
         self.correlations = CorrelationUpdater.calculate_correlation(
             newly_calculated_log_ratio_variances=self.log_ratio_variances,
             helper_matrix=self.helper_matrix,
-            original_log_ratio_variance=self.init_t
+            initial_log_ratio_variance=self.initial_log_ratio_variances
         )
         for excluded_component in self.excluded_components:
             self.correlations[excluded_component, :] = np.nan
@@ -132,10 +126,6 @@ class StronglyCorrelatedPairHandler:
             # Raise an error if too many components have been excluded
             if len(self.excluded_components) > (self.num_of_components - 4):
                 warnings.warn("Too many components had to be excluded from the analysis. Returning result of CLR.")
-                # Calculate clr
-                clr_calculator = CLRCalculator(data=self.resampled_data)
-                self.correlations = clr_calculator.run()
-                self.did_clr_run = True
 
             # Update matrices to reflect exclusions
             for comp in newly_excluded_components:
