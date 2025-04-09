@@ -14,7 +14,7 @@ class NodeRemover:
         """
         Initializes the NodeRemover with a network and configuration settings.
 
-        :param nx.Graph network: The network (graph) from which nodes will be removed.
+        :param nx.Graph network: The network from which nodes will be removed.
         :param dict config: Dictionary containing attack type and other configuration details.
         """
         self.network = network

@@ -16,7 +16,7 @@ class NodeAdder:
         """
         Initializes the NodeAdder with a network and configuration settings.
 
-        :param network: The network (graph) to which nodes will be added.
+        :param network: The network to which nodes will be added.
         :param config: Dictionary containing configuration details (e.g. nodes_to_add, num_of_connections,
          defending_metric).
         """

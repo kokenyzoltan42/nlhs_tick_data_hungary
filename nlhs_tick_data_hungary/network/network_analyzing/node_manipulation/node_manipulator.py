@@ -26,7 +26,7 @@ class NodeManipulator:
 
         (A more thorough description of this class is available at the Wiki page)
 
-        :param nx.Graph network: The input network graph.
+        :param nx.Graph network: The input network.
         :param dict config: A dictionary containing simulation parameters.
         """
         self.network = network

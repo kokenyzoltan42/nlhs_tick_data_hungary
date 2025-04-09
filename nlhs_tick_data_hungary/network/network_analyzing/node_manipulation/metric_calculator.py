@@ -19,7 +19,7 @@ class MetricCalculator:
         """
         Calculate the size of the largest connected component (LCC) in the network.
 
-        :param nx.Graph network: A networkx Graph for which the LCC size is to be calculated.
+        :param nx.Graph network: A networkx Graph object for which the LCC size is to be calculated.
         :return int: The number of nodes in the largest connected component as an integer.
         """
         analyzer = NetworkAnalyzer(config={}, network=network)
@@ -45,7 +45,7 @@ class MetricCalculator:
           - 'APL': Average path length of the network.
           - 'LCC': Size of the largest connected component.
 
-        :param nx.Graph network: A networkx Graph for which the metric is to be calculated.
+        :param nx.Graph network: A networkx Graph object for which the metric is to be calculated.
         :param str metric: A string key ('APL' or 'LCC') specifying the metric type.
         :return float: The computed metric value. This can be an integer (for LCC) or a float (for APL).
         """
