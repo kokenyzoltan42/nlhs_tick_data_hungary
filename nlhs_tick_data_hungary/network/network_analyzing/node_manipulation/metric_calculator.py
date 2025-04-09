@@ -11,7 +11,7 @@ class MetricCalculator:
 
     @staticmethod
     def calc_connectivity_loss(initial_lcc: int, current_lcc: int):
-        return (initial_lcc - current_lcc) / current_lcc
+        return (initial_lcc - current_lcc) / initial_lcc
 
     @staticmethod
     def calc_node_defending_metric(network: nx.Graph, metric: str):
