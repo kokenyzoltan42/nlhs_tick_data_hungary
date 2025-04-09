@@ -28,14 +28,14 @@ class CLRCalculator:
 
         :return np.ndarray: Correlation matrix of CLR-transformed data.
         """
-        z = self.clr()
+        z = self.calc_clr()
 
         # Compute correlation coefficients from the CLR-transformed data
         correlations = np.corrcoef(z)
 
         return correlations
 
-    def clr(self) -> np.ndarray:
+    def calc_clr(self) -> np.ndarray:
         """
         Performs Centered Log-Ratio (CLR) transformation on the dataset.
 
