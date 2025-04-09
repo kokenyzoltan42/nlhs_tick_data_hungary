@@ -16,4 +16,4 @@ class NodeAttacker:
         node_remover.run()
 
         self.results = pd.DataFrame(index=node_remover.fraction_of_nodes_removed,
-                                    data=node_remover.connectivity_losses)
+                                    data=node_remover.connectivity_loss_values)
