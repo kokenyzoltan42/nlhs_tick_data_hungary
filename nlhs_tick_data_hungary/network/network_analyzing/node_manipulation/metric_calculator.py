@@ -17,8 +17,8 @@ class MetricCalculator:
     def calc_node_defending_metric(network: nx.Graph, metric: str):
         analyzer = NetworkAnalyzer(config={}, network=network)
         metric_methods = {
-            'APL': analyzer.calc_average_path_length,
-            'LCC': analyzer.calc_size_of_largest_connected_component
+            'APL': analyzer.calc_average_path_length(),
+            'LCC': analyzer.calc_size_of_largest_connected_component()
         }
         return metric_methods[metric]
 
