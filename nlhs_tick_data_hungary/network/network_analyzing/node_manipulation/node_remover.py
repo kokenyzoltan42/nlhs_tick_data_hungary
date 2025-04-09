@@ -56,7 +56,7 @@ class NodeRemover:
                 if selected_node in self.network:
                     return selected_node
         else:
-            centrality_metric = str(self.config['attack_type'].replace('cascading_', ''))
+            centrality_metric = str(self.config['attack_type'].copy().replace('cascading_', ''))
 
             attack_methods = {
                 'random': np.random.choice(list(self.network.nodes)),
