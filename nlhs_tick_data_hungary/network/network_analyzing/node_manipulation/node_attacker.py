@@ -1,4 +1,5 @@
 import networkx as nx
+import pandas as pd
 
 from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.node_remover import NodeRemover
 
@@ -8,10 +9,11 @@ class NodeAttacker:
         self.network = network
         self.config = config
 
-        self.results = {
-            'fraction_removed': [],
-            'connectivity loss': []
-        }
+        self.results = None
 
     def run(self):
-        pass
+        node_remover = NodeRemover(network=self.network, config=self.config)
+        node_remover.run()
+
+        self.results = pd.DataFrame(index=node_remover.fraction_of_nodes_removed,
+                                    data=node_remover.connectivity_losses)
