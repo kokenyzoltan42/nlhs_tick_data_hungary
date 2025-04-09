@@ -39,8 +39,8 @@ class NodeManipulator:
         :return dict: A dictionary with simulation results.
         """
         simulation_modes = {
-            'defending': NodeAttacker(network=self.network, config=self.config),
-            'attacking': NodeDefender(network=self.network, config=self.config)
+            'defending': NodeDefender(network=self.network, config=self.config),
+            'attacking': NodeAttacker(network=self.network, config=self.config)
         }
         chosen_simulation = simulation_modes[self.config['manipulation_type']]
         chosen_simulation.run()
