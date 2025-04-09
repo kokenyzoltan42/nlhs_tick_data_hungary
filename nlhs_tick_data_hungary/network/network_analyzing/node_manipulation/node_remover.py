@@ -37,12 +37,9 @@ class NodeRemover:
         # Get the precomputed node removal order (if applicable)
         removal_order = self.get_removal_order()
 
-        print(f'Order_type: {type(removal_order)}')
-
         while self.network.number_of_nodes() > 1:
             # Select the next node to remove
             node_to_remove = self.select_node_to_remove(order=removal_order)
-            print(f'Node_to_remove: {node_to_remove}')
             if node_to_remove is None:
                 break  # Stop if no valid node remains
 
