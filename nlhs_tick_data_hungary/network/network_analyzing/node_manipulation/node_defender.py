@@ -1,4 +1,5 @@
 import networkx as nx
+import pandas as pd
 
 from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.node_adder import NodeAdder
 
@@ -8,8 +9,11 @@ class NodeDefender:
         self.network = network
         self.config = config
 
-        self.results = {'nodes_added': None,
-                        'metric': None}
+        self.results = None
 
     def run(self):
-        pass
+        node_adder = NodeAdder(network=self.network, config=self.config)
+        node_adder.run()
+
+        self.results = pd.DataFrame(index=node_adder.nodes_added,
+                                    data=node_adder.metric_results)
