@@ -5,64 +5,114 @@ from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.metric_c
 
 
 class NodeRemover:
+    """
+    Class responsible for removing nodes from a network based on different attack strategies. It tracks the fraction
+    of nodes removed and the corresponding connectivity loss values.
+    """
+
     def __init__(self, network: nx.Graph, config: dict):
+        """
+        Initializes the NodeRemover with a network and configuration settings.
+
+        :param nx.Graph network: The network (graph) from which nodes will be removed.
+        :param dict config: Dictionary containing attack type and other configuration details.
+        """
         self.network = network
         self.config = config
 
-        self.fraction_of_nodes_removed = []
-        self.connectivity_losses = []
+        self.fraction_of_nodes_removed = []  # Stores the fraction of nodes removed
+        self.connectivity_loss_values = []  # Stores connectivity loss values
 
     def run(self):
+        """
+        Executes the node removal process according to the specified attack strategy. Tracks how the removal of nodes
+        affect the network's connectivity.
+        """
+        # Store initial node count
         initial_num_of_nodes = self.network.number_of_nodes()
+        # Compute the size of the initial largest connected component
         initial_lcc = MetricCalculator.calc_lcc(network=self.network)
         removed_count = 0
 
+        # Get the precomputed node removal order (if applicable)
         removal_order = self.get_removal_order()
 
         while self.network.number_of_nodes() > 1:
+            # Select the next node to remove
             node_to_remove = self.select_node_to_remove(order=removal_order)
-            if node_to_remove is None:  # Ez biztos kell?
-                break
+            if node_to_remove is None:
+                break  # Stop if no valid node remains
+
+            # Remove the selected node
             self.network.remove_node(node_to_remove)
             removed_count += 1
-            self.fraction_of_nodes_removed.append(removed_count / initial_num_of_nodes)
+            # Compute the size of the largest connected component after a node has been removed
             current_lcc = MetricCalculator.calc_lcc(network=self.network)
-
+            # Compute connectivity loss
             connectivity_loss = MetricCalculator.calc_connectivity_loss(initial_lcc=initial_lcc,
                                                                         current_lcc=current_lcc)
-            self.connectivity_losses.append(connectivity_loss)
 
-    def get_removal_order(self):
+            # Track fraction removed
+            self.fraction_of_nodes_removed.append(removed_count / initial_num_of_nodes)
+            # Store connectivity loss
+            self.connectivity_loss_values.append(connectivity_loss)
+
+    def get_removal_order(self) -> list:
+        """
+        Determines the order in which nodes should be removed based on the initial centrality measures.
+
+        :return list: A sorted list of nodes based on their centrality values (descending order) or an empty list.
+        """
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
-            # Calculate the centrality values for each node
             centrality_values = MetricCalculator.calc_centrality(
                 network=self.network,
                 centrality_measure=self.config['attack_type'].replace('initial_', '')
             )
-            # Sort the values in descending order
-            return sorted(centrality_values, reverse=True)
+            return sorted(centrality_values, reverse=True)  # Return nodes sorted by highest centrality first
 
-        # If the attack type doesn't require removal order, return an empty list
-        return []
+        return []  # Return empty list if no ordering is needed
 
-    def select_node_to_remove(self, order: list):  # elvileg list
-        # TODO: ezt a metódust kettébontani, vagy legalábbis szebbé varázsolni
+    def select_node_to_remove(self, order: list) -> int:
+        """
+        Selects the next node to be removed based on the specified attack strategy. Delegates selection to specific
+        methods based on the attack type.
+
+        :param list order: List of nodes sorted by centrality if applicable.
+        :return int: The id of the node to remove or None if no valid node is found.
+        """
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
-            # Iterate through the removal order
-            while order:
-                # Select the next largest value in the list and drop it
-                selected_node = order.pop(0)
-                # If the selected node hasn't been already removed
-                if selected_node in self.network:
-                    return selected_node
+            return self._select_from_initial_order(order)  # Use predefined order if applicable
         else:
-            centrality_metric = str(self.config['attack_type'].replace('cascading_', ''))
+            return self._select_cascading_or_random()  # Use alternative selection strategies
 
-            attack_methods = {
-                'random': np.random.choice(list(self.network.nodes)),
-                'cascading_betweenness': max(MetricCalculator.calc_centrality(network=self.network,
-                                                                              centrality_measure=centrality_metric)),
-                'cascading_degree': max(MetricCalculator.calc_centrality(network=self.network,
-                                                                         centrality_measure=centrality_metric))
-            }
-            return attack_methods[self.config['attack_type']]
+    def _select_from_initial_order(self, order: list) -> int | None:
+        """
+        Selects the next node to remove based on the precomputed removal order.
+
+        :param list order: List of nodes sorted by centrality.
+        :return int | None: The next node to remove or None if no valid node remains.
+        """
+        while order:
+            selected_node = order.pop(0)  # Take the highest-priority node from the list
+            if selected_node in self.network:
+                return selected_node  # Return the node if it is still present in the network
+        return None  # Return None if no valid node remains
+
+    def _select_cascading_or_random(self) -> int:
+        """
+        Selects a node to remove based on cascading failure or random strategies. Uses centrality metrics (degree and
+        betweenness) to determine the most critical node.
+
+        :return int: The node to remove based on the given strategy.
+        """
+        # Extract the name of the centrality metric
+        centrality_metric = self.config['attack_type'].replace('cascading_', '')
+
+        # Select a random node or the node with the largest centrality value
+        attack_methods = {
+            'random': np.random.choice(list(self.network.nodes)),
+            'cascading_centrality': max(MetricCalculator.calc_centrality(self.network, centrality_metric))
+        }
+
+        # Return the selected node
+        return attack_methods[self.config['attack_type']]
