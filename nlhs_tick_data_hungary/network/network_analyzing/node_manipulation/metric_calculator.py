@@ -26,7 +26,7 @@ class MetricCalculator:
     def calc_centrality(network: nx.Graph, centrality_measure: str) -> dict:
         analyzer = NetworkAnalyzer(config={}, network=network)
         centrality_methods = {
-            'betweenness': analyzer.calc_betweenness_centrality,
-            'degree': analyzer.calc_degree_centrality
+            'betweenness': analyzer.calc_betweenness_centrality(),
+            'degree': analyzer.calc_degree_centrality()
         }
         return centrality_methods[centrality_measure]
