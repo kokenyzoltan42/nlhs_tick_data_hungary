@@ -20,10 +20,10 @@ class NodeRemover:
         removal_order = self.get_removal_order()
 
         while self.network.number_of_nodes() > 1:
-            nodes_to_remove = self.select_nodes_to_remove(order=removal_order)
-            if nodes_to_remove is None:  # Ez biztos kell?
+            node_to_remove = self.select_node_to_remove(order=removal_order)
+            if node_to_remove is None:  # Ez biztos kell?
                 break
-
+            self.network.remove_node(node_to_remove)
             removed_count += 1
             self.fraction_of_nodes_removed.append(removed_count / initial_num_of_nodes)
             current_lcc = MetricCalculator.calc_lcc(network=self.network)
@@ -45,8 +45,7 @@ class NodeRemover:
         # If the attack type doesn't require removal order, return an empty list
         return []
 
-    def select_nodes_to_remove(self, order: list):  # elvileg list
-        print(self.config['attack_type'])
+    def select_node_to_remove(self, order: list):  # elvileg list
         # TODO: ezt a metódust kettébontani, vagy legalábbis szebbé varázsolni
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
             # Iterate through the removal order
