@@ -97,7 +97,6 @@ class SparCCRunner:
                 "clr_run": iterative_process.did_clr_run
             }
 
-
             if self.args["do_download_data"]:
                 # Delegate saving of correlation matrix and clr_run flag to SparCCResult
                 result_obj.save_iteration_data(iteration_dir=iteration_dir, iteration=iteration)
