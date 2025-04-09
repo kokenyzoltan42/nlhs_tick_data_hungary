@@ -37,7 +37,7 @@ class NodeRemover:
             # Calculate the centrality values for each node
             centrality_values = MetricCalculator.calc_centrality(
                 network=self.network,
-                centrality_measure=self.config['attack_type'].replace('initial_', '')
+                centrality_measure=self.config['attack_type'].copy().replace('initial_', '')
             )
             # Sort the values in descending order
             return sorted(centrality_values, reverse=True)
@@ -55,14 +55,14 @@ class NodeRemover:
                 # If the selected node hasn't been already removed
                 if selected_node in self.network:
                     return selected_node
+        else:
+            centrality_metric = str(self.config['attack_type'].replace('cascading_', ''))
 
-        centrality_metric = str(self.config['attack_type'].replace('cascading_', ''))
-
-        attack_methods = {
-            'random': np.random.choice(list(self.network.nodes)),
-            'cascading_betweenness': max(MetricCalculator.calc_centrality(network=self.network,
-                                                                          centrality_measure=centrality_metric)),
-            'cascading_degree': max(MetricCalculator.calc_centrality(network=self.network,
-                                                                     centrality_measure=centrality_metric))
-        }
-        return attack_methods[self.config['attack_type']]
+            attack_methods = {
+                'random': np.random.choice(list(self.network.nodes)),
+                'cascading_betweenness': max(MetricCalculator.calc_centrality(network=self.network,
+                                                                              centrality_measure=centrality_metric)),
+                'cascading_degree': max(MetricCalculator.calc_centrality(network=self.network,
+                                                                         centrality_measure=centrality_metric))
+            }
+            return attack_methods[self.config['attack_type']]
