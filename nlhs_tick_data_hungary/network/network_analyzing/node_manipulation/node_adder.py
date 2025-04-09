@@ -46,7 +46,8 @@ class NodeAdder:
                                                     replace=False))
         min_weight, max_weight = weight_range
         edges = [
-            (new_node_id, nodes_to_connect_to, {'weight': np.random.uniform(low=min_weight, high=max_weight)})
+            (new_node_id, node, {'weight': np.random.uniform(low=min_weight, high=max_weight)})
+            for node in nodes_to_connect_to
         ]
 
         self.network.add_edges_from(edges)
