@@ -41,9 +41,9 @@ class NodeAdder:
 
     def connect_to_existing_nodes(self, new_node_id: int, weight_range: Tuple[int, int]):
         existing_nodes = list(self.network.nodes() - {new_node_id})
-        nodes_to_connect_to = np.random.choice(existing_nodes,
-                                               size=min(self.config['num_of_connections'], len(existing_nodes)),
-                                               replace=False)
+        nodes_to_connect_to = list(np.random.choice(existing_nodes,
+                                                    size=min(self.config['num_of_connections'], len(existing_nodes)),
+                                                    replace=False))
         min_weight, max_weight = weight_range
         edges = [
             (new_node_id, nodes_to_connect_to, {'weight': np.random.uniform(low=min_weight, high=max_weight)})
