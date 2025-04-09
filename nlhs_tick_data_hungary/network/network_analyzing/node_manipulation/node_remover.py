@@ -37,7 +37,7 @@ class NodeRemover:
             # Calculate the centrality values for each node
             centrality_values = MetricCalculator.calc_centrality(
                 network=self.network,
-                centrality_measure=self.config['attack_type'].copy().replace('initial_', '')
+                centrality_measure=self.config['attack_type'].replace('initial_', '')
             )
             # Sort the values in descending order
             return sorted(centrality_values, reverse=True)
@@ -46,6 +46,7 @@ class NodeRemover:
         return []
 
     def select_nodes_to_remove(self, order: list):  # elvileg list
+        print(self.config['attaxk_type'])
         # TODO: ezt a metódust kettébontani, vagy legalábbis szebbé varázsolni
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
             # Iterate through the removal order
@@ -56,7 +57,7 @@ class NodeRemover:
                 if selected_node in self.network:
                     return selected_node
         else:
-            centrality_metric = str(self.config['attack_type'].copy().replace('cascading_', ''))
+            centrality_metric = str(self.config['attack_type'].replace('cascading_', ''))
 
             attack_methods = {
                 'random': np.random.choice(list(self.network.nodes)),
