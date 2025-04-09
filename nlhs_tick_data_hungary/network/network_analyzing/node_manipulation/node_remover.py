@@ -46,7 +46,7 @@ class NodeRemover:
         return []
 
     def select_nodes_to_remove(self, order: list):  # elvileg list
-        print(self.config['attaxk_type'])
+        print(self.config['attack_type'])
         # TODO: ezt a metódust kettébontani, vagy legalábbis szebbé varázsolni
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
             # Iterate through the removal order
