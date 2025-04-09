@@ -81,7 +81,7 @@ class NodeRemover:
         :return int: The id of the node to remove or None if no valid node is found.
         """
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
-            return self._select_from_initial_order(order)  # Use predefined order if applicable
+            return self._select_from_initial_order(order=order)  # Use predefined order if applicable
         else:
             return self._select_cascading_or_random()  # Use alternative selection strategies
 
@@ -111,7 +111,8 @@ class NodeRemover:
         # Select a random node or the node with the largest centrality value
         attack_methods = {
             'random': np.random.choice(list(self.network.nodes)),
-            'cascading_centrality': max(MetricCalculator.calc_centrality(self.network, centrality_metric))
+            'cascading_centrality': max(MetricCalculator.calc_centrality(network=self.network,
+                                                                         centrality_measure=centrality_metric))
         }
 
         # Return the selected node
