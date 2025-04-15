@@ -1,7 +1,7 @@
 import networkx as nx
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.node_remover import NodeRemover
+from nlhs_tick_data_hungary.network.network_analyzing import NodeRemover
 
 
 class NodeAttacker:

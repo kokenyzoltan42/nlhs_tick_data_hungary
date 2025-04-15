@@ -1,8 +1,8 @@
 import networkx as nx
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.node_attacker import NodeAttacker
-from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.node_defender import NodeDefender
+from nlhs_tick_data_hungary.network.network_analyzing import NodeAttacker
+from nlhs_tick_data_hungary.network.network_analyzing import NodeDefender
 
 
 class NodeManipulator:

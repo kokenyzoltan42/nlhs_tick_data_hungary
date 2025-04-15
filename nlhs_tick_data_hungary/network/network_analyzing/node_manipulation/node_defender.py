@@ -1,7 +1,7 @@
 import networkx as nx
 import pandas as pd
 
-from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.node_adder import NodeAdder
+from nlhs_tick_data_hungary.network.network_analyzing import NodeAdder
 
 
 class NodeDefender:

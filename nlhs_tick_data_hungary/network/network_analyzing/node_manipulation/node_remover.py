@@ -1,7 +1,7 @@
 import networkx as nx
 import numpy as np
 
-from nlhs_tick_data_hungary.network.network_analyzing.node_manipulation.metric_calculator import MetricCalculator
+from nlhs_tick_data_hungary.network.network_analyzing import MetricCalculator
 
 
 class NodeRemover:
