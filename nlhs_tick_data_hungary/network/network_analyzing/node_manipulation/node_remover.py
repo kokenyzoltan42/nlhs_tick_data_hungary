@@ -39,7 +39,7 @@ class NodeRemover:
 
         while self.network.number_of_nodes() > 1:
             # Select the next node to remove
-            node_to_remove = self.select_node_to_remove(order=removal_order)
+            node_to_remove = self.select_node_to_remove(ordered_list=removal_order)
             if node_to_remove is None:
                 break  # Stop if no valid node remains
 
@@ -72,28 +72,28 @@ class NodeRemover:
 
         return []  # Return empty list if no ordering is needed
 
-    def select_node_to_remove(self, order: list) -> int:
+    def select_node_to_remove(self, ordered_list: list) -> int:
         """
         Selects the next node to be removed based on the specified attack strategy. Delegates selection to specific
         methods based on the attack type.
 
-        :param list order: List of nodes sorted by centrality if applicable.
+        :param list ordered_list: List of nodes sorted by centrality if applicable.
         :return int: The id of the node to remove or None if no valid node is found.
         """
         if self.config['attack_type'] in ['initial_betweenness', 'initial_degree']:
-            return self._select_from_initial_order(order=order)  # Use predefined order if applicable
+            return self._select_from_initial_order(ordered_list=ordered_list)  # Use predefined order if applicable
         else:
             return self._select_cascading_or_random()  # Use alternative selection strategies
 
-    def _select_from_initial_order(self, order: list) -> int | None:
+    def _select_from_initial_order(self, ordered_list: list) -> int | None:
         """
         Selects the next node to remove based on the precomputed removal order.
 
-        :param list order: List of nodes sorted by centrality.
+        :param list ordered_list: List of nodes sorted by centrality.
         :return int | None: The next node to remove or None if no valid node remains.
         """
-        while order:
-            selected_node = order.pop(0)  # Take the highest-priority node from the list
+        while ordered_list:
+            selected_node = ordered_list.pop(0)  # Take the highest-priority node from the list
             if selected_node in self.network:
                 return selected_node  # Return the node if it is still present in the network
         return None  # Return None if no valid node remains
