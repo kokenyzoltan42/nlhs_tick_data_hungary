@@ -12,7 +12,7 @@ class CorrelationCalculator:
         Initializes the correlation calculator with input data, a helper matrix, and the log_ratio_variances.
 
         :param np.ndarray log_ratio_variance: A matrix containing log-ratio variances for each OTU
-        :param np.ndarray basis_variances: A matrix containing basis variances for each OTU
+        :param np.ndarray basis_variances: A column vector containing basis variances for each OTU
         """
         # Array containing the log-ratio variances (often referenced as variation matrix, or T matrix)
         self.log_ratio_variance = log_ratio_variance
