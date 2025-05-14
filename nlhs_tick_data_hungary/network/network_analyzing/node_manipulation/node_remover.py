@@ -105,15 +105,14 @@ class NodeRemover:
 
         :return int: The node to remove based on the given strategy.
         """
-        attack_type = self.config['attack_type']
 
-        if attack_type == 'random':
+        if self.config['attack_type'] == 'random':
             return np.random.choice(list(self.network.nodes))
 
-        elif attack_type.startswith('cascading_'):
-            centrality_metric = attack_type.replace('cascading_', '')
+        elif self.config['attack_type'].startswith('cascading_'):
+            centrality_metric = self.config['attack_type'].replace('cascading_', '')
             centrality = MetricCalculator.calc_centrality(network=self.network, centrality_measure=centrality_metric)
-            return max(centrality)
+            return max(centrality, key=centrality.get)
 
         else:
-            raise ValueError(f"No strategy implemented as {attack_type}")
+            raise ValueError(f"No strategy implemented as {self.config['attack_type']}")
