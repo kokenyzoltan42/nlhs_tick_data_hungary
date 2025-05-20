@@ -1,4 +1,4 @@
-from typing import Optional, Sized
+from typing import Sized
 
 import networkx as nx
 
