@@ -5,7 +5,8 @@ import networkx as nx
 
 class NetworkAnalyzer:
     """
-    A class for analyzing various properties of a given network.
+    A class for analyzing various properties of a given network. The code assumes that the network is weighted and
+    only contains positive weights.
     """
 
     def __init__(self, config: dict, network: nx.Graph):
@@ -31,12 +32,15 @@ class NetworkAnalyzer:
                     result_key = func_name.replace("calc_", "")
                     self.result[result_key] = method()
 
-    def calc_network_diameter(self) -> int:
+    def calc_network_diameter(self) -> int | None:
         """
         Calculates the diameter of the network, considering edge weights.
         :return int: The diameter of the network.
         """
-        return nx.diameter(self.network, weight='weight')
+        if nx.is_connected(self.network):
+            return nx.diameter(self.network, weight='weight')
+        else:
+            return None
 
     def calc_modularity(self) -> float:
         """
