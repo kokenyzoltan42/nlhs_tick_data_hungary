@@ -100,6 +100,7 @@ class NetworkAnalyzer:
         if sum_of_path_lengths is None:
             # For disconnected networks, sum path lengths over all connected components
             sum_of_path_lengths = self.sum_path_lengths()
+            print('Baj van')
 
         # Normalize by the total number of ordered node pairs
         return sum_of_path_lengths / (num_nodes * (num_nodes - 1))

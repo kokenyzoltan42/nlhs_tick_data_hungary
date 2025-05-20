@@ -39,6 +39,7 @@ class NodeAdder:
         if self.config['defending_metric'] == 'APL' and not nx.is_connected(self.network):
             analyzer = NetworkAnalyzer(config={}, network=self.network)
             self.sum_of_all_path_lengths += analyzer.sum_path_lengths()
+            print('Kiszámoltam az utakat')
 
         # Loop from 1 up to the configured number of nodes to add for the network
         for i in range(1, self.config['nodes_to_add'] + 1):
