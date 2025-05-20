@@ -1,3 +1,5 @@
+from typing import Optional
+
 import networkx as nx
 
 from nlhs_tick_data_hungary.network.network_analyzing import NetworkAnalyzer
@@ -38,7 +40,7 @@ class MetricCalculator:
         return (initial_lcc - current_lcc) / initial_lcc
 
     @staticmethod
-    def calc_node_defending_metric(network: nx.Graph, metric: str) -> float:
+    def calc_node_defending_metric(network: nx.Graph, metric: str, sum_of_path_lengths: Optional[int] = None) -> float:
         """
         Calculate a network defending metric for the provided network.
         The metric to calculate is determined by the 'defending_metric' parameter and can be one of the following:
@@ -47,11 +49,13 @@ class MetricCalculator:
 
         :param nx.Graph network: A networkx Graph object for which the metric is to be calculated.
         :param str metric: A string key ('APL' or 'LCC') specifying the metric type.
+        :param int sum_of_path_lengths: The sum of every paths' lengths int the network. It is an optional parameter.
+        It is not necessary if the network is connected.
         :return float: The computed metric value. This can be an integer (for LCC) or a float (for APL).
         """
         analyzer = NetworkAnalyzer(config={}, network=network)
         metric_methods = {
-            'APL': analyzer.calc_average_path_length,
+            'APL': lambda: analyzer.calc_average_path_length(sum_of_path_lengths),
             'LCC': analyzer.calc_size_of_largest_connected_component
         }
         return metric_methods[metric]()

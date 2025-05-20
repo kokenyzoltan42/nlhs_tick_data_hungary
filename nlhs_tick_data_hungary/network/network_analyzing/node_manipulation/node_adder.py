@@ -4,6 +4,7 @@ import networkx as nx
 import numpy as np
 
 from nlhs_tick_data_hungary.network.network_analyzing import MetricCalculator
+from nlhs_tick_data_hungary.network.network_analyzing import NetworkAnalyzer
 
 
 class NodeAdder:
@@ -25,6 +26,8 @@ class NodeAdder:
 
         self.nodes_added = []  # Keeps track of the number/index of nodes added
         self.metric_results = []  # Stores metric values computed after each node addition
+        self.sum_of_new_weights = 0
+        self.sum_of_all_path_lengths = 0
 
     def run(self):
         """
@@ -32,6 +35,10 @@ class NodeAdder:
         """
         # Determine the overall range of weights across existing links in the network
         weight_range = self.determine_weight_range()
+
+        if self.config['defending_metric'] == 'APL' and not nx.is_connected(self.network):
+            analyzer = NetworkAnalyzer(config={}, network=self.network)
+            self.sum_of_all_path_lengths += analyzer.sum_path_lengths()
 
         # Loop from 1 up to the configured number of nodes to add for the network
         for i in range(1, self.config['nodes_to_add'] + 1):
@@ -92,10 +99,12 @@ class NodeAdder:
         min_weight, max_weight = weight_range  # Unpack the weight range
 
         # Create a link from the new node to each selected existing node with a random weight assigned
-        links = [
-            (new_node_id, node, {'weight': np.random.uniform(low=min_weight, high=max_weight)})
-            for node in nodes_to_connect_to
-        ]
+        links = []
+        for node in nodes_to_connect_to:
+            new_weight = np.random.uniform(min_weight, max_weight)
+            links.append((new_node_id, node, {'weight': new_weight}))
+            self.sum_of_all_path_lengths += new_weight
+
         self.network.add_edges_from(links)  # Add the generated links to the network
 
     def calc_metric_value(self) -> float:
@@ -106,4 +115,5 @@ class NodeAdder:
         :return float: The computed metric value from the MetricCalculator.
         """
         return MetricCalculator.calc_node_defending_metric(network=self.network,
-                                                           metric=self.config['defending_metric'])
+                                                           metric=self.config['defending_metric'],
+                                                           sum_of_path_lengths=self.sum_of_all_path_lengths)
