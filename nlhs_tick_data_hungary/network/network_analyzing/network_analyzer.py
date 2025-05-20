@@ -83,10 +83,37 @@ class NetworkAnalyzer:
 
     def calc_average_path_length(self) -> float:
         """
-        Computes the average shortest path length in the network.
+        Compute the average shortest path length in the network. If the network is not connected it calculates the sum
+        of all paths in every subgraph and divides by the total number of node pairs
+
         :return float: The average shortest path length.
         """
-        return nx.algorithms.shortest_paths.generic.average_shortest_path_length(G=self.network, weight='weight')
+        # If the network is connected, use the built-in function
+        if nx.is_connected(G=self.network):
+            return nx.average_shortest_path_length(
+                G=self.network,
+                weight="weight",
+            )
+
+        # For disconnected networks, sum path lengths over all connected components
+        num_nodes = self.network.number_of_nodes()
+        total_length = (
+            sum(
+                path_length  # sum all shortest path lengths within each component
+                for component in (
+                    self.network.subgraph(nodes).copy()
+                    for nodes in nx.connected_components(G=self.network)
+                )
+                for source in component.nodes()
+                for path_length in nx.single_source_dijkstra_path_length(
+                    G=component,
+                    source=source,
+                ).values()
+            )
+        )
+
+        # Normalize by the total number of ordered node pairs
+        return total_length / (num_nodes * (num_nodes - 1))
 
     def calc_degree_centrality(self) -> dict:
         """
