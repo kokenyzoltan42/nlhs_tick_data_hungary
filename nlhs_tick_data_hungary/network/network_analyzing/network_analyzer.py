@@ -92,7 +92,7 @@ class NetworkAnalyzer:
         if nx.is_connected(G=self.network):
             return nx.average_shortest_path_length(
                 G=self.network,
-                weight="weight",
+                weight='weight',
             )
 
         # For disconnected networks, sum path lengths over all connected components
