@@ -81,10 +81,10 @@ class NetworkAnalyzer:
         """
         return len(self.network.subgraph(self.calc_largest_connected_component()))
 
-    def calc_average_path_length(self, sum_of_path_lengths: Optional[int] = None) -> float:
+    def calc_average_path_length(self) -> float:
         """
-        Compute the average shortest path length in the network. If the network is not connected it calculates the sum
-        of all paths in every subgraph and divides by the total number of node pairs
+        Compute the average shortest path length in the network. If the network is not connected it calculates the
+        convex combination of the average path lengths in every component
 
         :return float: The average shortest path length.
         """
@@ -96,14 +96,16 @@ class NetworkAnalyzer:
             )
 
         num_nodes = self.network.number_of_nodes()
+        convex_combination = 0
 
-        if sum_of_path_lengths is None:
-            # For disconnected networks, sum path lengths over all connected components
-            sum_of_path_lengths = self.sum_path_lengths()
-            print('Baj van')
+        for subgraph in (self.network.subgraph(c).copy() for c in nx.connected_components(self.network)):
+            apl_in_subgraph = nx.average_shortest_path_length(G=subgraph,
+                                                              weight='weight')
+            convex_coefficient = subgraph.number_of_nodes() / num_nodes
+            convex_combination += convex_coefficient * apl_in_subgraph
 
         # Normalize by the total number of ordered node pairs
-        return sum_of_path_lengths / (num_nodes * (num_nodes - 1))
+        return convex_combination
 
     def calc_degree_centrality(self) -> dict:
         """
@@ -158,20 +160,3 @@ class NetworkAnalyzer:
             return total_degree / num_nodes
         else:
             return 0
-
-    def sum_path_lengths(self) -> int:
-        total_length = (
-            sum(
-                path_length  # sum all shortest path lengths within each component
-                for component in (
-                    self.network.subgraph(nodes).copy()
-                    for nodes in nx.connected_components(G=self.network)
-                )
-                for source in component.nodes()
-                for path_length in nx.single_source_dijkstra_path_length(
-                    G=component,
-                    source=source,
-                ).values()
-            )
-        )
-        return total_length
