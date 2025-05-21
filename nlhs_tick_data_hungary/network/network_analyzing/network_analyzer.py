@@ -34,13 +34,15 @@ class NetworkAnalyzer:
 
     def calc_network_diameter(self) -> int | None:
         """
-        Calculates the diameter of the network, considering edge weights.
+        Calculates the diameter of the network, considering edge weights. If the network is not connected it returns
+        the diameter of the largest connected component.
         :return int: The diameter of the network.
         """
         if nx.is_connected(self.network):
             return nx.diameter(self.network, weight='weight')
         else:
-            return None
+            largest_connected_component = self.calc_largest_connected_component()
+            return nx.diameter(largest_connected_component, weight='weight')
 
     def calc_modularity(self) -> float:
         """
