@@ -68,7 +68,8 @@ class NodeRemover:
                 network=self.network,
                 centrality_measure=self.config['attack_type'].replace('initial_', '')
             )
-            return sorted(centrality_values, reverse=True)  # Return nodes sorted by highest centrality first
+            # Return nodes sorted by highest centrality first
+            return sorted(centrality_values, key=centrality_values.get, reverse=True)
 
         return []  # Return empty list if no ordering is needed
 
