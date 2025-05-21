@@ -139,7 +139,7 @@ class NetworkAnalyzer:
         Computes eigenvector centrality, considering edge weights.
         :return dict: A dictionary with nodes as keys and their eigenvector centrality as values.
         """
-        return nx.algorithms.centrality.eigenvector_centrality(G=self.network, weight='weight')
+        return nx.algorithms.centrality.eigenvector_centrality(G=self.network, weight='weight', max_iter=1000)
 
     def calc_average_weighted_degree(self) -> float:
         """
