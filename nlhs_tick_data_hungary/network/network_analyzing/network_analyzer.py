@@ -75,7 +75,9 @@ class NetworkAnalyzer:
         Finds the largest connected component of the network.
         :return Sized: The largest connected component as a set of nodes.
         """
-        return sorted(nx.connected_components(G=self.network), key=len, reverse=True)[0]
+        return self.network.subgraph(
+            sorted(nx.connected_components(G=self.network), key=len, reverse=True)[0]
+        )
 
     def calc_size_of_largest_connected_component(self) -> int:
         """
@@ -83,7 +85,7 @@ class NetworkAnalyzer:
         (Larger value means more robust network)
         :return int: Size of the largest connected component
         """
-        return len(self.network.subgraph(self.calc_largest_connected_component()))
+        return len(self.calc_largest_connected_component())
 
     def calc_average_path_length(self) -> float:
         """
