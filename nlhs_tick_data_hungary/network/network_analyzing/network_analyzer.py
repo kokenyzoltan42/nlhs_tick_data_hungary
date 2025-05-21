@@ -32,7 +32,7 @@ class NetworkAnalyzer:
                     result_key = func_name.replace("calc_", "")
                     self.result[result_key] = method()
 
-    def calc_network_diameter(self) -> int | None:
+    def calc_network_diameter(self) -> int:
         """
         Calculates the diameter of the network, considering edge weights. If the network is not connected it returns
         the diameter of the largest connected component.
