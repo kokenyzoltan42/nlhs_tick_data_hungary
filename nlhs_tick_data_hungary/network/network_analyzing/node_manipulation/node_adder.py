@@ -96,6 +96,7 @@ class NodeAdder:
             (new_node_id, node, {'weight': np.random.uniform(low=min_weight, high=max_weight)})
             for node in nodes_to_connect_to
         ]
+
         self.network.add_edges_from(links)  # Add the generated links to the network
 
     def calc_metric_value(self) -> float:

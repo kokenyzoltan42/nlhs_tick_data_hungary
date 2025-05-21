@@ -34,11 +34,11 @@ class BasisVarianceCalculator:
         the Wiki page with the following steps:
 
         We can estimate the basis variances if we can solve the following equation: Ax = b, where A is the helper
-        matrix, x is the matrix containing the basis variances and b is the
+        matrix, x is the column vector containing the basis variances and b is the
         sum of columns of the log-ratio variances (t_i). We can solve the equation if we multiply the equation
-        with the inverse of A from the left (x = M^{-1} \cdot b).
+        with the inverse of A from the left.
         """
-        # Calculating the inverse of the helper matrix (M) with the Moore-Penrose inverse
+        # Calculating the inverse of the helper matrix (H) with the Moore-Penrose inverse
         helper_matrix_inv = np.linalg.pinv(self.helper_matrix)
         # Multiplying the sum of the columns of the log-ratio variances with
         # the inverse of the helper matrix from the left
