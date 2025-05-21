@@ -61,10 +61,12 @@ class NetworkAnalyzer:
 
     def calc_number_of_triangles(self) -> int:
         """
-        Calculates the number of triangles in the network.
+        Calculates the number of triangles in the network. The built-in function counts the number of triangles that
+        a node is in for every node. Since each triangle is counted as a triangle for each of the three nodes.
+        Thus the sum of the values should be 3 times the number of triangles.
         :return int: The total count of triangles in the network.
         """
-        return nx.algorithms.cluster.triangles(G=self.network)
+        return int(sum(nx.algorithms.cluster.triangles(G=self.network).values()) / 3)
 
     def calc_largest_connected_component(self) -> Sized:
         """
