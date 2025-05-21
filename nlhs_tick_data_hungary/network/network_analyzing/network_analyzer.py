@@ -157,12 +157,6 @@ class NetworkAnalyzer:
         :return float: The average degree (not considering weights).
         """
         num_nodes = self.network.number_of_nodes()
-        num_edges = self.network.number_of_edges()
-        max_possible_edges = num_nodes * (num_nodes - 1) / 2  # Maximum edges in an undirected simple network
 
-        # Check if the network is complete
-        if num_edges < max_possible_edges:
-            total_degree = sum(dict(self.network.degree()).values())
-            return total_degree / num_nodes
-        else:
-            return 0
+        total_degree = sum(dict(self.network.degree()).values())
+        return total_degree / num_nodes
