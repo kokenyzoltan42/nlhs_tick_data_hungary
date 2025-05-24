@@ -67,8 +67,8 @@ class NodeAdder:
 
         :return int: The identifier of the newly added node.
         """
-        # Calculate the new node id as one greater than the current maximum node id
-        new_node_id = max(self.network.nodes, default=-1) + 1
+        # Create id for new node
+        new_node_id = self.network.number_of_nodes() + 1
         self.network.add_node(new_node_id)  # Add the new node to the network
         return new_node_id
 
